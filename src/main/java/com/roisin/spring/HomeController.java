@@ -11,37 +11,43 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Handles requests for the application home page.
+ * Controllador de la pantalla de bienvenida.
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
  */
 @Controller
+@RequestMapping("/")
 public class HomeController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
+	public ModelAndView home() {
+		logger.info("Welcome home! The client locale is {}.", "prueba");
+
+		ModelAndView res = new ModelAndView("welcome/home");
+
 		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
+
 		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
-		return "home";
+
+		res.addObject("serverTime", formattedDate);
+
+		return res;
 	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage(Locale locale, Model model) {
 		return "login";
 	}
-	
+
 	@RequestMapping(value = "/home", method = RequestMethod.POST)
 	public String login(@Validated User user, Model model) {
 		model.addAttribute("userName", user.getUserName());
