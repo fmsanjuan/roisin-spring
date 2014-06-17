@@ -1,4 +1,4 @@
-package com.roisin.spring;
+package com.roisin.spring.controllers;
 
 import java.text.DateFormat;
 import java.util.Date;

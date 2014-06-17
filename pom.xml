@@ -143,7 +143,35 @@
 			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Rapidminer dependencies -->
+
+		<dependency>
+			<groupId>com.rapid_i</groupId>
+			<artifactId>rapidminer-dependencies</artifactId>
+			<version>5.3.013</version>
+		</dependency>
+
+		<!-- Roisin Core -->
+		<dependency>
+			<groupId>com.roisin.core</groupId>
+			<artifactId>roisin-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>roisin-repo</id>
+			<url>https://raw.github.com/fmsanjuan/roisin-repo/master/repository/</url>
+		</repository>
+		<repository>
+			<id>neil_rubens-repository</id>
+			<url>https://bitbucket.org/neil_rubens/rapidminer_maven-repo/raw/master/repository/</url>
+		</repository>
+	</repositories>
+
 	<build>
 		<plugins>
 			<plugin>

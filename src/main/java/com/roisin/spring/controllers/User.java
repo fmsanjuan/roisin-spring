@@ -1,4 +1,4 @@
-package com.roisin.spring;
+package com.roisin.spring.controllers;
 
 public class User {
 
