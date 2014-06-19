@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rapidminer.example.ExampleSet;
+import com.rapidminer.operator.OperatorException;
 import com.roisin.spring.model.UploadedFile;
+import com.roisin.spring.services.PreprocessingService;
 import com.roisin.spring.validator.FileValidator;
 
 @Controller
@@ -29,11 +33,15 @@ public class PreprocessingController {
 	@Autowired
 	FileValidator fileValidator;
 
+	@Autowired
+	PreprocessingService preprocessingService;
+
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create(@ModelAttribute("uploadedFile") UploadedFile uploadedFile,
 			BindingResult result) {
 
 		ModelAndView res = new ModelAndView("preprocessing/create");
+		res.addObject("uploaded", false);
 
 		return res;
 	}
@@ -43,11 +51,13 @@ public class PreprocessingController {
 			BindingResult result) {
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
+		ExampleSet exampleSet = null;
 
 		MultipartFile file = uploadedFile.getFile();
 		fileValidator.validate(uploadedFile, result);
 
 		String fileName = file.getOriginalFilename();
+		String filePath = StringUtils.EMPTY;
 
 		if (result.hasErrors()) {
 			return new ModelAndView("uploadForm");
@@ -55,8 +65,8 @@ public class PreprocessingController {
 
 		try {
 			inputStream = file.getInputStream();
-
-			File newFile = new File("/Users/felix/03.TFG/pruebafiles/" + fileName);
+			filePath = "/Users/felix/03.TFG/pruebafiles/" + fileName;
+			File newFile = new File(filePath);
 			if (!newFile.exists()) {
 				newFile.createNewFile();
 			}
@@ -67,15 +77,23 @@ public class PreprocessingController {
 			while ((read = inputStream.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
 			}
+			exampleSet = PreprocessingService.getExampleSetFromFile(fileName, filePath);
 		} catch (IOException e) {
+			logger.error("Imposible subir el fichero al servidor", e);
+		} catch (OperatorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+		String exampleSize = exampleSet != null ? String.valueOf(exampleSet.getExampleTable()
+				.size()) : null;
+
 		ModelAndView res = new ModelAndView("preprocessing/upload");
-		res.addObject("message", "Subido");
+		res.addObject("uploaded", true);
+		res.addObject("exampleSize", exampleSize);
+		res.addObject("attributes", exampleSet.getExampleTable().getAttributes());
+		res.addObject("examples", exampleSet.getExampleTable());
 
 		return res;
 	}
-
 }
