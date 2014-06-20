@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
 import com.rapidminer.operator.OperatorException;
 import com.roisin.spring.model.UploadedFile;
@@ -87,12 +89,16 @@ public class PreprocessingController {
 
 		String exampleSize = exampleSet != null ? String.valueOf(exampleSet.getExampleTable()
 				.size()) : null;
+		ArrayList<Example> lista = new ArrayList<Example>();
+		for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
+			lista.add(exampleSet.getExample(i));
+		}
 
 		ModelAndView res = new ModelAndView("preprocessing/upload");
 		res.addObject("uploaded", true);
 		res.addObject("exampleSize", exampleSize);
 		res.addObject("attributes", exampleSet.getExampleTable().getAttributes());
-		res.addObject("examples", exampleSet.getExampleTable());
+		res.addObject("examples", lista);
 
 		return res;
 	}

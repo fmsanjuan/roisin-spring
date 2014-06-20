@@ -3,11 +3,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
 
-<style>
-.table-responsive {
-	height: 180px;
-}
-</style>
 
 <h1>
 	<spring:message code="preprocessing.header" />
@@ -34,112 +29,39 @@
 			</form:form>
 		</c:when>
 		<c:when test="${uploaded == true }">
-			<h2>Fichero cargado de forma correcta</h2>
-			<p>Total ${exampleSize}</p>
-
-			<!-- Creación de tabla de prueba para mostrar la información cargada en la aplicación -->
-			<div class="container">
-				<div class="row">
-					<div class="table-responsive">
-						<table class="table table-hover">
-							<thead>
+			<h4>Fichero cargado de forma correcta</h4>
+			<div class="row">
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>#</th>
+								<c:forEach items="${attributes}" var="attribute">
+									<th>${attribute.getName() }</th>
+								</c:forEach>
+							</tr>
+						</thead>
+						<tbody id="myTable">
+							<c:forEach items="${examples}" var="example" varStatus="loop">
 								<tr>
-									<th>#</th>
+									<td>${loop.index+1 }</td>
 									<c:forEach items="${attributes}" var="attribute">
-										<th>${attribute.getName() }</th>
+										<td>${example.getValueAsString(attribute) }</td>
 									</c:forEach>
 								</tr>
-							</thead>
-							<tbody id="myTable">
-								<tr>
-									<td>1</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-								<tr>
-									<td>2</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-								<tr>
-									<td>3</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-								<tr>
-									<td>4</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-								<tr>
-									<td>5</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-								<tr>
-									<td>6</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-								<tr>
-									<td>7</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-								<tr>
-									<td>8</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-								<tr>
-									<td>9</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-								<tr>
-									<td>10</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-									<td>Table cell</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="col-md-12 text-center">
-						<ul class="pagination pagination-lg pager" id="myPager"></ul>
-					</div>
+							</c:forEach>
+						</tbody>
+					</table>
 				</div>
 			</div>
-			<!-- Aquí acaba la creación de la tabla de prueba -->
+			<div class="row">
+				<div class="col-md-1">
+					<p>Total ${exampleSize}</p>
+				</div>
+				<div class="col-md-10 text-center">
+					<ul class="pagination pagination-lg pager" id="myPager"></ul>
+				</div>
+			</div>
 		</c:when>
 	</c:choose>
 </div>
