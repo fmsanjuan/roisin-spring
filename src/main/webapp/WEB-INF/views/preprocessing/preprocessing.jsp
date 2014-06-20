@@ -5,7 +5,7 @@
 
 <style>
 .table-responsive {
-	height:180px;
+	height: 180px;
 }
 </style>
 
@@ -36,134 +36,110 @@
 		<c:when test="${uploaded == true }">
 			<h2>Fichero cargado de forma correcta</h2>
 			<p>Total ${exampleSize}</p>
+
+			<!-- Creación de tabla de prueba para mostrar la información cargada en la aplicación -->
+			<div class="container">
+				<div class="row">
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>#</th>
+									<c:forEach items="${attributes}" var="attribute">
+										<th>${attribute.getName() }</th>
+									</c:forEach>
+								</tr>
+							</thead>
+							<tbody id="myTable">
+								<tr>
+									<td>1</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+								<tr>
+									<td>7</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+								<tr>
+									<td>8</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+								<tr>
+									<td>9</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+								<tr>
+									<td>10</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+									<td>Table cell</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-md-12 text-center">
+						<ul class="pagination pagination-lg pager" id="myPager"></ul>
+					</div>
+				</div>
+			</div>
+			<!-- Aquí acaba la creación de la tabla de prueba -->
 		</c:when>
 	</c:choose>
-	
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-
-	<!-- Creación de tabla de prueba para mostrar la información cargada en la aplicación -->
-	<div class="container">
-		<div class="row">
-			<div class="table-responsive">
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Table heading</th>
-							<th>Table heading</th>
-							<th>Table heading</th>
-							<th>Table heading</th>
-							<th>Table heading</th>
-							<th>Table heading</th>
-						</tr>
-					</thead>
-					<tbody id="myTable">
-						<tr>
-							<td>1</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-						<tr class="success">
-							<td>5</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-						<tr>
-							<td>6</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-						<tr>
-							<td>7</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-						<tr>
-							<td>8</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-						<tr>
-							<td>9</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-						<tr>
-							<td>10</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-							<td>Table cell</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="col-md-12 text-center">
-				<ul class="pagination pagination-lg pager" id="myPager"></ul>
-			</div>
-		</div>
-	</div>
-
-
-
-
-	<!-- Aquí acaba la creación de la tabla de prueba -->
 </div>
