@@ -27,6 +27,6 @@
 		Total <span class="badge">${exampleSize}</span>
 	</div>
 	<div class="col-md-10 text-center">
-		<ul class="pagination pagination-lg pager" id="myPager3"></ul>
+		<ul class="pagination pagination" id="myPager3"></ul>
 	</div>
 </div>

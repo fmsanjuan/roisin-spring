@@ -10,7 +10,7 @@ $.fn.pageMe = function(opts){
     var listElement = $this;
     var perPage = settings.perPage; 
     var children = listElement.children();
-    var pager = $('.pager');
+    var pager = $('.pagination');
     
     if (typeof settings.childSelector!="undefined") {
         children = listElement.find(settings.childSelector);
