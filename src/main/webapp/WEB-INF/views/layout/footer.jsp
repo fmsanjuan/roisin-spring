@@ -1,1 +1,1 @@
-<p>Copyright &copy; Roisin</p>
+<p class="text-center">Copyright &copy; Roisin</p>

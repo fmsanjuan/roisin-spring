@@ -4,9 +4,9 @@
 <%@ page session="false"%>
 
 
-<h1>
-	<spring:message code="preprocessing.header" />
-</h1>
+<div class="page-header text-center">
+  <h1><spring:message code="preprocessing.header" /> <small>Select your data</small></h1>
+</div>
 
 <div class="container">
 	<c:choose>

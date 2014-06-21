@@ -1,10 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page session="false" %>
-<h1>
-	<spring:message code="welcome.hello" /> <spring:message code="welcome.hello.description" />
-</h1>
 
-<p>  <spring:message code="welcome.time" /> ${serverTime}. </p>
+<div class="page-header text-center">
+  <h1><spring:message code="welcome.hello" /> <small><spring:message code="welcome.hello.description" /></small></h1>
+</div>
 
-<a href="preprocessing/create">A procesamiento</a>
+<p class="text-center">  <spring:message code="welcome.time" /> ${serverTime}. </p>
