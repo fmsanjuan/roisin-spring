@@ -42,116 +42,26 @@
 				<li><a href="#deleteRows" data-toggle="tab">Delete Rows</a></li>
 				<li><a href="#deleteAttributes" data-toggle="tab">Delete
 						Attributes</a></li>
-				<li><a href="#settings" data-toggle="tab">Settings</a></li>
+				<li><a href="#options" data-toggle="tab">Options</a></li>
 			</ul>
 
 			<div class="tab-content">
 				<div class="tab-pane active" id="view">
 					<br />
-					<div class="row">
-						<div class="table-responsive">
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										<th>#</th>
-										<c:forEach items="${attributes}" var="attribute">
-											<th>${attribute.getName() }</th>
-										</c:forEach>
-									</tr>
-								</thead>
-								<tbody id="myTable">
-									<c:forEach items="${examples}" var="example" varStatus="loop">
-										<tr>
-											<td>${loop.index+1 }</td>
-											<c:forEach items="${attributes}" var="attribute">
-												<td>${example.getValueAsString(attribute) }</td>
-											</c:forEach>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-1">
-							Total <span class="badge">${exampleSize}</span>
-						</div>
-						<div class="col-md-10 text-center">
-							<ul class="pagination pagination-lg pager" id="myPager"></ul>
-						</div>
-					</div>
+					<%@include file="includes/viewData.jsp"%>
 				</div>
 				<div class="tab-pane" id="deleteRows">
 					<br />
-					<div class="row">
-						<div class="table-responsive">
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										<th>#</th>
-										<c:forEach items="${attributes}" var="attribute">
-											<th>${attribute.getName() }</th>
-										</c:forEach>
-									</tr>
-								</thead>
-								<tbody id="myTable2">
-									<c:forEach items="${examples}" var="example" varStatus="loop">
-										<tr>
-											<td>${loop.index+1 }</td>
-											<c:forEach items="${attributes}" var="attribute">
-												<td>${example.getValueAsString(attribute) }</td>
-											</c:forEach>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-1">
-							Total <span class="badge">${exampleSize}</span>
-						</div>
-						<div class="col-md-10 text-center">
-							<ul class="pagination pagination-lg pager" id="myPager2"></ul>
-						</div>
-					</div>
+					<%@include file="includes/deleteRows.jsp"%>
 				</div>
 				<div class="tab-pane" id="deleteAttributes">
 					<br />
-					<div class="row">
-						<div class="table-responsive">
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										<th>#</th>
-										<c:forEach items="${attributes}" var="attribute">
-											<th>${attribute.getName() }</th>
-										</c:forEach>
-									</tr>
-								</thead>
-								<tbody id="myTable3">
-									<c:forEach items="${examples}" var="example" varStatus="loop">
-										<tr>
-											<td>${loop.index+1 }</td>
-											<c:forEach items="${attributes}" var="attribute">
-												<td>${example.getValueAsString(attribute) }</td>
-											</c:forEach>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-1">
-							Total <span class="badge">${exampleSize}</span>
-						</div>
-						<div class="col-md-10 text-center">
-							<ul class="pagination pagination-lg pager" id="myPager3"></ul>
-						</div>
-					</div>
+					<%@include file="includes/deleteAttributes.jsp"%>
 				</div>
-				<div class="tab-pane" id="settings">settings</div>
+				<div class="tab-pane" id="options">
+					<br />
+					<%@include file="includes/options.jsp"%>
+				</div>
 			</div>
 
 			<script>
