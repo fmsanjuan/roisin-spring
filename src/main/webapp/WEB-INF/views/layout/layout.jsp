@@ -10,6 +10,7 @@
 <script src="<%=request.getContextPath()%>/resources/js/jquery.min.js"></script>
 <script src="<%=request.getContextPath()%>/resources/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath()%>/resources/js/table.js"></script>
+<script src="<%=request.getContextPath()%>/resources/js/bootstrap-filestyle.min.js"> </script>
 <link href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css" rel="stylesheet"
 	type="text/css">
 <link href="<%=request.getContextPath()%>/resources/css/bootstrap-theme.min.css" rel="stylesheet"

@@ -13,23 +13,24 @@
 		<c:when test="${uploaded == false}">
 			<form:form method="post" enctype="multipart/form-data"
 				modelAttribute="uploadedFile" action="upload">
-				<table>
-					<tr>
-						<td>Upload File:</td>
-						<td><input type="file" name="file" /></td>
-						<td style="color: red; font-style: italic;"><form:errors
-								path="file" /></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><input type="submit" value="Upload" /></td>
-						<td></td>
-					</tr>
-				</table>
+
+				<div class="row">
+					<h3>Data upload</h3>
+				</div>
+				<div class="row">
+					<input type="file" name="file" class="filestyle">
+					<form:errors path="file" />
+				</div>
+				<br />
+				<div class="row">
+					<button class="btn btn-default" type="submit" value="Upload">Upload</button>
+				</div>
 			</form:form>
 		</c:when>
 		<c:when test="${uploaded == true }">
-			<h3><span class="label label-success">Success</span></h3>
+			<h3>
+				<span class="label label-success">Success</span>
+			</h3>
 			<div class="row">
 				<div class="table-responsive">
 					<table class="table table-hover">

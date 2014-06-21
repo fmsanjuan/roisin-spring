@@ -10,7 +10,7 @@
 			<a class="navbar-brand" href="/roisin-spring">Roisin</a>
 		</div>
 		<ul class="nav navbar-nav">
-			<li><a href="preprocessing/create">Preprocessing</a></li>
+			<li><a href="/roisin-spring/preprocessing/create">Preprocessing</a></li>
 			<li><a href="#">Processing</a></li>
 			<li><a href="#">Results</a></li>
 		</ul>
