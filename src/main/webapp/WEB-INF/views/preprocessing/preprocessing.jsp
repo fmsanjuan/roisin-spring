@@ -29,7 +29,7 @@
 			</form:form>
 		</c:when>
 		<c:when test="${uploaded == true }">
-			<h4>Fichero cargado de forma correcta</h4>
+			<h3><span class="label label-success">Success</span></h3>
 			<div class="row">
 				<div class="table-responsive">
 					<table class="table table-hover">
@@ -56,7 +56,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-1">
-					<p>Total ${exampleSize}</p>
+					Total <span class="badge">${exampleSize}</span>
 				</div>
 				<div class="col-md-10 text-center">
 					<ul class="pagination pagination-lg pager" id="myPager"></ul>
