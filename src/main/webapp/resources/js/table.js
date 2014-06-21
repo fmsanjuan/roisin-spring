@@ -26,7 +26,7 @@ $.fn.pageMe = function(opts){
     pager.data("curr",0);
     
     if (settings.showPrevNext){
-        $('<li><a href="#" class="prev_link"><</a></li>').appendTo(pager);
+        $('<li><a href="#" class="prev_link">&laquo;</a></li>').appendTo(pager);
     }
     
     var curr = 0;
@@ -36,7 +36,7 @@ $.fn.pageMe = function(opts){
     }
     
     if (settings.showPrevNext){
-        $('<li><a href="#" class="next_link">></a></li>').appendTo(pager);
+        $('<li><a href="#" class="next_link">&raquo;</a></li>').appendTo(pager);
     }
     
     pager.find('.page_link:first').addClass('active');
