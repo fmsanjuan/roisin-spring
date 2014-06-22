@@ -27,6 +27,7 @@ import com.rapidminer.operator.OperatorException;
 import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.UploadedFile;
 import com.roisin.spring.services.PreprocessingService;
+import com.roisin.spring.utils.Constants;
 import com.roisin.spring.validator.FileValidator;
 
 @Controller
@@ -34,12 +35,6 @@ import com.roisin.spring.validator.FileValidator;
 public class PreprocessingController {
 
 	private static final Logger logger = LoggerFactory.getLogger(PreprocessingController.class);
-
-	private static ExampleSet exampleSet = null;
-
-	private static List<Example> examples = Lists.newArrayList();
-
-	private static Attribute[] attributes;
 
 	@Autowired
 	FileValidator fileValidator;
@@ -62,6 +57,7 @@ public class PreprocessingController {
 			BindingResult result) {
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
+		ExampleSet exampleSet = null;
 
 		MultipartFile file = uploadedFile.getFile();
 		fileValidator.validate(uploadedFile, result);
@@ -95,14 +91,14 @@ public class PreprocessingController {
 			e.printStackTrace();
 		}
 
-		if (exampleSet != null && examples.isEmpty()) {
-			for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
-				examples.add(exampleSet.getExample(i));
-			}
+		List<Example> examples = Lists.newArrayList();
+		for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
+			examples.add(exampleSet.getExample(i));
 		}
 
-		attributes = exampleSet.getExampleTable().getAttributes();
+		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
 		PreprocessingForm form = new PreprocessingForm();
+		form.setFilePath(filePath);
 
 		ModelAndView res = new ModelAndView("preprocessing/upload");
 		res.addObject("uploaded", true);
@@ -113,14 +109,33 @@ public class PreprocessingController {
 		return res;
 	}
 
-	@RequestMapping(value = "/updatePreprocessing", method = RequestMethod.POST)
+	@RequestMapping(value = "/processData", method = RequestMethod.POST)
 	public ModelAndView uploaded(@ModelAttribute("form") PreprocessingForm form,
 			BindingResult result) {
 
-		ModelAndView res = new ModelAndView("preprocessing/upload");
+		// Transformación de condición provisional
+		if (StringUtils.isBlank(form.getFilterValue())) {
+			StringBuilder condition = new StringBuilder();
+			condition.append(form.getFilterAttribute());
+			if (form.getFilterOperator().equals(Constants.EQUALS)) {
+				condition.append(Constants.EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.NON_EQUALS)) {
+				condition.append(Constants.NON_EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.GREATER_OR_EQUALS)) {
+				condition.append(Constants.GREATER_OR_EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.SMALLER_OR_EQUALS)) {
+				condition.append(Constants.SMALLER_OR_EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.SMALLER_THAN)) {
+				condition.append(Constants.SMALLER_THAN_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.GREATER_THAN)) {
+				condition.append(Constants.GREATER_THAN_SYMBOL);
+			}
+			condition.append(form.getFilterValue());
+			form.setFilterCondition(condition.toString());
+		}
+
+		ModelAndView res = new ModelAndView("processing/create");
 		res.addObject("uploaded", true);
-		res.addObject("examples", examples);
-		res.addObject("attributes", attributes);
 		res.addObject("form", form);
 		return res;
 	}

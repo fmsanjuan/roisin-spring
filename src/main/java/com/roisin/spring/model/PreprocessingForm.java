@@ -1,7 +1,7 @@
 package com.roisin.spring.model;
 
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -12,15 +12,23 @@ public class PreprocessingForm {
 
 	private List<String> deletedAttributes;
 
-	private Set<Integer> deletedRows;
+	private SortedSet<Integer> deletedRows;
+
+	private String filterAttribute;
+
+	private String filterOperator;
+
+	private String filterValue;
 
 	private String filterCondition;
 
 	private String label;
 
+	private String filePath;
+
 	public PreprocessingForm() {
 		deletedAttributes = Lists.newArrayList();
-		deletedRows = Sets.newHashSet();
+		deletedRows = Sets.newTreeSet();
 		filterCondition = StringUtils.EMPTY;
 		label = StringUtils.EMPTY;
 	}
@@ -33,11 +41,11 @@ public class PreprocessingForm {
 		this.deletedAttributes = deletedAttributes;
 	}
 
-	public Set<Integer> getDeletedRows() {
+	public SortedSet<Integer> getDeletedRows() {
 		return deletedRows;
 	}
 
-	public void setDeletedRows(Set<Integer> deletedRows) {
+	public void setDeletedRows(SortedSet<Integer> deletedRows) {
 		this.deletedRows = deletedRows;
 	}
 
@@ -55,6 +63,38 @@ public class PreprocessingForm {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getFilterAttribute() {
+		return filterAttribute;
+	}
+
+	public void setFilterAttribute(String filterAttribute) {
+		this.filterAttribute = filterAttribute;
+	}
+
+	public String getFilterOperator() {
+		return filterOperator;
+	}
+
+	public void setFilterOperator(String filterOperator) {
+		this.filterOperator = filterOperator;
+	}
+
+	public String getFilterValue() {
+		return filterValue;
+	}
+
+	public void setFilterValue(String filterValue) {
+		this.filterValue = filterValue;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 }

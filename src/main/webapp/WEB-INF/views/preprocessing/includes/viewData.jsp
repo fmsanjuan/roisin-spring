@@ -1,4 +1,4 @@
-<form:form method="post" action="updatePreprocessing"
+<form:form method="post" action="processData"
 	modelAttribute="form" role="form">
 	<div class="row">
 		<div class="col-md-3">
@@ -14,24 +14,24 @@
 			<h3>Filter condition</h3>
 			<br />
 			<div class="col-md-3">
-				<form:select path="label" class="form-control">
+				<form:select path="filterAttribute" class="form-control">
 					<c:forEach items="${attributes }" var="attribute">
 						<form:option value="${attribute.getName() }" />
 					</c:forEach>
 				</form:select>
 			</div>
 			<div class="col-md-3">
-				<select class="form-control">
-					<option>equals</option>
-					<option>non equals</option>
-					<option>greater or equals</option>
-					<option>greater</option>
-					<option>smaller or equals</option>
-					<option>smaller</option>
-				</select>
+				<form:select path="filterOperator" class="form-control">
+					<form:option value="eq">equals</form:option>
+					<form:option value="neq">non equals</form:option>
+					<form:option value="goe">greater or equals</form:option>
+					<form:option value="gt">greater</form:option>
+					<form:option value="soe">smaller or equals</form:option>
+					<form:option value="st">smaller</form:option>
+				</form:select>
 			</div>
 			<div class="col-md-6">
-				<input type="text" class="form-control" />
+				<form:input path="filterValue" type="text" class="form-control" />
 			</div>
 		</div>
 		<div class="col-md-2">
