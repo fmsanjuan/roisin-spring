@@ -1,32 +1,44 @@
-<div class="row">
-	<div class="table-responsive">
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th>#</th>
-					<c:forEach items="${attributes}" var="attribute">
-						<th>${attribute.getName() }</th>
-					</c:forEach>
-				</tr>
-			</thead>
-			<tbody id="myTable2">
-				<c:forEach items="${examples}" var="example" varStatus="loop">
+<form:form method="post" action="updatePreprocessing"
+	modelAttribute="form" role="form">
+	<form:hidden path="deletedAttributes" />
+	<form:hidden path="filterCondition" />
+	<form:hidden path="label" />
+
+	<div class="row">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
 					<tr>
-						<td>${loop.index+1 }</td>
+						<th>#</th>
 						<c:forEach items="${attributes}" var="attribute">
-							<td>${example.getValueAsString(attribute) }</td>
+							<th>${attribute.getName() }</th>
 						</c:forEach>
+						<th>Delete</th>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+				</thead>
+				<tbody id="myTable2">
+					<c:forEach items="${examples}" var="example" varStatus="loop">
+						<tr>
+							<td>${loop.index+1 }</td>
+							<c:forEach items="${attributes}" var="attribute">
+								<td>${example.getValueAsString(attribute) }</td>
+							</c:forEach>
+							<td><form:checkbox path="deletedRows" value="${loop.index }" /></td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
 	</div>
-</div>
-<div class="row">
-	<div class="col-md-1">
-		Total <span class="badge">${examples.size()}</span>
+	<div class="row">
+		<div class="col-md-1">
+			Total <span class="badge">${examples.size()}</span>
+		</div>
+		<div class="col-md-10 text-center">
+			<ul class="pagination pagination" id="myPager2"></ul>
+		</div>
+		<div class="col-md-1">
+			<form:button type="submit" class="btn btn-danger">Delete Rows</form:button>
+		</div>
 	</div>
-	<div class="col-md-10 text-center">
-		<ul class="pagination pagination" id="myPager2"></ul>
-	</div>
-</div>
+</form:form>

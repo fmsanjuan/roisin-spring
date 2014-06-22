@@ -4,16 +4,16 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<c:forEach items="${attributes}" var="attribute">
+					<c:forEach items="${attributes }" var="attribute">
 						<th>${attribute.getName() }</th>
 					</c:forEach>
 				</tr>
 			</thead>
-			<tbody id="myTable3">
-				<c:forEach items="${examples}" var="example" varStatus="loop">
+			<tbody id="myTable">
+				<c:forEach items="${examples }" var="example" varStatus="loop">
 					<tr>
 						<td>${loop.index+1 }</td>
-						<c:forEach items="${attributes}" var="attribute">
+						<c:forEach items="${attributes }" var="attribute">
 							<td>${example.getValueAsString(attribute) }</td>
 						</c:forEach>
 					</tr>
@@ -27,6 +27,6 @@
 		Total <span class="badge">${examples.size()}</span>
 	</div>
 	<div class="col-md-10 text-center">
-		<ul class="pagination pagination" id="myPager3"></ul>
+		<ul class="pagination pagination" id="myPager"></ul>
 	</div>
 </div>

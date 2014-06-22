@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -19,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.common.collect.Lists;
+import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
 import com.rapidminer.operator.OperatorException;
+import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.UploadedFile;
 import com.roisin.spring.services.PreprocessingService;
 import com.roisin.spring.validator.FileValidator;
@@ -31,6 +34,12 @@ import com.roisin.spring.validator.FileValidator;
 public class PreprocessingController {
 
 	private static final Logger logger = LoggerFactory.getLogger(PreprocessingController.class);
+
+	private static ExampleSet exampleSet = null;
+
+	private static List<Example> examples = Lists.newArrayList();
+
+	private static Attribute[] attributes;
 
 	@Autowired
 	FileValidator fileValidator;
@@ -48,12 +57,11 @@ public class PreprocessingController {
 		return res;
 	}
 
-	@RequestMapping("/upload")
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public ModelAndView uploaded(@ModelAttribute("uploadedFile") UploadedFile uploadedFile,
 			BindingResult result) {
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
-		ExampleSet exampleSet = null;
 
 		MultipartFile file = uploadedFile.getFile();
 		fileValidator.validate(uploadedFile, result);
@@ -87,18 +95,33 @@ public class PreprocessingController {
 			e.printStackTrace();
 		}
 
-		String exampleSize = exampleSet != null ? String.valueOf(exampleSet.getExampleTable()
-				.size()) : null;
-		ArrayList<Example> lista = new ArrayList<Example>();
-		for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
-			lista.add(exampleSet.getExample(i));
+		if (exampleSet != null && examples.isEmpty()) {
+			for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
+				examples.add(exampleSet.getExample(i));
+			}
 		}
+
+		attributes = exampleSet.getExampleTable().getAttributes();
+		PreprocessingForm form = new PreprocessingForm();
 
 		ModelAndView res = new ModelAndView("preprocessing/upload");
 		res.addObject("uploaded", true);
-		res.addObject("attributes", exampleSet.getExampleTable().getAttributes());
-		res.addObject("examples", lista);
+		res.addObject("examples", examples);
+		res.addObject("attributes", attributes);
+		res.addObject("form", form);
 
+		return res;
+	}
+
+	@RequestMapping(value = "/updatePreprocessing", method = RequestMethod.POST)
+	public ModelAndView uploaded(@ModelAttribute("form") PreprocessingForm form,
+			BindingResult result) {
+
+		ModelAndView res = new ModelAndView("preprocessing/upload");
+		res.addObject("uploaded", true);
+		res.addObject("examples", examples);
+		res.addObject("attributes", attributes);
+		res.addObject("form", form);
 		return res;
 	}
 }

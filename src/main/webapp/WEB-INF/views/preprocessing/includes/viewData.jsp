@@ -4,16 +4,16 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<c:forEach items="${attributes}" var="attribute">
+					<c:forEach items="${attributes }" var="attribute">
 						<th>${attribute.getName() }</th>
 					</c:forEach>
 				</tr>
 			</thead>
 			<tbody id="myTable">
-				<c:forEach items="${examples}" var="example" varStatus="loop">
+				<c:forEach items="${examples }" var="example" varStatus="loop">
 					<tr>
 						<td>${loop.index+1 }</td>
-						<c:forEach items="${attributes}" var="attribute">
+						<c:forEach items="${attributes }" var="attribute">
 							<td>${example.getValueAsString(attribute) }</td>
 						</c:forEach>
 					</tr>
