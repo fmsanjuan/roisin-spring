@@ -31,18 +31,18 @@
 			</form:form>
 		</c:when>
 		<c:when test="${uploaded == true }">
-			<h3>
-				<span class="label label-success">Success</span>
-			</h3>
+			<div class="row">
+				<div class="col-md-1 col-md-offset-10">
+					<h3>
+						<span class="label label-success">Success</span>
+					</h3>
+				</div>
+			</div>
 			<br />
 
 			<ul class="nav nav-tabs" id="myTab">
-				<li class="active"><a href="#view" data-toggle="tab">View
-						Data</a></li>
-				<li><a href="#deleteRows" data-toggle="tab">Delete Rows</a></li>
-				<li><a href="#deleteAttributes" data-toggle="tab">Delete
-						Attributes</a></li>
-				<li><a href="#options" data-toggle="tab">Options</a></li>
+				<li class="active"><a href="#view" data-toggle="tab">Data Selection</a></li>
+				<li><a href="#filter" data-toggle="tab">Filter</a></li>
 			</ul>
 
 			<div class="tab-content">
@@ -50,17 +50,9 @@
 					<br />
 					<%@include file="includes/viewData.jsp"%>
 				</div>
-				<div class="tab-pane" id="deleteRows">
+				<div class="tab-pane" id="filter">
 					<br />
-					<%@include file="includes/deleteRows.jsp"%>
-				</div>
-				<div class="tab-pane" id="deleteAttributes">
-					<br />
-					<%@include file="includes/deleteAttributes.jsp"%>
-				</div>
-				<div class="tab-pane" id="options">
-					<br />
-					<%@include file="includes/options.jsp"%>
+					<%@include file="includes/filter.jsp"%>
 				</div>
 			</div>
 
