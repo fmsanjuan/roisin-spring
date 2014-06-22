@@ -24,7 +24,7 @@
 </div>
 <div class="row">
 	<div class="col-md-1">
-		Total <span class="badge">${exampleSize}</span>
+		Total <span class="badge">${examples.size()}</span>
 	</div>
 	<div class="col-md-10 text-center">
 		<ul class="pagination pagination" id="myPager3"></ul>

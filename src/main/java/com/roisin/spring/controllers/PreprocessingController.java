@@ -96,7 +96,6 @@ public class PreprocessingController {
 
 		ModelAndView res = new ModelAndView("preprocessing/upload");
 		res.addObject("uploaded", true);
-		res.addObject("exampleSize", exampleSize);
 		res.addObject("attributes", exampleSet.getExampleTable().getAttributes());
 		res.addObject("examples", lista);
 
