@@ -1,8 +1,45 @@
 <form:form method="post" action="updatePreprocessing"
 	modelAttribute="form" role="form">
-	<form:hidden path="filterCondition" />
-	<form:hidden path="label" />
-
+	<div class="row">
+		<div class="col-md-3">
+			<h3>Label selection</h3>
+			<br />
+			<form:select path="label" class="form-control">
+				<c:forEach items="${attributes }" var="attribute">
+					<form:option value="${attribute.getName() }" />
+				</c:forEach>
+			</form:select>
+		</div>
+		<div class="col-md-7">
+			<h3>Filter condition</h3>
+			<br />
+			<div class="col-md-3">
+				<form:select path="label" class="form-control">
+					<c:forEach items="${attributes }" var="attribute">
+						<form:option value="${attribute.getName() }" />
+					</c:forEach>
+				</form:select>
+			</div>
+			<div class="col-md-3">
+				<select class="form-control">
+					<option>equals</option>
+					<option>non equals</option>
+					<option>greater or equals</option>
+					<option>greater</option>
+					<option>smaller or equals</option>
+					<option>smaller</option>
+				</select>
+			</div>
+			<div class="col-md-6">
+				<input type="text" class="form-control" />
+			</div>
+		</div>
+		<div class="col-md-2">
+			<br /> <br /> <br />
+			<form:button type="submit" class="btn btn-success btn-lg">Process Data</form:button>
+		</div>
+	</div>
+	<br />
 	<div class="row">
 		<div class="table-responsive">
 			<table class="table table-hover">
@@ -10,7 +47,8 @@
 					<tr>
 						<th>#</th>
 						<c:forEach items="${attributes }" var="attribute">
-							<th>${attribute.getName() } <form:checkbox path="deletedAttributes" value="${attribute.getName() }" /></th>
+							<th>${attribute.getName() } <form:checkbox
+									path="deletedAttributes" value="${attribute.getName() }" /></th>
 						</c:forEach>
 						<th>Delete</th>
 					</tr>
@@ -36,8 +74,6 @@
 		<div class="col-md-10 text-center">
 			<ul class="pagination pagination" id="myPager"></ul>
 		</div>
-		<div class="col-md-1">
-			<form:button type="submit" class="btn btn-danger">Save</form:button>
-		</div>
 	</div>
+
 </form:form>

@@ -31,36 +31,8 @@
 			</form:form>
 		</c:when>
 		<c:when test="${uploaded == true }">
-			<div class="row">
-				<div class="col-md-1 col-md-offset-10">
-					<h3>
-						<span class="label label-success">Success</span>
-					</h3>
-				</div>
-			</div>
 			<br />
-
-			<ul class="nav nav-tabs" id="myTab">
-				<li class="active"><a href="#view" data-toggle="tab">Data Selection</a></li>
-				<li><a href="#filter" data-toggle="tab">Filter</a></li>
-			</ul>
-
-			<div class="tab-content">
-				<div class="tab-pane active" id="view">
-					<br />
-					<%@include file="includes/viewData.jsp"%>
-				</div>
-				<div class="tab-pane" id="filter">
-					<br />
-					<%@include file="includes/filter.jsp"%>
-				</div>
-			</div>
-
-			<script>
-				$(function() {
-					$('#myTab a:first').tab('show')
-				})
-			</script>
+			<%@include file="includes/viewData.jsp"%>
 		</c:when>
 	</c:choose>
 </div>
