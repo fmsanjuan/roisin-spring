@@ -1,5 +1,6 @@
 <form:form method="post" action="processData"
 	modelAttribute="form" role="form">
+	<form:hidden path="filePath" />
 	<div class="row">
 		<div class="col-md-3">
 			<h3>Label selection</h3>

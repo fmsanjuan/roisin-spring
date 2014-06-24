@@ -90,15 +90,22 @@ public class PreprocessingController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		// Listado de ejemplos
 		List<Example> examples = Lists.newArrayList();
 		for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
 			examples.add(exampleSet.getExample(i));
 		}
-
+		// Listado de atributos seleccionados, en un principio se deben
+		// seleccionar todos
 		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+		List<String> attributeSelection = Lists.newArrayList();
+		for (int i = 0; i < attributes.length; i++) {
+			attributeSelection.add(attributes[i].getName());
+		}
+		// Creación del formulario vacío
 		PreprocessingForm form = new PreprocessingForm();
 		form.setFilePath(filePath);
+		form.setDeletedAttributes(attributeSelection);
 
 		ModelAndView res = new ModelAndView("preprocessing/upload");
 		res.addObject("uploaded", true);
@@ -114,7 +121,7 @@ public class PreprocessingController {
 			BindingResult result) {
 
 		// Transformación de condición provisional
-		if (StringUtils.isBlank(form.getFilterValue())) {
+		if (!StringUtils.isBlank(form.getFilterValue())) {
 			StringBuilder condition = new StringBuilder();
 			condition.append(form.getFilterAttribute());
 			if (form.getFilterOperator().equals(Constants.EQUALS)) {

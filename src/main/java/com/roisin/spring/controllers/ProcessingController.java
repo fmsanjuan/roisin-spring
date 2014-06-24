@@ -109,7 +109,7 @@ public class ProcessingController {
 			e.printStackTrace();
 		}
 
-		ModelAndView res = new ModelAndView("processing/create");
+		ModelAndView res = new ModelAndView("results/create");
 		res.addObject("results", results);
 
 		return res;
