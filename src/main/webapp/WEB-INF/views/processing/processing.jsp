@@ -17,25 +17,44 @@
 	<br /> <br /> <br />
 	<div class="row">
 		<div class="col-md-2 col-md-offset-1">
-			<form:form method="post" modelAttribute="form" action="/roisin-spring/processing/ripper" role="form">
-				<form:hidden path="deletedRows"/>
-				<form:hidden path="deletedAttributes"/>
-				<form:hidden path="filePath"/>
-				<form:hidden path="label"/>
-				<form:hidden path="filterCondition"/>
-				<form:hidden path="filterAttribute"/>
-				<form:hidden path="filterOperator"/>
-				<form:hidden path="filterValue"/>
+			<form:form method="post" modelAttribute="form"
+				action="/roisin-spring/processing/ripper" role="form">
+				<form:hidden path="deletedRows" />
+				<form:hidden path="deletedAttributes" />
+				<form:hidden path="filePath" />
+				<form:hidden path="label" />
+				<form:hidden path="filterCondition" />
+				<form:hidden path="filterAttribute" />
+				<form:hidden path="filterOperator" />
+				<form:hidden path="filterValue" />
 				<form:button type="submit" class="btn btn-primary btn-lg">Ripper</form:button>
 			</form:form>
 		</div>
 		<div class="col-md-2 col-md-offset-2">
-			<form:form method="post" modelAttribute="form" action="subgroup" role="form">
+			<form:form method="post" modelAttribute="form" action="/roisin-spring/processing/subgroup"
+				role="form">
+				<form:hidden path="deletedRows" />
+				<form:hidden path="deletedAttributes" />
+				<form:hidden path="filePath" />
+				<form:hidden path="label" />
+				<form:hidden path="filterCondition" />
+				<form:hidden path="filterAttribute" />
+				<form:hidden path="filterOperator" />
+				<form:hidden path="filterValue" />
 				<form:button type="submit" class="btn btn-primary btn-lg">Subgroup Discovery</form:button>
 			</form:form>
 		</div>
 		<div class="col-md-2 col-md-offset-2">
-			<form:form method="post" modelAttribute="form" action="tree" role="form">
+			<form:form method="post" modelAttribute="form" action="/roisin-spring/processing/tree"
+				role="form">
+				<form:hidden path="deletedRows" />
+				<form:hidden path="deletedAttributes" />
+				<form:hidden path="filePath" />
+				<form:hidden path="label" />
+				<form:hidden path="filterCondition" />
+				<form:hidden path="filterAttribute" />
+				<form:hidden path="filterOperator" />
+				<form:hidden path="filterValue" />
 				<form:button type="submit" class="btn btn-primary btn-lg">Tree to Rules</form:button>
 			</form:form>
 		</div>
