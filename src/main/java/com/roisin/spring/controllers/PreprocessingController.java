@@ -2,6 +2,7 @@ package com.roisin.spring.controllers;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.common.collect.Lists;
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
@@ -28,6 +28,8 @@ import com.roisin.spring.validator.PreprocessingFormValidator;
 public class PreprocessingController {
 
 	private static final Logger logger = LoggerFactory.getLogger(PreprocessingController.class);
+
+	private static String filePath = StringUtils.EMPTY;
 
 	@Autowired
 	FileValidator fileValidator;
@@ -61,24 +63,15 @@ public class PreprocessingController {
 			res.addObject("uploaded", false);
 			return res;
 		} else {
-			String filePath = "/Users/felix/03.TFG/pruebafiles/" + file.getOriginalFilename();
+			filePath = "/Users/felix/03.TFG/pruebafiles/" + file.getOriginalFilename();
 			ExampleSet exampleSet = preprocessingService.getExampleSetFromFile(file, filePath);
-			// Listado de ejemplos
-			List<Example> examples = Lists.newArrayList();
-			for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
-				examples.add(exampleSet.getExample(i));
-			}
-			// Listado de atributos seleccionados, en un principio se deben
-			// seleccionar todos
+			List<Example> examples = preprocessingService.getExampleListFromExampleSet(exampleSet);
 			Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
-			List<String> attributeSelection = Lists.newArrayList();
-			for (int i = 0; i < attributes.length; i++) {
-				attributeSelection.add(attributes[i].getName());
-			}
 			// Creación del formulario vacío
 			PreprocessingForm form = new PreprocessingForm();
 			form.setFilePath(filePath);
-			form.setAttributeSelection(attributeSelection);
+			form.setAttributeSelection(preprocessingService
+					.getAttributeNameListFromExampleSet(attributes));
 			form.setExampleSetSize(examples.size());
 
 			ModelAndView res = new ModelAndView("preprocessing/upload");
@@ -97,15 +90,21 @@ public class PreprocessingController {
 		formValidator.validate(form, result);
 
 		if (result.hasErrors()) {
+
+			ExampleSet exampleSet = preprocessingService.getExampleSetFromFilePath(filePath);
+			List<Example> examples = preprocessingService.getExampleListFromExampleSet(exampleSet);
+			Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+
 			ModelAndView res = new ModelAndView("preprocessing/create");
 			res.addObject("uploaded", true);
 			res.addObject("form", form);
+			res.addObject("examples", examples);
+			res.addObject("attributes", attributes);
 			res.addObject("error", true);
 			return res;
 		} else {
 			form = preprocessingService.calculateFilterCondition(form);
 			ModelAndView res = new ModelAndView("processing/create");
-			res.addObject("uploaded", true);
 			res.addObject("form", form);
 			return res;
 		}

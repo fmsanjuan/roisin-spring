@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -12,9 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.common.collect.Lists;
 import com.rapidminer.Process;
 import com.rapidminer.RapidMiner;
 import com.rapidminer.RapidMiner.ExecutionMode;
+import com.rapidminer.example.Attribute;
+import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
 import com.rapidminer.operator.IOContainer;
 import com.rapidminer.operator.OperatorException;
@@ -86,6 +90,57 @@ public class PreprocessingService {
 			form.setFilterCondition(condition.toString());
 		}
 		return form;
+	}
+
+	/**
+	 * This method returns an example set object returned by Rapidminer and
+	 * receives the filePath of the file that will be transformed into an
+	 * exampleSet.
+	 * 
+	 * @param filePath
+	 * @return
+	 */
+	public ExampleSet getExampleSetFromFilePath(String filePath) {
+		ExampleSet exampleSet = null;
+		try {
+			Process process = Preprocessing.getExampleSetFromFileProcess(
+					StringUtils.substringAfterLast(filePath, Constants.DOT_SYMBOL), filePath);
+			IOContainer container;
+			container = process.run();
+			exampleSet = (ExampleSet) container.asList().get(0);
+		} catch (OperatorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return exampleSet;
+	}
+
+	/**
+	 * Returns the list of examples that are contained into an example set.
+	 * 
+	 * @param exampleSet
+	 * @return
+	 */
+	public List<Example> getExampleListFromExampleSet(ExampleSet exampleSet) {
+		List<Example> examples = Lists.newArrayList();
+		for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
+			examples.add(exampleSet.getExample(i));
+		}
+		return examples;
+	}
+
+	/**
+	 * Returns all the attribute names from an example set.
+	 * 
+	 * @param exampleSet
+	 * @return
+	 */
+	public List<String> getAttributeNameListFromExampleSet(Attribute[] attributes) {
+		List<String> attributeSelection = Lists.newArrayList();
+		for (int i = 0; i < attributes.length; i++) {
+			attributeSelection.add(attributes[i].getName());
+		}
+		return attributeSelection;
 	}
 
 }
