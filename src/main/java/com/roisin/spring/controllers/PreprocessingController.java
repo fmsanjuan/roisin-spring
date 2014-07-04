@@ -85,7 +85,8 @@ public class PreprocessingController {
 	}
 
 	@RequestMapping(value = "/processData", method = RequestMethod.POST)
-	public ModelAndView uploaded(PreprocessingForm form, BindingResult result) {
+	public ModelAndView processData(@ModelAttribute("form") PreprocessingForm form,
+			BindingResult result) {
 
 		formValidator.validate(form, result);
 
