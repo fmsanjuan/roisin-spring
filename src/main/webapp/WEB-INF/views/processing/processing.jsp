@@ -20,13 +20,14 @@
 			<form:form method="post" modelAttribute="form"
 				action="/roisin-spring/processing/ripper" role="form">
 				<form:hidden path="deletedRows" />
-				<form:hidden path="deletedAttributes" />
+				<form:hidden path="attributeSelection" />
 				<form:hidden path="filePath" />
 				<form:hidden path="label" />
 				<form:hidden path="filterCondition" />
 				<form:hidden path="filterAttribute" />
 				<form:hidden path="filterOperator" />
 				<form:hidden path="filterValue" />
+				<form:hidden path="exampleSetSize" />
 				<form:button type="submit" class="btn btn-primary btn-lg">Ripper</form:button>
 			</form:form>
 		</div>
@@ -34,13 +35,14 @@
 			<form:form method="post" modelAttribute="form" action="/roisin-spring/processing/subgroup"
 				role="form">
 				<form:hidden path="deletedRows" />
-				<form:hidden path="deletedAttributes" />
+				<form:hidden path="attributeSelection" />
 				<form:hidden path="filePath" />
 				<form:hidden path="label" />
 				<form:hidden path="filterCondition" />
 				<form:hidden path="filterAttribute" />
 				<form:hidden path="filterOperator" />
 				<form:hidden path="filterValue" />
+				<form:hidden path="exampleSetSize" />
 				<form:button type="submit" class="btn btn-primary btn-lg">Subgroup Discovery</form:button>
 			</form:form>
 		</div>
@@ -48,13 +50,14 @@
 			<form:form method="post" modelAttribute="form" action="/roisin-spring/processing/tree"
 				role="form">
 				<form:hidden path="deletedRows" />
-				<form:hidden path="deletedAttributes" />
+				<form:hidden path="attributeSelection" />
 				<form:hidden path="filePath" />
 				<form:hidden path="label" />
 				<form:hidden path="filterCondition" />
 				<form:hidden path="filterAttribute" />
 				<form:hidden path="filterOperator" />
 				<form:hidden path="filterValue" />
+				<form:hidden path="exampleSetSize" />
 				<form:button type="submit" class="btn btn-primary btn-lg">Tree to Rules</form:button>
 			</form:form>
 		</div>

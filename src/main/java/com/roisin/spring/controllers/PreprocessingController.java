@@ -1,13 +1,7 @@
 package com.roisin.spring.controllers;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +17,11 @@ import com.google.common.collect.Lists;
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
-import com.rapidminer.operator.OperatorException;
 import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.UploadedFile;
 import com.roisin.spring.services.PreprocessingService;
-import com.roisin.spring.utils.Constants;
 import com.roisin.spring.validator.FileValidator;
+import com.roisin.spring.validator.PreprocessingFormValidator;
 
 @Controller
 @RequestMapping("/preprocessing")
@@ -38,6 +31,9 @@ public class PreprocessingController {
 
 	@Autowired
 	FileValidator fileValidator;
+
+	@Autowired
+	PreprocessingFormValidator formValidator;
 
 	@Autowired
 	PreprocessingService preprocessingService;
@@ -55,95 +51,63 @@ public class PreprocessingController {
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public ModelAndView uploaded(@ModelAttribute("uploadedFile") UploadedFile uploadedFile,
 			BindingResult result) {
-		InputStream inputStream = null;
-		OutputStream outputStream = null;
-		ExampleSet exampleSet = null;
 
 		MultipartFile file = uploadedFile.getFile();
 		fileValidator.validate(uploadedFile, result);
 
-		String fileName = file.getOriginalFilename();
-		String filePath = StringUtils.EMPTY;
-
 		if (result.hasErrors()) {
-			return new ModelAndView("uploadForm");
-		}
-
-		try {
-			inputStream = file.getInputStream();
-			filePath = "/Users/felix/03.TFG/pruebafiles/" + fileName;
-			File newFile = new File(filePath);
-			if (!newFile.exists()) {
-				newFile.createNewFile();
+			ModelAndView res = new ModelAndView("preprocessing/create");
+			res.addObject("error", true);
+			res.addObject("uploaded", false);
+			return res;
+		} else {
+			String filePath = "/Users/felix/03.TFG/pruebafiles/" + file.getOriginalFilename();
+			ExampleSet exampleSet = preprocessingService.getExampleSetFromFile(file, filePath);
+			// Listado de ejemplos
+			List<Example> examples = Lists.newArrayList();
+			for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
+				examples.add(exampleSet.getExample(i));
 			}
-			outputStream = new FileOutputStream(newFile);
-			int read = 0;
-			byte[] bytes = new byte[1024];
-
-			while ((read = inputStream.read(bytes)) != -1) {
-				outputStream.write(bytes, 0, read);
+			// Listado de atributos seleccionados, en un principio se deben
+			// seleccionar todos
+			Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+			List<String> attributeSelection = Lists.newArrayList();
+			for (int i = 0; i < attributes.length; i++) {
+				attributeSelection.add(attributes[i].getName());
 			}
-			exampleSet = PreprocessingService.getExampleSetFromFile(fileName, filePath);
-		} catch (IOException e) {
-			logger.error("Imposible subir el fichero al servidor", e);
-		} catch (OperatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// Listado de ejemplos
-		List<Example> examples = Lists.newArrayList();
-		for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
-			examples.add(exampleSet.getExample(i));
-		}
-		// Listado de atributos seleccionados, en un principio se deben
-		// seleccionar todos
-		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
-		List<String> attributeSelection = Lists.newArrayList();
-		for (int i = 0; i < attributes.length; i++) {
-			attributeSelection.add(attributes[i].getName());
-		}
-		// Creación del formulario vacío
-		PreprocessingForm form = new PreprocessingForm();
-		form.setFilePath(filePath);
-		form.setDeletedAttributes(attributeSelection);
+			// Creación del formulario vacío
+			PreprocessingForm form = new PreprocessingForm();
+			form.setFilePath(filePath);
+			form.setAttributeSelection(attributeSelection);
+			form.setExampleSetSize(examples.size());
 
-		ModelAndView res = new ModelAndView("preprocessing/upload");
-		res.addObject("uploaded", true);
-		res.addObject("examples", examples);
-		res.addObject("attributes", attributes);
-		res.addObject("form", form);
+			ModelAndView res = new ModelAndView("preprocessing/upload");
+			res.addObject("uploaded", true);
+			res.addObject("examples", examples);
+			res.addObject("attributes", attributes);
+			res.addObject("form", form);
 
-		return res;
+			return res;
+		}
 	}
 
 	@RequestMapping(value = "/processData", method = RequestMethod.POST)
-	public ModelAndView uploaded(@ModelAttribute("form") PreprocessingForm form,
-			BindingResult result) {
+	public ModelAndView uploaded(PreprocessingForm form, BindingResult result) {
 
-		// Transformación de condición provisional
-		if (!StringUtils.isBlank(form.getFilterValue())) {
-			StringBuilder condition = new StringBuilder();
-			condition.append(form.getFilterAttribute());
-			if (form.getFilterOperator().equals(Constants.EQUALS)) {
-				condition.append(Constants.EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.NON_EQUALS)) {
-				condition.append(Constants.NON_EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.GREATER_OR_EQUALS)) {
-				condition.append(Constants.GREATER_OR_EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.SMALLER_OR_EQUALS)) {
-				condition.append(Constants.SMALLER_OR_EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.SMALLER_THAN)) {
-				condition.append(Constants.SMALLER_THAN_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.GREATER_THAN)) {
-				condition.append(Constants.GREATER_THAN_SYMBOL);
-			}
-			condition.append(form.getFilterValue());
-			form.setFilterCondition(condition.toString());
+		formValidator.validate(form, result);
+
+		if (result.hasErrors()) {
+			ModelAndView res = new ModelAndView("preprocessing/create");
+			res.addObject("uploaded", true);
+			res.addObject("form", form);
+			res.addObject("error", true);
+			return res;
+		} else {
+			form = preprocessingService.calculateFilterCondition(form);
+			ModelAndView res = new ModelAndView("processing/create");
+			res.addObject("uploaded", true);
+			res.addObject("form", form);
+			return res;
 		}
-
-		ModelAndView res = new ModelAndView("processing/create");
-		res.addObject("uploaded", true);
-		res.addObject("form", form);
-		return res;
 	}
 }

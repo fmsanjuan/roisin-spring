@@ -16,17 +16,31 @@
 		<c:when test="${uploaded == false}">
 			<form:form method="post" enctype="multipart/form-data"
 				modelAttribute="uploadedFile" action="upload">
-
-				<div class="row">
-					<h3>Data upload</h3>
-				</div>
-				<div class="row">
-					<input type="file" name="file" class="filestyle">
-					<form:errors path="file" />
-				</div>
-				<br />
-				<div class="row">
-					<button class="btn btn-default" type="submit" value="Upload">Upload</button>
+				<div class="col-md-6 col-md-offset-3">
+					<c:if test="${error == true}">
+						<div class="row">
+							<div class="alert alert-danger alert-dismissable">
+								<button type="button" class="close" data-dismiss="alert"
+									aria-hidden="true">&times;</button>
+								<strong>Error! </strong>
+								<form:errors path="file" />
+							</div>
+						</div>
+					</c:if>
+					<div class="row">
+						<h3>Data upload</h3>
+						<p>First, you need to upload a file with the information you
+							want to process.</p>
+					</div>
+					<div class="row">
+						<input type="file" name="file" class="filestyle">
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<button class="btn btn-primary" type="submit" value="Upload">Upload</button>
+						</div>
+					</div>
 				</div>
 			</form:form>
 		</c:when>

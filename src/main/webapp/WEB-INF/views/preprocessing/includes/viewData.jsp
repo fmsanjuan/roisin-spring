@@ -1,6 +1,19 @@
-<form:form method="post" action="processData"
-	modelAttribute="form" role="form">
+<form:form method="post" action="processData" modelAttribute="form"
+	role="form">
 	<form:hidden path="filePath" />
+	<form:hidden path="exampleSetSize" />
+	<c:if test="${error == true}">
+		<div class="row">
+			<div class="alert alert-danger alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-hidden="true">&times;</button>
+				<strong>Error! </strong>
+				<form:errors path="label" />
+				<form:errors path="deletedRows" />
+				<form:errors path="attributeSelection" />
+			</div>
+		</div>
+	</c:if>
 	<div class="row">
 		<div class="col-md-3">
 			<h3>Label selection</h3>
@@ -32,7 +45,8 @@
 				</form:select>
 			</div>
 			<div class="col-md-6">
-				<form:input path="filterValue" type="text" class="form-control" />
+				<form:input path="filterValue" type="text" class="form-control"
+					placeholder="value" />
 			</div>
 		</div>
 		<div class="col-md-2">
@@ -48,8 +62,8 @@
 					<tr>
 						<th>#</th>
 						<c:forEach items="${attributes }" var="attribute">
-							<th>${attribute.getName() } <form:checkbox
-									path="deletedAttributes" value="${attribute.getName() }" /></th>
+							<th>${attribute.getName() }<form:checkbox
+									path="attributeSelection" value="${attribute.getName() }" /></th>
 						</c:forEach>
 						<th>Delete</th>
 					</tr>

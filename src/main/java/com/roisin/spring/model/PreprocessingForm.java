@@ -10,7 +10,7 @@ import com.google.common.collect.Sets;
 
 public class PreprocessingForm {
 
-	private List<String> deletedAttributes;
+	private List<String> attributeSelection;
 
 	private SortedSet<Integer> deletedRows;
 
@@ -26,19 +26,21 @@ public class PreprocessingForm {
 
 	private String filePath;
 
+	private int exampleSetSize;
+
 	public PreprocessingForm() {
-		deletedAttributes = Lists.newArrayList();
+		attributeSelection = Lists.newArrayList();
 		deletedRows = Sets.newTreeSet();
 		filterCondition = StringUtils.EMPTY;
 		label = StringUtils.EMPTY;
 	}
 
-	public List<String> getDeletedAttributes() {
-		return deletedAttributes;
+	public List<String> getAttributeSelection() {
+		return attributeSelection;
 	}
 
-	public void setDeletedAttributes(List<String> deletedAttributes) {
-		this.deletedAttributes = deletedAttributes;
+	public void setAttributeSelection(List<String> attributeSelection) {
+		this.attributeSelection = attributeSelection;
 	}
 
 	public SortedSet<Integer> getDeletedRows() {
@@ -95,6 +97,14 @@ public class PreprocessingForm {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public int getExampleSetSize() {
+		return exampleSetSize;
+	}
+
+	public void setExampleSetSize(int exampleSetSize) {
+		this.exampleSetSize = exampleSetSize;
 	}
 
 }

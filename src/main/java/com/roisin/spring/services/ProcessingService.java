@@ -29,14 +29,13 @@ public class ProcessingService {
 			Process process = GenericProcesses.getRipper(
 					StringUtils.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL),
 					form.getFilePath(), form.getLabel(), form.getDeletedRows(),
-					form.getFilterCondition(), form.getDeletedAttributes());
+					form.getFilterCondition(), form.getAttributeSelection());
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
 			results = new RipperResults(ruleModel, exampleSet);
 		} catch (OperatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("No ha sido posible ejecutar el proceso con Ripper");
 		}
 		return results;
 	}
@@ -47,14 +46,13 @@ public class ProcessingService {
 			Process process = GenericProcesses.getSubgroupDiscoveryDiscretization(
 					StringUtils.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL),
 					form.getFilePath(), form.getLabel(), form.getDeletedRows(),
-					form.getFilterCondition(), form.getDeletedAttributes());
+					form.getFilterCondition(), form.getAttributeSelection());
 			IOContainer container = process.run();
 			RuleSet ruleModel = (RuleSet) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
 			results = new SubgroupResults(ruleModel, exampleSet);
 		} catch (OperatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("No ha sido posible ejecutar el proceso con Subgroup Discovery");
 		}
 		return results;
 	}
@@ -65,14 +63,13 @@ public class ProcessingService {
 			Process process = GenericProcesses.getDecisionTreeToRules(
 					StringUtils.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL),
 					form.getFilePath(), form.getLabel(), form.getDeletedRows(),
-					form.getFilterCondition(), form.getDeletedAttributes());
+					form.getFilterCondition(), form.getAttributeSelection());
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
 			results = new RipperResults(ruleModel, exampleSet);
 		} catch (OperatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("No ha sido posible ejecutar el proceso con Decision Tree to rules");
 		}
 		return results;
 	}
