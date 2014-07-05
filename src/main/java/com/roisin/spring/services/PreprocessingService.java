@@ -1,12 +1,16 @@
 package com.roisin.spring.services;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.SortedSet;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +29,8 @@ import com.rapidminer.operator.OperatorException;
 import com.roisin.core.processes.Preprocessing;
 import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.utils.Constants;
+
+import exception.RoisinException;
 
 @Service
 public class PreprocessingService {
@@ -59,6 +65,7 @@ public class PreprocessingService {
 							file.getOriginalFilename(), Constants.DOT_SYMBOL), filePath);
 			IOContainer container = process.run();
 			exampleSet = (ExampleSet) container.asList().get(0);
+			outputStream.close();
 		} catch (IOException e) {
 			logger.error("Imposible subir el fichero al servidor", e);
 		} catch (OperatorException e) {
@@ -143,4 +150,49 @@ public class PreprocessingService {
 		return attributeSelection;
 	}
 
+	/**
+	 * This method executes the process that does the preprocessing step and
+	 * stores all the preprocessed information in the server. Finally, it
+	 * returns a ByteArrayOutputStream with the file stored in the server.
+	 * 
+	 * @param inputFormat
+	 * @param inputPath
+	 * @param rowFilter
+	 * @param filterCondition
+	 * @param attributeSelection
+	 * @param outputFormat
+	 * @param outputPath
+	 * @return
+	 */
+	public ByteArrayOutputStream exportData(String inputPath, SortedSet<Integer> rowFilter,
+			String filterCondition, List<String> attributeSelection, String outputPath) {
+
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			Process process = Preprocessing.getPreprocessedDataFile(inputPath, rowFilter,
+					filterCondition, attributeSelection, outputPath);
+			process.run();
+			FileInputStream fis = new FileInputStream(new File(outputPath));
+			byte[] buf = new byte[1024];
+			for (int readNum; (readNum = fis.read(buf)) != -1;) {
+				bos.write(buf, 0, readNum); // no doubt here is 0
+				// Writes len bytes from the specified byte array starting at
+				// offset off to this byte array output stream.
+				System.out.println("read " + readNum + " bytes,");
+			}
+			fis.close();
+		} catch (RoisinException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OperatorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bos;
+	}
 }

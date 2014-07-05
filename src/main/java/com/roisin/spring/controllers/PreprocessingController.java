@@ -2,10 +2,15 @@ package com.roisin.spring.controllers;
 
 import java.util.List;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +25,7 @@ import com.rapidminer.example.ExampleSet;
 import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.UploadedFile;
 import com.roisin.spring.services.PreprocessingService;
+import com.roisin.spring.utils.Constants;
 import com.roisin.spring.validator.FileValidator;
 import com.roisin.spring.validator.PreprocessingFormValidator;
 
@@ -84,14 +90,14 @@ public class PreprocessingController {
 		}
 	}
 
-	@RequestMapping(value = "/processData", method = RequestMethod.POST)
+	@RequestMapping(value = "/processData", method = RequestMethod.POST, params = { "process" })
 	public ModelAndView processData(@ModelAttribute("form") PreprocessingForm form,
 			BindingResult result) {
 
 		formValidator.validate(form, result);
 
 		if (result.hasErrors()) {
-
+			// Get the data again and return it to the form
 			ExampleSet exampleSet = preprocessingService.getExampleSetFromFilePath(filePath);
 			List<Example> examples = preprocessingService.getExampleListFromExampleSet(exampleSet);
 			Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
@@ -109,5 +115,33 @@ public class PreprocessingController {
 			res.addObject("form", form);
 			return res;
 		}
+	}
+
+	@RequestMapping(value = "/processData", method = RequestMethod.POST, params = { "export" })
+	public ResponseEntity<byte[]> exportData(@ModelAttribute("form") PreprocessingForm form,
+			BindingResult result) {
+		// Original file name, path and outputpath.
+		String originalFileName = StringUtils.substringAfterLast(filePath, Constants.SLASH_SYMBOL);
+		String originalFileNameNoFormat = StringUtils.substringBeforeLast(originalFileName,
+				Constants.DOT_SYMBOL);
+		String originalFileFormat = StringUtils.substringAfterLast(filePath, Constants.DOT_SYMBOL);
+		String outputFileName = originalFileNameNoFormat + "_MOD" + Constants.DOT_SYMBOL
+				+ originalFileFormat;
+
+		String outputPath = StringUtils.substringBeforeLast(filePath, Constants.SLASH_SYMBOL);
+		outputPath += Constants.SLASH_SYMBOL + outputFileName;
+		// Get the document
+		ByteArrayOutputStream document = preprocessingService.exportData(form.getFilePath(),
+				form.getDeletedRows(), form.getFilterCondition(), form.getAttributeSelection(),
+				outputPath);
+		// Create and configure headers to return the file
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType("application/" + originalFileFormat));
+		headers.setContentDispositionFormData(outputFileName, outputFileName);
+		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(document.toByteArray(),
+				headers, HttpStatus.OK);
+
+		return response;
 	}
 }

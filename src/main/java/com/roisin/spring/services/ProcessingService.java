@@ -26,10 +26,8 @@ public class ProcessingService {
 	public RoisinResults getRipperResults(PreprocessingForm form) {
 		RipperResults results = null;
 		try {
-			Process process = GenericProcesses.getRipper(
-					StringUtils.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL),
-					form.getFilePath(), form.getLabel(), form.getDeletedRows(),
-					form.getFilterCondition(), form.getAttributeSelection());
+			Process process = GenericProcesses.getRipper(form.getFilePath(), form.getLabel(),
+					form.getDeletedRows(), form.getFilterCondition(), form.getAttributeSelection());
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);

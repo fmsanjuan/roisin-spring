@@ -50,8 +50,14 @@
 			</div>
 		</div>
 		<div class="col-md-2">
-			<br /> <br /> <br />
-			<form:button type="submit" class="btn btn-success btn-lg">Process Data</form:button>
+			<div class="row">
+				<form:button type="submit" name="export" value="Export"
+					class="btn btn-primary btn-lg">Export Data</form:button>
+			</div>
+			<div class="row">
+				<form:button type="submit" name="process" value="Process"
+					class="btn btn-success btn-lg">Process Data</form:button>
+			</div>
 		</div>
 	</div>
 	<br />
