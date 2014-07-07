@@ -27,7 +27,8 @@ public class ProcessingService {
 		RipperResults results = null;
 		try {
 			Process process = GenericProcesses.getRipper(form.getFilePath(), form.getLabel(),
-					form.getDeletedRows(), form.getFilterCondition(), form.getAttributeSelection());
+					form.getDeletedRows(), form.getFilterCondition(), form.getAttributeSelection(),
+					null, null, null, null);
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
@@ -44,7 +45,8 @@ public class ProcessingService {
 			Process process = GenericProcesses.getSubgroupDiscoveryDiscretization(
 					StringUtils.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL),
 					form.getFilePath(), form.getLabel(), form.getDeletedRows(),
-					form.getFilterCondition(), form.getAttributeSelection());
+					form.getFilterCondition(), form.getAttributeSelection(), null, null, null,
+					null, null, null);
 			IOContainer container = process.run();
 			RuleSet ruleModel = (RuleSet) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
@@ -61,7 +63,8 @@ public class ProcessingService {
 			Process process = GenericProcesses.getDecisionTreeToRules(
 					StringUtils.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL),
 					form.getFilePath(), form.getLabel(), form.getDeletedRows(),
-					form.getFilterCondition(), form.getAttributeSelection());
+					form.getFilterCondition(), form.getAttributeSelection(), null, null, null,
+					null, null, null, null, null, null);
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
