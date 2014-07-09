@@ -151,8 +151,8 @@ div.product-chooser div.product-chooser-item input.non-visible {
 										<div class="col-sm-4">
 											<form:select class="form-control" id="ripperCriterionSelect"
 												path="ripperCriterion">
-												<option>information gain</option>
-												<option>accuracy</option>
+												<form:option value="information gain" selected="selected" />
+												<form:option value="accuracy" />
 											</form:select>
 										</div>
 									</div>
@@ -263,8 +263,8 @@ div.product-chooser div.product-chooser-item input.non-visible {
 										<div class="col-sm-4">
 											<form:select class="form-control" id="subgroupModeSelect"
 												path="mode">
-												<option>k best rules</option>
-												<option>above minimum utility</option>
+												<form:option value="k best rules" selected="selected" />
+												<form:option value="above minimum utility" />
 											</form:select>
 										</div>
 									</div>
@@ -275,16 +275,16 @@ div.product-chooser div.product-chooser-item input.non-visible {
 										<div class="col-sm-4">
 											<form:select class="form-control"
 												id="subgroupUtilityFunctionSelect" path="utilityFunction">
-												<option>WRAcc</option>
-												<option>Coverage</option>
-												<option>Precision</option>
-												<option>Accuracy</option>
-												<option>Bias</option>
-												<option>Lift</option>
-												<option>Binominal</option>
-												<option>Squared</option>
-												<option>Odds</option>
-												<option>Odds Ratio</option>
+												<form:option value="WRAcc" selected="selected" />
+												<form:option value="Coverage" />
+												<form:option value="Precision" />
+												<form:option value="Accuracy" />
+												<form:option value="Bias" />
+												<form:option value="Lift" />
+												<form:option value="Binominal" />
+												<form:option value="Squared" />
+												<form:option value="Odds" />
+												<form:option value="Odds Ratio" />
 											</form:select>
 										</div>
 									</div>
@@ -306,6 +306,20 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="subgroupKBestRules" placeholder="k best rules"
 												path="kBestRules" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="subgroupUtilityFunctionSelect"
+											class="col-sm-4 col-sm-offset-1 control-label">Utility
+											Function</label>
+										<div class="col-sm-4">
+											<form:select class="form-control"
+												id="subgroupUtilityFunctionSelect" path="ruleGeneration">
+												<form:option value="positive" />
+												<form:option value="negative" />
+												<form:option value="prediction" />
+												<form:option value="both" selected="selected" />
+											</form:select>
 										</div>
 									</div>
 									<div class="form-group">
@@ -401,10 +415,10 @@ div.product-chooser div.product-chooser-item input.non-visible {
 										<div class="col-sm-4">
 											<form:select class="form-control" id="subgroupModeSelect"
 												path="tree2RulesCriterion">
-												<option>gain_ratio</option>
-												<option>information_gain</option>
-												<option>gini_index</option>
-												<option>accuracy</option>
+												<form:option value="gain_ration" selected="selected" />
+												<form:option value="information_gain" />
+												<form:option value="gini_index" />
+												<form:option value="accuracy" />
 											</form:select>
 										</div>
 									</div>
@@ -495,67 +509,3 @@ div.product-chooser div.product-chooser-item input.non-visible {
 
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-<!-- <div class="container"> -->
-<!-- 	<div class="row"> -->
-<!-- 		<h3 class="text-center">Choose an algorithm</h3> -->
-<!-- 	</div> -->
-<!-- 	<br /> <br /> <br /> -->
-<!-- 	<div class="row"> -->
-<!-- 		<div class="col-md-2 col-md-offset-1"> -->
-<%-- 			<form:form method="post" modelAttribute="form" --%>
-<%-- 				action="/roisin-spring/processing/ripper" role="form"> --%>
-<%-- 				<form:hidden path="deletedRows" /> --%>
-<%-- 				<form:hidden path="attributeSelection" /> --%>
-<%-- 				<form:hidden path="filePath" /> --%>
-<%-- 				<form:hidden path="label" /> --%>
-<%-- 				<form:hidden path="filterCondition" /> --%>
-<%-- 				<form:hidden path="filterAttribute" /> --%>
-<%-- 				<form:hidden path="filterOperator" /> --%>
-<%-- 				<form:hidden path="filterValue" /> --%>
-<%-- 				<form:hidden path="exampleSetSize" /> --%>
-<%-- 				<form:button type="submit" class="btn btn-primary btn-lg">Run Ripper</form:button> --%>
-<%-- 			</form:form> --%>
-<!-- 		</div> -->
-<!-- 		<div class="col-md-2 col-md-offset-2"> -->
-<%-- 			<form:form method="post" modelAttribute="form" --%>
-<%-- 				action="/roisin-spring/processing/subgroup" role="form"> --%>
-<%-- 				<form:hidden path="deletedRows" /> --%>
-<%-- 				<form:hidden path="attributeSelection" /> --%>
-<%-- 				<form:hidden path="filePath" /> --%>
-<%-- 				<form:hidden path="label" /> --%>
-<%-- 				<form:hidden path="filterCondition" /> --%>
-<%-- 				<form:hidden path="filterAttribute" /> --%>
-<%-- 				<form:hidden path="filterOperator" /> --%>
-<%-- 				<form:hidden path="filterValue" /> --%>
-<%-- 				<form:hidden path="exampleSetSize" /> --%>
-<%-- 				<form:button type="submit" class="btn btn-primary btn-lg"> Run Subgroup Discovery</form:button> --%>
-<%-- 			</form:form> --%>
-<!-- 		</div> -->
-<!-- 		<div class="col-md-2 col-md-offset-2"> -->
-<%-- 			<form:form method="post" modelAttribute="form" --%>
-<%-- 				action="/roisin-spring/processing/tree" role="form"> --%>
-<%-- 				<form:hidden path="deletedRows" /> --%>
-<%-- 				<form:hidden path="attributeSelection" /> --%>
-<%-- 				<form:hidden path="filePath" /> --%>
-<%-- 				<form:hidden path="label" /> --%>
-<%-- 				<form:hidden path="filterCondition" /> --%>
-<%-- 				<form:hidden path="filterAttribute" /> --%>
-<%-- 				<form:hidden path="filterOperator" /> --%>
-<%-- 				<form:hidden path="filterValue" /> --%>
-<%-- 				<form:hidden path="exampleSetSize" /> --%>
-<%-- 				<form:button type="submit" class="btn btn-primary btn-lg">Run Tree to Rules</form:button> --%>
-<%-- 			</form:form> --%>
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- </div> -->

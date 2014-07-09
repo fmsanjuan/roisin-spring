@@ -50,6 +50,8 @@ public class PreprocessingForm {
 
 	private Integer kBestRules;
 
+	private String ruleGeneration;
+
 	private Integer maxDepth;
 
 	private Double minCoverage;
@@ -89,6 +91,7 @@ public class PreprocessingForm {
 		this.utilityFunction = ProcessConstants.WRACC;
 		this.minUtility = 0.0;
 		this.kBestRules = 10;
+		this.ruleGeneration = ProcessConstants.BOTH;
 		this.maxDepth = 5;
 		this.minCoverage = 0.0;
 		// Tree2Rules
@@ -325,6 +328,14 @@ public class PreprocessingForm {
 
 	public void setNoPruning(Boolean noPruning) {
 		this.noPruning = noPruning;
+	}
+
+	public String getRuleGeneration() {
+		return ruleGeneration;
+	}
+
+	public void setRuleGeneration(String ruleGeneration) {
+		this.ruleGeneration = ruleGeneration;
 	}
 
 }

@@ -48,7 +48,8 @@ public class ProcessingService {
 					.getFilePath(), form.getLabel(), form.getDeletedRows(), form
 					.getFilterCondition(), form.getAttributeSelection(), form.getMode(), form
 					.getUtilityFunction(), form.getMinUtility().toString(), form.getkBestRules()
-					.toString(), form.getMaxDepth().toString(), form.getMinCoverage().toString());
+					.toString(), form.getRuleGeneration().toString(),
+					form.getMaxDepth().toString(), form.getMinCoverage().toString());
 			IOContainer container = process.run();
 			RuleSet ruleModel = (RuleSet) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);

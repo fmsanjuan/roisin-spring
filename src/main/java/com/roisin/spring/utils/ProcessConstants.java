@@ -44,6 +44,8 @@ public interface ProcessConstants {
 
 	String ODDS_RATIO = "Odds Ratio";
 
+	String BOTH = "both";
+
 	/*
 	 * Decision Tree
 	 */
