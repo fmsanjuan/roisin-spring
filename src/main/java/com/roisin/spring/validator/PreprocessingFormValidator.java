@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.roisin.spring.model.PreprocessingForm;
+import com.roisin.spring.forms.PreprocessingForm;
 
 public class PreprocessingFormValidator implements Validator {
 

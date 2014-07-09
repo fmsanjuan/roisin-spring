@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.roisin.core.results.RoisinResults;
-import com.roisin.spring.model.PreprocessingForm;
+import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.services.ProcessingService;
 
 @Controller

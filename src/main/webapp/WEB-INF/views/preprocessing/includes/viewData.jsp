@@ -2,6 +2,28 @@
 	role="form">
 	<form:hidden path="filePath" />
 	<form:hidden path="exampleSetSize" />
+	<!-- Ripper Hidden -->
+	<form:hidden path="ripperCriterion" />
+	<form:hidden path="sampleRatio" />
+	<form:hidden path="pureness" />
+	<form:hidden path="minimalPruneBenefit" />
+	<!-- Subgroup Hidden -->
+	<form:hidden path="mode" />
+	<form:hidden path="utilityFunction" />
+	<form:hidden path="minUtility" />
+	<form:hidden path="kBestRules" />
+	<form:hidden path="maxDepth" />
+	<form:hidden path="minCoverage" />
+	<!-- Tree2Rules Hidden -->
+	<form:hidden path="tree2RulesCriterion" />
+	<form:hidden path="minimalSizeForSplit" />
+	<form:hidden path="minimalLeafSize" />
+	<form:hidden path="minimalGain" />
+	<form:hidden path="maximalDepth" />
+	<form:hidden path="confidence" />
+	<form:hidden path="numberOfPrepruningAlternatives" />
+	<form:hidden path="noPrepruning" />
+	<form:hidden path="noPruning" />
 	<c:if test="${error == true}">
 		<div class="row">
 			<div class="alert alert-danger alert-dismissable">

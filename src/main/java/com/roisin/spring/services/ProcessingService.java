@@ -15,7 +15,7 @@ import com.roisin.core.processes.GenericProcesses;
 import com.roisin.core.results.RipperResults;
 import com.roisin.core.results.RoisinResults;
 import com.roisin.core.results.SubgroupResults;
-import com.roisin.spring.model.PreprocessingForm;
+import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.utils.Constants;
 
 @Service

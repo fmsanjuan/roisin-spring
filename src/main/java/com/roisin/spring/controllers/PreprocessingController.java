@@ -22,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
-import com.roisin.spring.model.PreprocessingForm;
+import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.model.UploadedFile;
 import com.roisin.spring.services.PreprocessingService;
 import com.roisin.spring.utils.Constants;

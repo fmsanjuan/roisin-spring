@@ -27,7 +27,7 @@ import com.rapidminer.example.ExampleSet;
 import com.rapidminer.operator.IOContainer;
 import com.rapidminer.operator.OperatorException;
 import com.roisin.core.processes.Preprocessing;
-import com.roisin.spring.model.PreprocessingForm;
+import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.utils.Constants;
 
 import exception.RoisinException;
