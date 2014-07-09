@@ -26,9 +26,10 @@ public class ProcessingService {
 	public RoisinResults getRipperResults(PreprocessingForm form) {
 		RipperResults results = null;
 		try {
-			Process process = GenericProcesses.getRipper(form.getFilePath(), form.getLabel(),
-					form.getDeletedRows(), form.getFilterCondition(), form.getAttributeSelection(),
-					null, null, null, null);
+			Process process = GenericProcesses.getRipper(form.getFilePath(), form.getLabel(), form
+					.getDeletedRows(), form.getFilterCondition(), form.getAttributeSelection(),
+					form.getRipperCriterion(), form.getSampleRatio().toString(), form.getPureness()
+							.toString(), form.getMinimalPruneBenefit().toString());
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
@@ -42,11 +43,12 @@ public class ProcessingService {
 	public RoisinResults getSubgroupResults(PreprocessingForm form) {
 		SubgroupResults results = null;
 		try {
-			Process process = GenericProcesses.getSubgroupDiscoveryDiscretization(
-					StringUtils.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL),
-					form.getFilePath(), form.getLabel(), form.getDeletedRows(),
-					form.getFilterCondition(), form.getAttributeSelection(), null, null, null,
-					null, null, null);
+			Process process = GenericProcesses.getSubgroupDiscoveryDiscretization(StringUtils
+					.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL), form
+					.getFilePath(), form.getLabel(), form.getDeletedRows(), form
+					.getFilterCondition(), form.getAttributeSelection(), form.getMode(), form
+					.getUtilityFunction(), form.getMinUtility().toString(), form.getkBestRules()
+					.toString(), form.getMaxDepth().toString(), form.getMinCoverage().toString());
 			IOContainer container = process.run();
 			RuleSet ruleModel = (RuleSet) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
@@ -60,11 +62,15 @@ public class ProcessingService {
 	public RoisinResults getTreeToRulesResults(PreprocessingForm form) {
 		RipperResults results = null;
 		try {
-			Process process = GenericProcesses.getDecisionTreeToRules(
-					StringUtils.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL),
-					form.getFilePath(), form.getLabel(), form.getDeletedRows(),
-					form.getFilterCondition(), form.getAttributeSelection(), null, null, null,
-					null, null, null, null, null, null);
+			Process process = GenericProcesses.getDecisionTreeToRules(StringUtils
+					.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL), form
+					.getFilePath(), form.getLabel(), form.getDeletedRows(), form
+					.getFilterCondition(), form.getAttributeSelection(), form
+					.getTree2RulesCriterion(), form.getMinimalSizeForSplit().toString(), form
+					.getMinimalLeafSize().toString(), form.getMinimalGain().toString(), form
+					.getMaximalDepth().toString(), form.getConfidence().toString(), form
+					.getNumberOfPrepruningAlternatives().toString(), form.getNoPrepruning()
+					.toString(), form.getNoPruning().toString());
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);

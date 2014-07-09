@@ -401,9 +401,9 @@ div.product-chooser div.product-chooser-item input.non-visible {
 										<div class="col-sm-4">
 											<form:select class="form-control" id="subgroupModeSelect"
 												path="tree2RulesCriterion">
-												<option>gain ratio</option>
-												<option>information gain</option>
-												<option>gini index</option>
+												<option>gain_ratio</option>
+												<option>information_gain</option>
+												<option>gini_index</option>
 												<option>accuracy</option>
 											</form:select>
 										</div>
