@@ -36,9 +36,12 @@ public class PreprocessingFormValidator implements Validator {
 			errors.rejectValue("deletedRows", "form.rows", "You cannot delete all the examples");
 		}
 
-		/*
-		 * Ripper Advanced Settings validation
-		 */
+	}
+
+	public void validateRipper(Object target, Errors errors) {
+
+		PreprocessingForm form = (PreprocessingForm) target;
+
 		if (!form.getRipperCriterion().equals(ProcessConstants.INFORMATION_GAIN)
 				&& !form.getRipperCriterion().equals(ProcessConstants.ACCURACY_RIPPER_TREE)) {
 			errors.rejectValue("ripperCriterion", "form.ripperCriterion",
@@ -59,9 +62,13 @@ public class PreprocessingFormValidator implements Validator {
 					"Must be between 0 and 1");
 		}
 
-		/*
-		 * Subgroup Discovery Settings validation
-		 */
+		validate(form, errors);
+	}
+
+	public void validateSubgroup(Object target, Errors errors) {
+
+		PreprocessingForm form = (PreprocessingForm) target;
+
 		if (!form.getMode().equals(ProcessConstants.K_BEST_RULES)
 				&& !form.getMode().equals(ProcessConstants.ABOVE_MINIMUM_UTILITY)) {
 			errors.rejectValue("mode", "form.mode", "Please, select a mode");
@@ -81,11 +88,6 @@ public class PreprocessingFormValidator implements Validator {
 					"Please, select a utility function");
 		}
 
-		// if (form.getkBestRules().doubleValue() < 1.0) {
-		// errors.rejectValue("kBestRules", "form.kBestRules",
-		// "Must be greater or equal than 1");
-		// }
-
 		if (!form.getRuleGeneration().equals(ProcessConstants.POSITIVE)
 				&& !form.getRuleGeneration().equals(ProcessConstants.NEGATIVE)
 				&& !form.getRuleGeneration().equals(ProcessConstants.PREDICTION)
@@ -94,18 +96,16 @@ public class PreprocessingFormValidator implements Validator {
 					"Please, select a rule generatio mode");
 		}
 
-		// if (form.getMaxDepth().doubleValue() < 0.0) {
-		// errors.rejectValue("maxDepth", "form.maxDepth",
-		// "Must be greater or equal than 0");
-		// }
-
 		if (form.getMinCoverage().doubleValue() < 0.0 || form.getMinCoverage().doubleValue() > 1.0) {
 			errors.rejectValue("minCoverage", "form.minCoverage", "Must be between 0 and 1");
 		}
 
-		/*
-		 * Tree2Rules
-		 */
+		validate(form, errors);
+	}
+
+	public void validateTree2rules(Object target, Errors errors) {
+
+		PreprocessingForm form = (PreprocessingForm) target;
 
 		if (!form.getTree2RulesCriterion().equals(ProcessConstants.GAIN_RATIO)
 				&& !form.getTree2RulesCriterion().equals(ProcessConstants.INFORMATION_GAIN)
@@ -123,5 +123,7 @@ public class PreprocessingFormValidator implements Validator {
 			errors.rejectValue("confidence", "form.confidence", "Must be between 0 and 0.5");
 		}
 
+		validate(form, errors);
 	}
+
 }

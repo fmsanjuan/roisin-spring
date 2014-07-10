@@ -41,7 +41,7 @@ public class ProcessingController {
 	@RequestMapping(value = "/ripper", method = RequestMethod.POST)
 	public ModelAndView ripper(@ModelAttribute("form") PreprocessingForm form, BindingResult result) {
 
-		formValidator.validate(form, result);
+		formValidator.validateRipper(form, result);
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("processing/create");
@@ -59,7 +59,7 @@ public class ProcessingController {
 	@RequestMapping(value = "/subgroup", method = RequestMethod.POST)
 	public ModelAndView subgroup(@ModelAttribute("form") PreprocessingForm form,
 			BindingResult result) {
-		formValidator.validate(form, result);
+		formValidator.validateSubgroup(form, result);
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("processing/create");
@@ -77,7 +77,7 @@ public class ProcessingController {
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
 	public ModelAndView tree(@ModelAttribute("form") PreprocessingForm form, BindingResult result) {
 
-		formValidator.validate(form, result);
+		formValidator.validateTree2rules(form, result);
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("processing/create");
