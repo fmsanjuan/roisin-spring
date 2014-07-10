@@ -1,0 +1,9 @@
+<form:hidden path="deletedRows" />
+<form:hidden path="attributeSelection" />
+<form:hidden path="filePath" />
+<form:hidden path="label" />
+<form:hidden path="filterCondition" />
+<form:hidden path="filterAttribute" />
+<form:hidden path="filterOperator" />
+<form:hidden path="filterValue" />
+<form:hidden path="exampleSetSize" />

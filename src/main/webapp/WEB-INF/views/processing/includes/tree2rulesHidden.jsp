@@ -1,0 +1,9 @@
+<form:hidden path="tree2RulesCriterion" />
+<form:hidden path="minimalSizeForSplit" />
+<form:hidden path="minimalLeafSize" />
+<form:hidden path="minimalGain" />
+<form:hidden path="maximalDepth" />
+<form:hidden path="confidence" />
+<form:hidden path="numberOfPrepruningAlternatives" />
+<form:hidden path="noPrepruning" />
+<form:hidden path="noPruning" />
