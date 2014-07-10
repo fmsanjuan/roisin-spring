@@ -6,7 +6,7 @@
 	<%@include file="tree2rulesHidden.jsp"%>
 	<!-- Subgroup Hidden -->
 	<%@include file="subgroupHidden.jsp"%>
-	
+
 	<div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
 		<h3 class="text-center">Ripper</h3>
 		<br /> <span class="description">Lorem ipsum dolor sit amet,
@@ -19,10 +19,20 @@
 	</div>
 	<div class="clear"></div>
 	<br />
-	<a href="#aboutRipperModal" data-toggle="modal"
-		data-target="#ripperModal"><button type="button"
-			class="btn btn-default">Advanced Settings</button>
-		</button></a>
+	<c:choose>
+		<c:when test="${error !=null && error=='Ripper' }">
+			<a href="#aboutRipperModal" data-toggle="modal"
+				data-target="#ripperModal"><button type="button"
+					class="btn btn-danger">Advanced Settings</button>
+				</button></a>
+		</c:when>
+		<c:otherwise>
+			<a href="#aboutRipperModal" data-toggle="modal"
+				data-target="#ripperModal"><button type="button"
+					class="btn btn-default">Advanced Settings</button>
+				</button></a>
+		</c:otherwise>
+	</c:choose>
 	<form:button type="submit" class="btn btn-default">Run Ripper</form:button>
 	<div class="modal fade" id="ripperModal" tabindex="-1" role="dialog"
 		aria-labelledby="ripperModalLabel" aria-hidden="true">

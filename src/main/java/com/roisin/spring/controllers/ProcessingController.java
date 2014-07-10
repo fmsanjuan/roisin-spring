@@ -2,6 +2,8 @@ package com.roisin.spring.controllers;
 
 import java.util.Locale;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,7 @@ public class ProcessingController {
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("processing/create");
+			res.addObject("error", "Ripper");
 			res.addObject("form", form);
 			return res;
 		} else {
@@ -57,12 +60,13 @@ public class ProcessingController {
 	}
 
 	@RequestMapping(value = "/subgroup", method = RequestMethod.POST)
-	public ModelAndView subgroup(@ModelAttribute("form") PreprocessingForm form,
+	public ModelAndView subgroup(@ModelAttribute("form") @Valid PreprocessingForm form,
 			BindingResult result) {
 		formValidator.validateSubgroup(form, result);
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("processing/create");
+			res.addObject("error", "Subgroup Discovery");
 			res.addObject("form", form);
 			return res;
 		} else {
@@ -81,6 +85,7 @@ public class ProcessingController {
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("processing/create");
+			res.addObject("error", "Tree to Rules");
 			res.addObject("form", form);
 			return res;
 		} else {

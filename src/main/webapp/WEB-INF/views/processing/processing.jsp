@@ -84,6 +84,18 @@ div.product-chooser div.product-chooser-item input.non-visible {
 </script>
 
 <div class="container">
+	<c:if test="${error != null}">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="alert alert-danger alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert"
+						aria-hidden="true">&times;</button>
+					<strong>Error! </strong> Please, revise the configuration for the
+					algorithm ${error }.
+				</div>
+			</div>
+		</div>
+	</c:if>
 	<div class="row form-group product-chooser">
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 			<div class="product-chooser-item selected">

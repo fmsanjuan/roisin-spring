@@ -18,9 +18,18 @@
 	</div>
 	<div class="clear"></div>
 	<br />
-	<a href="#aboutsubgroupModal" data-toggle="modal"
-		data-target="#subgroupModal"><button type="button"
-			class="btn btn-default">Advanced Settings</button></a>
+	<c:choose>
+		<c:when test="${error !=null && error=='Subgroup Discovery' }">
+			<a href="#aboutsubgroupModal" data-toggle="modal"
+				data-target="#subgroupModal"><button type="button"
+					class="btn btn-danger">Advanced Settings</button></a>
+		</c:when>
+		<c:otherwise>
+			<a href="#aboutsubgroupModal" data-toggle="modal"
+				data-target="#subgroupModal"><button type="button"
+					class="btn btn-default">Advanced Settings</button></a>
+		</c:otherwise>
+	</c:choose>
 	<form:button type="submit" class="btn btn-default">Run Subgroup</form:button>
 
 	<div class="modal fade" id="subgroupModal" tabindex="-1" role="dialog"

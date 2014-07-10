@@ -18,9 +18,18 @@
 	</div>
 	<div class="clear"></div>
 	<br />
-	<a href="#aboutTree2rulesModal" data-toggle="modal"
-		data-target="#tree2rulesModal"><button type="button"
-			class="btn btn-default">Advanced Settings</button></a>
+	<c:choose>
+		<c:when test="${error !=null && error=='Tree to Rules' }">
+			<a href="#aboutTree2rulesModal" data-toggle="modal"
+				data-target="#tree2rulesModal"><button type="button"
+					class="btn btn-danger">Advanced Settings</button></a>
+		</c:when>
+		<c:otherwise>
+			<a href="#aboutTree2rulesModal" data-toggle="modal"
+				data-target="#tree2rulesModal"><button type="button"
+					class="btn btn-default">Advanced Settings</button></a>
+		</c:otherwise>
+	</c:choose>
 	<form:button type="submit" class="btn btn-default">Run Tree to Rules</form:button>
 	<div class="modal fade" id="tree2rulesModal" tabindex="-1"
 		role="dialog" aria-labelledby="tree2rulesModalLabel"
@@ -39,7 +48,7 @@
 						<div class="col-sm-4">
 							<form:select class="form-control" id="subgroupModeSelect"
 								path="tree2RulesCriterion">
-								<form:option value="gain_ration" selected="selected" />
+								<form:option value="gain_ratio" selected="selected" />
 								<form:option value="information_gain" />
 								<form:option value="gini_index" />
 								<form:option value="accuracy" />
