@@ -44,6 +44,12 @@ public interface ProcessConstants {
 
 	String ODDS_RATIO = "Odds Ratio";
 
+	String POSITIVE = "positive";
+
+	String NEGATIVE = "negative";
+
+	String PREDICTION = "prediction";
+
 	String BOTH = "both";
 
 	/*

@@ -151,9 +151,10 @@ div.product-chooser div.product-chooser-item input.non-visible {
 										<div class="col-sm-4">
 											<form:select class="form-control" id="ripperCriterionSelect"
 												path="ripperCriterion">
-												<form:option value="information gain" selected="selected" />
+												<form:option value="information_gain" selected="selected" />
 												<form:option value="accuracy" />
 											</form:select>
+											<form:errors path="ripperCriterion" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -164,6 +165,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="ripperSampleRatio" placeholder="Sample Ratio"
 												path="sampleRatio" />
+											<form:errors path="sampleRatio" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -172,6 +174,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 										<div class="col-sm-4">
 											<form:input type="text" class="form-control"
 												id="ripperPureness" placeholder="Pureness" path="pureness" />
+											<form:errors path="pureness" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -183,6 +186,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 												id="ripperMinimalPruneBenefit"
 												placeholder="Minimal Prune Benefit"
 												path="minimalPruneBenefit" />
+											<form:errors path="minimalPruneBenefit" />
 										</div>
 									</div>
 
@@ -266,6 +270,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 												<form:option value="k best rules" selected="selected" />
 												<form:option value="above minimum utility" />
 											</form:select>
+											<form:errors path="mode" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -286,6 +291,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 												<form:option value="Odds" />
 												<form:option value="Odds Ratio" />
 											</form:select>
+											<form:errors path="utilityFunction" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -296,6 +302,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="subgroupMinUtility" placeholder="Min Utility"
 												path="minUtility" />
+											<form:errors path="minUtility" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -306,6 +313,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="subgroupKBestRules" placeholder="k best rules"
 												path="kBestRules" />
+											<form:errors path="kBestRules" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -320,6 +328,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 												<form:option value="prediction" />
 												<form:option value="both" selected="selected" />
 											</form:select>
+											<form:errors path="ruleGeneration" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -330,6 +339,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="subgroupMaxDepthRules" placeholder="Max Depth"
 												path="maxDepth" />
+											<form:errors path="maxDepth" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -340,6 +350,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="subgroupMinCoverage" placeholder="Min Coverage"
 												path="minCoverage" />
+											<form:errors path="minCoverage" />
 										</div>
 									</div>
 								</div>
@@ -420,6 +431,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 												<form:option value="gini_index" />
 												<form:option value="accuracy" />
 											</form:select>
+											<form:errors path="tree2RulesCriterion" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -430,6 +442,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 												id="subgroupMinSizeSplit"
 												placeholder="Minimal Size for Split"
 												path="minimalSizeForSplit" />
+											<form:errors path="minimalSizeForSplit" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -439,6 +452,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="subgroupMinLeafSize" placeholder="Minimal Leaf Size"
 												path="minimalLeafSize" />
+											<form:errors path="minimalLeafSize" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -448,6 +462,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="subgroupMinimalGain" placeholder="Minimal Gain"
 												path="minimalGain" />
+											<form:errors path="minimalGain" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -457,6 +472,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="subgroupMaxDepth" placeholder="Maximal Depth"
 												path="maximalDepth" />
+											<form:errors path="maximalDepth" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -465,6 +481,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 											<form:input type="text" class="form-control"
 												id="subgroupConfidence" placeholder="Confidence"
 												path="confidence" />
+											<form:errors path="confidence" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -476,6 +493,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 												id="subgroupNumberOfPrepruning"
 												placeholder="Number of prepruning"
 												path="numberOfPrepruningAlternatives" />
+											<form:errors path="numberOfPrepruningAlternatives" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -484,6 +502,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 										<div class="col-sm-4">
 											<form:checkbox class="form-control" id="subgroupNoPrepruning"
 												path="noPrepruning" />
+											<form:errors path="noPrepruning" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -492,6 +511,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 										<div class="col-sm-4">
 											<form:checkbox class="form-control" id="subgroupNoPruning"
 												path="noPruning" />
+											<form:errors path="noPruning" />
 										</div>
 									</div>
 								</div>

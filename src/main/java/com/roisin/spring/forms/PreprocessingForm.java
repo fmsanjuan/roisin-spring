@@ -3,6 +3,9 @@ package com.roisin.spring.forms;
 import java.util.List;
 import java.util.SortedSet;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
@@ -32,6 +35,7 @@ public class PreprocessingForm {
 	/*
 	 * Ripper Form
 	 */
+	@NotNull
 	private String ripperCriterion;
 
 	private Double sampleRatio;
@@ -42,38 +46,50 @@ public class PreprocessingForm {
 	/*
 	 * Subgroup Discovery Form
 	 */
+	@NotNull
 	private String mode;
 
+	@NotNull
 	private String utilityFunction;
 
 	private Double minUtility;
 
+	@Min(1)
 	private Integer kBestRules;
 
+	@NotNull
 	private String ruleGeneration;
 
+	@Min(0)
 	private Integer maxDepth;
 
 	private Double minCoverage;
 	/*
 	 * Tree 2 Rules Form
 	 */
+	@NotNull
 	private String tree2RulesCriterion;
 
+	@Min(1)
 	private Integer minimalSizeForSplit;
 
+	@Min(1)
 	private Integer minimalLeafSize;
 
 	private Double minimalGain;
 
+	@Min(-1)
 	private Integer maximalDepth;
 
 	private Double confidence;
 
+	@Min(0)
 	private Integer numberOfPrepruningAlternatives;
 
+	@NotNull
 	private Boolean noPrepruning;
 
+	@NotNull
 	private Boolean noPruning;
 
 	public PreprocessingForm() {
