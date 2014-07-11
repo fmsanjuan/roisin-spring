@@ -2,8 +2,6 @@ package com.roisin.spring.controllers;
 
 import java.util.Locale;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +58,7 @@ public class ProcessingController {
 	}
 
 	@RequestMapping(value = "/subgroup", method = RequestMethod.POST)
-	public ModelAndView subgroup(@ModelAttribute("form") @Valid PreprocessingForm form,
+	public ModelAndView subgroup(@ModelAttribute("form") PreprocessingForm form,
 			BindingResult result) {
 		formValidator.validateSubgroup(form, result);
 

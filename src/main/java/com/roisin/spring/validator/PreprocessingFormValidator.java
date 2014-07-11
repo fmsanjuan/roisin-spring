@@ -42,8 +42,9 @@ public class PreprocessingFormValidator implements Validator {
 
 		PreprocessingForm form = (PreprocessingForm) target;
 
-		if (!form.getRipperCriterion().equals(ProcessConstants.INFORMATION_GAIN)
-				&& !form.getRipperCriterion().equals(ProcessConstants.ACCURACY_RIPPER_TREE)) {
+		if (StringUtils.isBlank(form.getRipperCriterion())
+				|| (!form.getRipperCriterion().equals(ProcessConstants.INFORMATION_GAIN) && !form
+						.getRipperCriterion().equals(ProcessConstants.ACCURACY_RIPPER_TREE))) {
 			errors.rejectValue("ripperCriterion", "form.ripperCriterion",
 					"Please, select a criterion");
 		}
@@ -69,31 +70,43 @@ public class PreprocessingFormValidator implements Validator {
 
 		PreprocessingForm form = (PreprocessingForm) target;
 
-		if (!form.getMode().equals(ProcessConstants.K_BEST_RULES)
-				&& !form.getMode().equals(ProcessConstants.ABOVE_MINIMUM_UTILITY)) {
+		if (StringUtils.isBlank(form.getMode())
+				|| (!form.getMode().equals(ProcessConstants.K_BEST_RULES) && !form.getMode()
+						.equals(ProcessConstants.ABOVE_MINIMUM_UTILITY))) {
 			errors.rejectValue("mode", "form.mode", "Please, select a mode");
 		}
 
-		if (!form.getUtilityFunction().equals(ProcessConstants.WRACC)
-				&& !form.getUtilityFunction().equals(ProcessConstants.COVERAGE)
-				&& !form.getUtilityFunction().equals(ProcessConstants.PRECISION)
-				&& !form.getUtilityFunction().equals(ProcessConstants.ACCURACY_SUBGROUP)
-				&& !form.getUtilityFunction().equals(ProcessConstants.BIAS)
-				&& !form.getUtilityFunction().equals(ProcessConstants.LIFT)
-				&& !form.getUtilityFunction().equals(ProcessConstants.BINOMINAL)
-				&& !form.getUtilityFunction().equals(ProcessConstants.SQUARED)
-				&& !form.getUtilityFunction().equals(ProcessConstants.ODDS)
-				&& !form.getUtilityFunction().equals(ProcessConstants.ODDS_RATIO)) {
+		if (StringUtils.isBlank(form.getUtilityFunction())
+				|| (!form.getUtilityFunction().equals(ProcessConstants.WRACC)
+						&& !form.getUtilityFunction().equals(ProcessConstants.COVERAGE)
+						&& !form.getUtilityFunction().equals(ProcessConstants.PRECISION)
+						&& !form.getUtilityFunction().equals(ProcessConstants.ACCURACY_SUBGROUP)
+						&& !form.getUtilityFunction().equals(ProcessConstants.BIAS)
+						&& !form.getUtilityFunction().equals(ProcessConstants.LIFT)
+						&& !form.getUtilityFunction().equals(ProcessConstants.BINOMINAL)
+						&& !form.getUtilityFunction().equals(ProcessConstants.SQUARED)
+						&& !form.getUtilityFunction().equals(ProcessConstants.ODDS) && !form
+						.getUtilityFunction().equals(ProcessConstants.ODDS_RATIO))) {
 			errors.rejectValue("utilityFunction", "form.utilityFunction",
 					"Please, select a utility function");
 		}
 
-		if (!form.getRuleGeneration().equals(ProcessConstants.POSITIVE)
-				&& !form.getRuleGeneration().equals(ProcessConstants.NEGATIVE)
-				&& !form.getRuleGeneration().equals(ProcessConstants.PREDICTION)
-				&& !form.getRuleGeneration().equals(ProcessConstants.BOTH)) {
+		if (form.getkBestRules() < 1) {
+			errors.rejectValue("kBestRules", "form.kBestRules",
+					"Must be greater than or equal to 1");
+		}
+
+		if (StringUtils.isBlank(form.getRuleGeneration())
+				|| (!form.getRuleGeneration().equals(ProcessConstants.POSITIVE)
+						&& !form.getRuleGeneration().equals(ProcessConstants.NEGATIVE)
+						&& !form.getRuleGeneration().equals(ProcessConstants.PREDICTION) && !form
+						.getRuleGeneration().equals(ProcessConstants.BOTH))) {
 			errors.rejectValue("ruleGeneration", "form.ruleGeneration",
 					"Please, select a rule generatio mode");
+		}
+
+		if (form.getMaxDepth() < 0) {
+			errors.rejectValue("maxDepth", "form.maxDepth", "Must be greater than or equal to 0");
 		}
 
 		if (form.getMinCoverage().doubleValue() < 0.0 || form.getMinCoverage().doubleValue() > 1.0) {
@@ -107,20 +120,50 @@ public class PreprocessingFormValidator implements Validator {
 
 		PreprocessingForm form = (PreprocessingForm) target;
 
-		if (!form.getTree2RulesCriterion().equals(ProcessConstants.GAIN_RATIO)
-				&& !form.getTree2RulesCriterion().equals(ProcessConstants.INFORMATION_GAIN)
-				&& !form.getTree2RulesCriterion().equals(ProcessConstants.GINI_INDEX)
-				&& !form.getTree2RulesCriterion().equals(ProcessConstants.ACCURACY_RIPPER_TREE)) {
+		if (StringUtils.isBlank(form.getTree2RulesCriterion())
+				|| (!form.getTree2RulesCriterion().equals(ProcessConstants.GAIN_RATIO)
+						&& !form.getTree2RulesCriterion().equals(ProcessConstants.INFORMATION_GAIN)
+						&& !form.getTree2RulesCriterion().equals(ProcessConstants.GINI_INDEX) && !form
+						.getTree2RulesCriterion().equals(ProcessConstants.ACCURACY_RIPPER_TREE))) {
 			errors.rejectValue("tree2RulesCriterion", "form.tree2RulesCriterion",
 					"Please, select a criterion");
 		}
 
+		if (form.getMinimalSizeForSplit() < 1) {
+			errors.rejectValue("minimalSizeForSplit", "form.minimalSizeForSplit",
+					"Must be greater than or equal to 1");
+		}
+
+		if (form.getMinimalLeafSize() < 1) {
+			errors.rejectValue("minimalLeafSize", "form.minimalLeafSize",
+					"Must be greater than or equal to 1");
+		}
+
 		if (form.getMinimalGain().doubleValue() < 0.0) {
-			errors.rejectValue("minimalGain", "form.minimalGain", "Must be greater than 0");
+			errors.rejectValue("minimalGain", "form.minimalGain",
+					"Must be greater than or equal to 0");
+		}
+
+		if (form.getMaximalDepth() < -1) {
+			errors.rejectValue("maximalDepth", "form.maximalDepth",
+					"Must be greater than or equal to -1");
 		}
 
 		if (form.getConfidence() > 0.5 || form.getConfidence() < 0.0) {
 			errors.rejectValue("confidence", "form.confidence", "Must be between 0 and 0.5");
+		}
+
+		if (form.getNumberOfPrepruningAlternatives() < 0) {
+			errors.rejectValue("maximalDepth", "form.maximalDepth",
+					"Must be greater than or equal to 0");
+		}
+
+		if (form.getNoPrepruning() == null) {
+			errors.rejectValue("maximalDepth", "form.maximalDepth", "Cannot be null");
+		}
+
+		if (form.getNoPruning() == null) {
+			errors.rejectValue("maximalDepth", "form.maximalDepth", "Cannot be null");
 		}
 
 		validate(form, errors);
