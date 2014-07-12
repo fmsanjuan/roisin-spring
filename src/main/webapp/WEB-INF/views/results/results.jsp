@@ -51,4 +51,7 @@
 			</table>
 		</div>
 	</div>
+	<div class="row text-center">
+		<img alt="AUC Chart" src="${chart }">
+	</div>
 </div>

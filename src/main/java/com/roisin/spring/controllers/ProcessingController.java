@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.googlecode.charts4j.XYLineChart;
 import com.roisin.core.results.RoisinResults;
 import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.services.ProcessingService;
@@ -50,9 +51,11 @@ public class ProcessingController {
 			return res;
 		} else {
 			RoisinResults results = processingService.getRipperResults(form);
+			XYLineChart chart = processingService.getAucChart(results);
 
 			ModelAndView res = new ModelAndView("results/create");
 			res.addObject("results", results);
+			res.addObject("chart", chart.toURLString());
 			return res;
 		}
 	}
@@ -69,9 +72,11 @@ public class ProcessingController {
 			return res;
 		} else {
 			RoisinResults results = processingService.getSubgroupResults(form);
+			XYLineChart chart = processingService.getAucChart(results);
 
 			ModelAndView res = new ModelAndView("results/create");
 			res.addObject("results", results);
+			res.addObject("chart", chart.toURLString());
 			return res;
 		}
 	}
@@ -88,9 +93,11 @@ public class ProcessingController {
 			return res;
 		} else {
 			RoisinResults results = processingService.getTreeToRulesResults(form);
+			XYLineChart chart = processingService.getAucChart(results);
 
 			ModelAndView res = new ModelAndView("results/create");
 			res.addObject("results", results);
+			res.addObject("chart", chart.toURLString());
 			return res;
 		}
 	}
