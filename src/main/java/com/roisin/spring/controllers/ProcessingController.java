@@ -53,6 +53,7 @@ public class ProcessingController {
 		} else {
 			RoisinResults results = processingService.getRipperResults(form);
 			XYLineChart chart = processingService.getAucChart(results);
+			results.truncateResults();
 			form.setAlgorithm(ProcessConstants.RIPPER);
 
 			ModelAndView res = new ModelAndView("results/create");
@@ -76,6 +77,7 @@ public class ProcessingController {
 		} else {
 			RoisinResults results = processingService.getSubgroupResults(form);
 			XYLineChart chart = processingService.getAucChart(results);
+			results.truncateResults();
 			form.setAlgorithm(ProcessConstants.SUBGROUP_DISCOVERY);
 
 			ModelAndView res = new ModelAndView("results/create");
@@ -99,6 +101,7 @@ public class ProcessingController {
 		} else {
 			RoisinResults results = processingService.getTreeToRulesResults(form);
 			XYLineChart chart = processingService.getAucChart(results);
+			results.truncateResults();
 			form.setAlgorithm(ProcessConstants.TREE_TO_RULES);
 
 			ModelAndView res = new ModelAndView("results/create");
