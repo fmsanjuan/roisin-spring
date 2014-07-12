@@ -52,15 +52,9 @@ public class ProcessingController {
 			return res;
 		} else {
 			RoisinResults results = processingService.getRipperResults(form);
-			XYLineChart chart = processingService.getAucChart(results);
-			results.truncateResults();
 			form.setAlgorithm(ProcessConstants.RIPPER);
 
-			ModelAndView res = new ModelAndView("results/create");
-			res.addObject("results", results);
-			res.addObject("form", form);
-			res.addObject("chart", chart.toURLString());
-			return res;
+			return createModelAndView(results, form);
 		}
 	}
 
@@ -76,15 +70,9 @@ public class ProcessingController {
 			return res;
 		} else {
 			RoisinResults results = processingService.getSubgroupResults(form);
-			XYLineChart chart = processingService.getAucChart(results);
-			results.truncateResults();
 			form.setAlgorithm(ProcessConstants.SUBGROUP_DISCOVERY);
 
-			ModelAndView res = new ModelAndView("results/create");
-			res.addObject("results", results);
-			res.addObject("form", form);
-			res.addObject("chart", chart.toURLString());
-			return res;
+			return createModelAndView(results, form);
 		}
 	}
 
@@ -100,16 +88,21 @@ public class ProcessingController {
 			return res;
 		} else {
 			RoisinResults results = processingService.getTreeToRulesResults(form);
-			XYLineChart chart = processingService.getAucChart(results);
-			results.truncateResults();
 			form.setAlgorithm(ProcessConstants.TREE_TO_RULES);
 
-			ModelAndView res = new ModelAndView("results/create");
-			res.addObject("results", results);
-			res.addObject("form", form);
-			res.addObject("chart", chart.toURLString());
-			return res;
+			return createModelAndView(results, form);
 		}
+	}
+
+	public ModelAndView createModelAndView(RoisinResults results, PreprocessingForm form) {
+		XYLineChart chart = processingService.getAucChart(results);
+		results.truncateResults();
+
+		ModelAndView res = new ModelAndView("results/create");
+		res.addObject("results", results);
+		res.addObject("form", form);
+		res.addObject("chart", chart.toURLString());
+		return res;
 	}
 
 }
