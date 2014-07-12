@@ -36,4 +36,12 @@ public interface Constants {
 
 	String SLASH_SYMBOL = "/";
 
+	double ZERO = 0.0;
+
+	double ONE = 1.0;
+
+	int CHART_WIDTH = 500;
+
+	int CHART_HEIGTH = 300;
+
 }

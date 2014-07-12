@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.googlecode.charts4j.Color;
 import com.googlecode.charts4j.Data;
 import com.googlecode.charts4j.DataUtil;
+import com.googlecode.charts4j.Fills;
 import com.googlecode.charts4j.GCharts;
 import com.googlecode.charts4j.Plots;
 import com.googlecode.charts4j.XYLine;
@@ -93,29 +95,30 @@ public class ProcessingService {
 
 	public XYLineChart getAucChart(RoisinResults roisinResults) {
 
-		int width = 500;
-		int heigth = 300;
-
 		List<RoisinRule> rules = roisinResults.getRoisinRules();
 		int rulesSize = rules.size();
 
+		// Curve
 		double[] xValues = new double[rulesSize + 1];
 		double[] yValues = new double[rulesSize + 1];
-		xValues[0] = 0.0;
-		yValues[0] = 0.0;
+		xValues[0] = Constants.ZERO;
+		yValues[0] = Constants.ZERO;
 
 		for (int i = 0; i < rules.size(); i++) {
 			xValues[i + 1] = rules.get(i).getFalsePositiveRate();
 			yValues[i + 1] = rules.get(i).getTruePositiveRate();
 		}
 
-		Data xData = DataUtil.scaleWithinRange(0.0, 1.0, xValues);
-		Data yData = DataUtil.scaleWithinRange(0.0, 1.0, yValues);
+		Data xData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, xValues);
+		Data yData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, yValues);
 
 		XYLine line = Plots.newXYLine(xData, yData);
+		line.setFillAreaColor(Color.YELLOW);
 		XYLineChart chart = GCharts.newXYLineChart(line);
-		chart.setSize(width, heigth);
+		chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
 		chart.setTitle("Area under the curve");
+
+		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
 
 		return chart;
 	}
