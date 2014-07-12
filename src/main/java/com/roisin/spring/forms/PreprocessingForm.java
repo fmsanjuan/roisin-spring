@@ -29,6 +29,8 @@ public class PreprocessingForm {
 
 	private int exampleSetSize;
 
+	private String algorithm;
+
 	/*
 	 * Ripper Form
 	 */
@@ -82,6 +84,7 @@ public class PreprocessingForm {
 		deletedRows = Sets.newTreeSet();
 		filterCondition = StringUtils.EMPTY;
 		label = StringUtils.EMPTY;
+		this.algorithm = StringUtils.EMPTY;
 		// Ripper
 		this.ripperCriterion = ProcessConstants.INFORMATION_GAIN;
 		this.sampleRatio = 0.9;
@@ -337,6 +340,14 @@ public class PreprocessingForm {
 
 	public void setRuleGeneration(String ruleGeneration) {
 		this.ruleGeneration = ruleGeneration;
+	}
+
+	public String getAlgorithm() {
+		return algorithm;
+	}
+
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
 	}
 
 }

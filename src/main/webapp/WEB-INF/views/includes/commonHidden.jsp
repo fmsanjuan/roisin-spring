@@ -1,3 +1,4 @@
+<form:hidden path="algorithm" />
 <form:hidden path="deletedRows" />
 <form:hidden path="attributeSelection" />
 <form:hidden path="filePath" />

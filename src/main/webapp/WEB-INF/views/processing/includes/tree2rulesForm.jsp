@@ -1,11 +1,11 @@
 <form:form method="post" class="form-horizontal"
 	action="/roisin-spring/processing/tree" role="form"
 	modelAttribute="form">
-	<%@include file="commonHidden.jsp"%>
+	<%@include file="/WEB-INF/views/includes/commonHidden.jsp"%>
 	<!-- Ripper Hidden -->
-	<%@include file="ripperHidden.jsp"%>
+	<%@include file="/WEB-INF/views/includes/ripperHidden.jsp"%>
 	<!-- Subgroup Hidden -->
-	<%@include file="subgroupHidden.jsp"%>
+	<%@include file="/WEB-INF/views/includes/subgroupHidden.jsp"%>
 
 	<div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
 		<h3 class="text-center">Tree to Rules</h3>

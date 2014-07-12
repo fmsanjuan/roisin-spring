@@ -16,6 +16,7 @@ import com.googlecode.charts4j.XYLineChart;
 import com.roisin.core.results.RoisinResults;
 import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.services.ProcessingService;
+import com.roisin.spring.utils.ProcessConstants;
 import com.roisin.spring.validator.PreprocessingFormValidator;
 
 @Controller
@@ -46,15 +47,17 @@ public class ProcessingController {
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("processing/create");
-			res.addObject("error", "Ripper");
+			res.addObject("error", ProcessConstants.RIPPER);
 			res.addObject("form", form);
 			return res;
 		} else {
 			RoisinResults results = processingService.getRipperResults(form);
 			XYLineChart chart = processingService.getAucChart(results);
+			form.setAlgorithm(ProcessConstants.RIPPER);
 
 			ModelAndView res = new ModelAndView("results/create");
 			res.addObject("results", results);
+			res.addObject("form", form);
 			res.addObject("chart", chart.toURLString());
 			return res;
 		}
@@ -67,15 +70,17 @@ public class ProcessingController {
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("processing/create");
-			res.addObject("error", "Subgroup Discovery");
+			res.addObject("error", ProcessConstants.SUBGROUP_DISCOVERY);
 			res.addObject("form", form);
 			return res;
 		} else {
 			RoisinResults results = processingService.getSubgroupResults(form);
 			XYLineChart chart = processingService.getAucChart(results);
+			form.setAlgorithm(ProcessConstants.SUBGROUP_DISCOVERY);
 
 			ModelAndView res = new ModelAndView("results/create");
 			res.addObject("results", results);
+			res.addObject("form", form);
 			res.addObject("chart", chart.toURLString());
 			return res;
 		}
@@ -88,15 +93,17 @@ public class ProcessingController {
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("processing/create");
-			res.addObject("error", "Tree to Rules");
+			res.addObject("error", ProcessConstants.TREE_TO_RULES);
 			res.addObject("form", form);
 			return res;
 		} else {
 			RoisinResults results = processingService.getTreeToRulesResults(form);
 			XYLineChart chart = processingService.getAucChart(results);
+			form.setAlgorithm(ProcessConstants.TREE_TO_RULES);
 
 			ModelAndView res = new ModelAndView("results/create");
 			res.addObject("results", results);
+			res.addObject("form", form);
 			res.addObject("chart", chart.toURLString());
 			return res;
 		}

@@ -1,11 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
 
 <div class="page-header text-center">
 	<h1>
-		Results
-		<small>Validate the rules</small>
+		Results <small>Validate the rules</small>
 	</h1>
 </div>
 
@@ -51,7 +51,19 @@
 			</table>
 		</div>
 	</div>
-	<div class="row text-center">
-		<img alt="AUC Chart" src="${chart }">
+	<div class="row">
+		<div class="col-md-6">
+			<img alt="AUC Chart" src="${chart }">
+		</div>
+	</div>
+	<div class="col-md-6">
+		<form:form method="post" class="form-horizontal" action="../results/export"
+			role="form" modelAttribute="form">
+			<%@include file="/WEB-INF/views/includes/commonHidden.jsp"%>
+			<%@include file="/WEB-INF/views/includes/ripperHidden.jsp"%>
+			<%@include file="/WEB-INF/views/includes/subgroupHidden.jsp"%>
+			<%@include file="/WEB-INF/views/includes/tree2rulesHidden.jsp"%>
+			<form:button type="submit">Get Excel</form:button>
+		</form:form>
 	</div>
 </div>

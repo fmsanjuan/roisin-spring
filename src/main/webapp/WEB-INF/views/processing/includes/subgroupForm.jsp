@@ -1,11 +1,11 @@
 <form:form method="post" class="form-horizontal"
 	action="/roisin-spring/processing/subgroup" role="form"
 	modelAttribute="form">
-	<%@include file="commonHidden.jsp"%>
+	<%@include file="/WEB-INF/views/includes/commonHidden.jsp"%>
 	<!-- Ripper Hidden -->
-	<%@include file="ripperHidden.jsp"%>
+	<%@include file="/WEB-INF/views/includes/ripperHidden.jsp"%>
 	<!-- Tree2Rules Hidden -->
-	<%@include file="tree2rulesHidden.jsp"%>
+	<%@include file="/WEB-INF/views/includes/tree2rulesHidden.jsp"%>
 
 	<div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
 		<h3 class="text-center">Subgroup Discovery</h3>

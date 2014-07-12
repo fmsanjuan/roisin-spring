@@ -10,6 +10,16 @@ package com.roisin.spring.utils;
 public interface ProcessConstants {
 
 	/*
+	 * Algorithms
+	 */
+
+	String RIPPER = "Ripper";
+
+	String SUBGROUP_DISCOVERY = "Subgroup Discovery";
+
+	String TREE_TO_RULES = "Tree to Rules";
+
+	/*
 	 * Ripper
 	 */
 	String INFORMATION_GAIN = "information_gain";
