@@ -42,6 +42,6 @@ public interface Constants {
 
 	int CHART_WIDTH = 500;
 
-	int CHART_HEIGTH = 300;
+	int CHART_HEIGTH = 500;
 
 }

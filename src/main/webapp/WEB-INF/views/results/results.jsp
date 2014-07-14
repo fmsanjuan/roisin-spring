@@ -56,8 +56,7 @@
 			<img alt="AUC Chart" src="${chart }" />
 		</div>
 		<div class="col-md-3">
-			<br /> <br /> <br /> <br /> <br />
-			<br />
+			<br /> <br /> <br /> <br /> <br /> <br />
 			<form:form method="post" class="form-horizontal"
 				action="../results/export" role="form" modelAttribute="form">
 				<%@include file="/WEB-INF/views/includes/commonHidden.jsp"%>
@@ -66,6 +65,8 @@
 				<%@include file="/WEB-INF/views/includes/tree2rulesHidden.jsp"%>
 				<form:button class="btn btn-primary btn-lg" type="submit">Download Results</form:button>
 			</form:form>
+			<br /> <a href="${chart }" download="auc"><button class="btn btn-primary btn-lg">Download
+					Chart</button></a>
 		</div>
 	</div>
 </div>

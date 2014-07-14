@@ -121,7 +121,7 @@ public class ProcessingService {
 		line.setFillAreaColor(Color.YELLOW);
 		XYLineChart chart = GCharts.newXYLineChart(line);
 		chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
-		chart.setTitle("Area under the curve");
+		chart.setTitle("Area under the curve = " + roisinResults.getRulesAuc());
 
 		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
 
