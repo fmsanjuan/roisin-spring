@@ -99,15 +99,20 @@ public class ProcessingService {
 		int rulesSize = rules.size();
 
 		// Curve
-		double[] xValues = new double[rulesSize + 1];
-		double[] yValues = new double[rulesSize + 1];
+		double[] xValues = new double[rulesSize + 2];
+		double[] yValues = new double[rulesSize + 2];
 		xValues[0] = Constants.ZERO;
 		yValues[0] = Constants.ZERO;
 
-		for (int i = 0; i < rules.size(); i++) {
+		int i;
+
+		for (i = 0; i < rules.size(); i++) {
 			xValues[i + 1] = rules.get(i).getFalsePositiveRate();
 			yValues[i + 1] = rules.get(i).getTruePositiveRate();
 		}
+
+		xValues[i + 1] = Constants.ONE;
+		yValues[i + 1] = Constants.ONE;
 
 		Data xData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, xValues);
 		Data yData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, yValues);
