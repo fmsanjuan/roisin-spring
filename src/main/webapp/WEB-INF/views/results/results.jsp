@@ -65,7 +65,7 @@
 				<%@include file="/WEB-INF/views/includes/tree2rulesHidden.jsp"%>
 				<form:button class="btn btn-primary btn-lg" type="submit">Download Results</form:button>
 			</form:form>
-			<br /> <a href="${chart }" download="auc"><button class="btn btn-primary btn-lg">Download
+			<br /> <a href="${chart }" ><button class="btn btn-primary btn-lg">Download
 					Chart</button></a>
 		</div>
 	</div>

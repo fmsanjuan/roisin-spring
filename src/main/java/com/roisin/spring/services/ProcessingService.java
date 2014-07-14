@@ -1,5 +1,6 @@
 package com.roisin.spring.services;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +27,7 @@ import com.roisin.core.results.RipperResults;
 import com.roisin.core.results.RoisinResults;
 import com.roisin.core.results.RoisinRule;
 import com.roisin.core.results.SubgroupResults;
+import com.roisin.core.utils.RoisinRuleComparator;
 import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.utils.Constants;
 
@@ -96,6 +98,7 @@ public class ProcessingService {
 	public XYLineChart getAucChart(RoisinResults roisinResults) {
 
 		List<RoisinRule> rules = roisinResults.getRoisinRules();
+		Collections.sort(rules, new RoisinRuleComparator());
 		int rulesSize = rules.size();
 
 		// Curve
