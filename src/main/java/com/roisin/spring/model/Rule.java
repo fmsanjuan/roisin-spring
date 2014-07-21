@@ -3,8 +3,6 @@ package com.roisin.spring.model;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 
@@ -12,14 +10,13 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Access(AccessType.PROPERTY)
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Rule extends DomainEntity {
 
 	private String premise;
 
 	private String conclusion;
 
-	private Double precision;
+	private Double rulePrecision;
 
 	private Double support;
 
@@ -61,12 +58,12 @@ public class Rule extends DomainEntity {
 		this.conclusion = conclusion;
 	}
 
-	public Double getPrecision() {
-		return precision;
+	public Double getRulePrecision() {
+		return rulePrecision;
 	}
 
-	public void setPrecision(Double precision) {
-		this.precision = precision;
+	public void setRulePrecision(Double rulePrecision) {
+		this.rulePrecision = rulePrecision;
 	}
 
 	public Double getSupport() {

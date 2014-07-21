@@ -5,8 +5,7 @@ import java.util.Collection;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
@@ -16,7 +15,6 @@ import com.rapidminer.example.ExampleSet;
 
 @Entity
 @Access(AccessType.PROPERTY)
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Examples extends DomainEntity {
 
 	private String filePath;
@@ -39,6 +37,7 @@ public class Examples extends DomainEntity {
 		this.filePath = filePath;
 	}
 
+	@Lob
 	public ExampleSet getExampleSet() {
 		return exampleSet;
 	}
