@@ -5,55 +5,12 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@ page session="false"%>
 
-<style>
-.jumbotron {
-	margin-bottom: 0px;
-	background-image: url(resources/images/rosas-background.jpg);
-	background-position: 0% 25%;
-	background-size: cover;
-	background-repeat: no-repeat;
-	color: white;
-	text-shadow: black 0.3em 0.3em 0.3em;
-}
-</style>
-
 <div class="page-header text-center">
 	<h1>
 		<spring:message code="welcome.hello" />
 		<small><spring:message code="welcome.hello.description" /></small>
 	</h1>
 </div>
-
-
-<div class="jumbotron">
-	<div class="container">
-		<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
-		<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
-	</div>
-</div>
-<br />
-<p class="text-center">
-	<spring:message code="welcome.time" />
-	${serverTime}.
-</p>
-
-
-
-
-
-
-
-<security:authorize access="hasRole('ADMIN')">
-SOY ADMIN
-</security:authorize>
-
-
-<security:authorize access="hasRole('USER')">
-SOY USER
-</security:authorize>
-
-
-
 
 
 <security:authorize access="isAnonymous()">
@@ -88,9 +45,6 @@ SOY USER
 							<form:errors class="error" path="username" />
 						</div>
 						<br />
-						<jstl:if test="${showError == true}">
-							<div class="error">Error en el login</div>
-						</jstl:if>
 						<div class="row">
 
 							<div class="col-xs-12 col-sm-12 col-md-12">
@@ -113,3 +67,9 @@ SOY USER
 	<br />
 
 </security:authorize>
+
+<br />
+<p class="text-center">
+	<spring:message code="welcome.time" />
+	${serverTime}.
+</p>

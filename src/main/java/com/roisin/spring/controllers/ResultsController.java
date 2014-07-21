@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.model.UploadedFile;
-import com.roisin.spring.services.ResultsService;
+import com.roisin.spring.services.ResultsService2;
 
 @Controller
 @RequestMapping("/results")
@@ -26,7 +26,7 @@ public class ResultsController {
 	private static final Logger logger = LoggerFactory.getLogger(ResultsController.class);
 
 	@Autowired
-	private ResultsService resultService;
+	private ResultsService2 resultService;
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create(@ModelAttribute("uploadedFile") UploadedFile uploadedFile,

@@ -5,6 +5,18 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	
 	<persistence-unit name="roisin">
+		<class>com.roisin.spring.model.Administrator</class>
+		<class>com.roisin.spring.model.DomainEntity</class>
+		<class>com.roisin.spring.model.User</class>
+		<class>com.roisin.spring.model.TreeToRulesSettings</class>
+		<class>com.roisin.spring.model.Rule</class>
+		<class>com.roisin.spring.model.Results</class>
+		<class>com.roisin.spring.model.RipperSettings</class>
+		<class>com.roisin.spring.model.Process</class>
+		<class>com.roisin.spring.model.SubgroupSettings</class>
+		<class>com.roisin.spring.security.Authority</class>
+		<class>com.roisin.spring.security.UserAccount</class>
+		<class>com.roisin.spring.model.Examples</class>
 
 		<!-- <provider>org.hibernate.ejb.HibernatePersistence</provider> -->
 		
