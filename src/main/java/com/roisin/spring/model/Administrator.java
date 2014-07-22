@@ -2,9 +2,15 @@ package com.roisin.spring.model;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.roisin.spring.security.UserAccount;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -15,6 +21,8 @@ public class Administrator extends DomainEntity {
 	private String surname;
 
 	private String email;
+
+	private UserAccount userAccount;
 
 	public Administrator() {
 		super();
@@ -45,6 +53,17 @@ public class Administrator extends DomainEntity {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@NotNull
+	@Valid
+	@OneToOne(cascade = CascadeType.ALL, optional = false)
+	public UserAccount getUserAccount() {
+		return userAccount;
+	}
+
+	public void setUserAccount(UserAccount userAccount) {
+		this.userAccount = userAccount;
 	}
 
 }

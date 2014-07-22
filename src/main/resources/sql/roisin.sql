@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 22-07-2014 a las 01:36:45
+-- Tiempo de generación: 23-07-2014 a las 01:15:37
 -- Versión del servidor: 5.6.12
 -- Versión de PHP: 5.5.3
 
@@ -34,23 +34,49 @@ CREATE TABLE IF NOT EXISTS `Administrator` (
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `surname` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `userAccount_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_idt4b4u259p6vs4pyr9lax4eg` (`userAccount_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `Administrator`
+--
+
+INSERT INTO `Administrator` (`id`, `version`, `email`, `name`, `surname`, `userAccount_id`) VALUES
+(5, 0, 'a@admin1.com', 'Administrator 1', 'Surname 1', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `DeletedRow`
+--
+
+CREATE TABLE IF NOT EXISTS `DeletedRow` (
+  `id` int(11) NOT NULL,
+  `version` int(11) NOT NULL,
+  `number` int(11) DEFAULT NULL,
+  `preprocessingForm_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_l901h0g3x3888s2ewxm62w0yd` (`preprocessingForm_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Examples`
+-- Estructura de tabla para la tabla `File`
 --
 
-CREATE TABLE IF NOT EXISTS `Examples` (
+CREATE TABLE IF NOT EXISTS `File` (
   `id` int(11) NOT NULL,
   `version` int(11) NOT NULL,
-  `exampleSet` longblob,
-  `filePath` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `hash` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `originalFile` tinyblob,
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_cqtkdv36vuws0k5w57c967k6r` (`user_id`)
+  KEY `FK_hpo4utwhhxcalm7ml3jwq0iob` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -74,6 +100,38 @@ INSERT INTO `hibernate_sequences` (`sequence_name`, `sequence_next_hi_value`) VA
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `PreprocessedData`
+--
+
+CREATE TABLE IF NOT EXISTS `PreprocessedData` (
+  `id` int(11) NOT NULL,
+  `version` int(11) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `exampleSet` longblob,
+  `name` varchar(255) DEFAULT NULL,
+  `preprocessingForm_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_dea1kimbjlto9voehdf0bvsj2` (`preprocessingForm_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `PreprocessingForm`
+--
+
+CREATE TABLE IF NOT EXISTS `PreprocessingForm` (
+  `id` int(11) NOT NULL,
+  `version` int(11) NOT NULL,
+  `filterCondition` varchar(255) DEFAULT NULL,
+  `file_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_orh9ovajd06hhh296gmco1t48` (`file_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `Process`
 --
 
@@ -81,13 +139,9 @@ CREATE TABLE IF NOT EXISTS `Process` (
   `id` int(11) NOT NULL,
   `version` int(11) NOT NULL,
   `algorithm` varchar(255) DEFAULT NULL,
-  `filterCondition` varchar(255) DEFAULT NULL,
-  `label` varchar(255) DEFAULT NULL,
-  `examples_id` int(11) DEFAULT NULL,
-  `results_id` int(11) DEFAULT NULL,
+  `preprocessedData_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_1twfjjwiogcv5hvdmxafyc3ip` (`examples_id`),
-  KEY `FK_n6cyrli24gvwxlpqe825riyf7` (`results_id`)
+  KEY `FK_ju0bhbyfw9cdkywnyogbfio4h` (`preprocessedData_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -146,6 +200,23 @@ CREATE TABLE IF NOT EXISTS `Rule` (
   `results_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_bfrqr92ht500ryauufrfvviyj` (`results_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `SelectedAttribute`
+--
+
+CREATE TABLE IF NOT EXISTS `SelectedAttribute` (
+  `id` int(11) NOT NULL,
+  `version` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `preprocessingForm_id` int(11) DEFAULT NULL,
+  `process_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_qo6jqtuogeou696ddcod3971l` (`preprocessingForm_id`),
+  KEY `FK_rkbht68y8ebj6sogd3cely24b` (`process_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -211,6 +282,15 @@ CREATE TABLE IF NOT EXISTS `User` (
   UNIQUE KEY `UK_o6s94d43co03sx067ili5760c` (`userAccount_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `User`
+--
+
+INSERT INTO `User` (`id`, `version`, `city`, `email`, `name`, `nationality`, `surname`, `userAccount_id`) VALUES
+(6, 0, 'Seville', 'c@customer1.com', 'Customer 1', 'Spain', 'SurnameC 1', 2),
+(7, 0, 'Seville', 'c@customer1.com', 'Customer 1', 'Spain', 'SurnameC 1', 3),
+(8, 0, 'Seville', 'c@customer2.com', 'Customer 2', 'Spain', 'SurnameC 2', 4);
+
 -- --------------------------------------------------------
 
 --
@@ -226,6 +306,16 @@ CREATE TABLE IF NOT EXISTS `UserAccount` (
   UNIQUE KEY `UK_csivo9yqa08nrbkog71ycilh5` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `UserAccount`
+--
+
+INSERT INTO `UserAccount` (`id`, `version`, `password`, `username`) VALUES
+(1, 0, '21232f297a57a5a743894a0e4a801fc3', 'admin'),
+(2, 0, 'ffbc4675f864e0e9aab8bdf7a0437010', 'customer1'),
+(3, 0, '25779f8829ab7a7650e85a4cc871e6ac', 'felix'),
+(4, 0, '5ce4d191fd14ac85a1469fb8c29b7a7b', 'customer2');
+
 -- --------------------------------------------------------
 
 --
@@ -239,21 +329,54 @@ CREATE TABLE IF NOT EXISTS `UserAccount_authorities` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Volcado de datos para la tabla `UserAccount_authorities`
+--
+
+INSERT INTO `UserAccount_authorities` (`UserAccount_id`, `authority`) VALUES
+(1, 'ADMIN'),
+(2, 'USER'),
+(3, 'USER'),
+(4, 'USER');
+
+--
 -- Restricciones para tablas volcadas
 --
 
 --
--- Filtros para la tabla `Examples`
+-- Filtros para la tabla `Administrator`
 --
-ALTER TABLE `Examples`
-  ADD CONSTRAINT `FK_cqtkdv36vuws0k5w57c967k6r` FOREIGN KEY (`user_id`) REFERENCES `User` (`id`);
+ALTER TABLE `Administrator`
+  ADD CONSTRAINT `FK_idt4b4u259p6vs4pyr9lax4eg` FOREIGN KEY (`userAccount_id`) REFERENCES `UserAccount` (`id`);
+
+--
+-- Filtros para la tabla `DeletedRow`
+--
+ALTER TABLE `DeletedRow`
+  ADD CONSTRAINT `FK_l901h0g3x3888s2ewxm62w0yd` FOREIGN KEY (`preprocessingForm_id`) REFERENCES `PreprocessingForm` (`id`);
+
+--
+-- Filtros para la tabla `File`
+--
+ALTER TABLE `File`
+  ADD CONSTRAINT `FK_hpo4utwhhxcalm7ml3jwq0iob` FOREIGN KEY (`user_id`) REFERENCES `User` (`id`);
+
+--
+-- Filtros para la tabla `PreprocessedData`
+--
+ALTER TABLE `PreprocessedData`
+  ADD CONSTRAINT `FK_dea1kimbjlto9voehdf0bvsj2` FOREIGN KEY (`preprocessingForm_id`) REFERENCES `PreprocessingForm` (`id`);
+
+--
+-- Filtros para la tabla `PreprocessingForm`
+--
+ALTER TABLE `PreprocessingForm`
+  ADD CONSTRAINT `FK_orh9ovajd06hhh296gmco1t48` FOREIGN KEY (`file_id`) REFERENCES `File` (`id`);
 
 --
 -- Filtros para la tabla `Process`
 --
 ALTER TABLE `Process`
-  ADD CONSTRAINT `FK_n6cyrli24gvwxlpqe825riyf7` FOREIGN KEY (`results_id`) REFERENCES `Results` (`id`),
-  ADD CONSTRAINT `FK_1twfjjwiogcv5hvdmxafyc3ip` FOREIGN KEY (`examples_id`) REFERENCES `Examples` (`id`);
+  ADD CONSTRAINT `FK_ju0bhbyfw9cdkywnyogbfio4h` FOREIGN KEY (`preprocessedData_id`) REFERENCES `PreprocessedData` (`id`);
 
 --
 -- Filtros para la tabla `Results`
@@ -272,6 +395,13 @@ ALTER TABLE `RipperSettings`
 --
 ALTER TABLE `Rule`
   ADD CONSTRAINT `FK_bfrqr92ht500ryauufrfvviyj` FOREIGN KEY (`results_id`) REFERENCES `Results` (`id`);
+
+--
+-- Filtros para la tabla `SelectedAttribute`
+--
+ALTER TABLE `SelectedAttribute`
+  ADD CONSTRAINT `FK_rkbht68y8ebj6sogd3cely24b` FOREIGN KEY (`process_id`) REFERENCES `Process` (`id`),
+  ADD CONSTRAINT `FK_qo6jqtuogeou696ddcod3971l` FOREIGN KEY (`preprocessingForm_id`) REFERENCES `PreprocessingForm` (`id`);
 
 --
 -- Filtros para la tabla `SubgroupSettings`

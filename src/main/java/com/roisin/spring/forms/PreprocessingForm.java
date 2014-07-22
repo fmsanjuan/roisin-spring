@@ -7,9 +7,10 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.roisin.spring.model.DomainEntity;
 import com.roisin.spring.utils.ProcessConstants;
 
-public class PreprocessingForm {
+public class PreprocessingForm extends DomainEntity {
 
 	private List<String> attributeSelection;
 

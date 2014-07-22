@@ -1,5 +1,6 @@
 package com.roisin.spring.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Access;
@@ -9,8 +10,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
-import com.googlecode.charts4j.collect.Lists;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -24,7 +23,7 @@ public class Results extends DomainEntity {
 
 	public Results() {
 		super();
-		this.rules = Lists.newArrayList();
+		this.rules = new ArrayList<Rule>();
 	}
 
 	public Double getAuc() {

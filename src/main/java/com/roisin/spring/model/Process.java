@@ -2,24 +2,21 @@ package com.roisin.spring.model;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.TableGenerator;
 import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Access(AccessType.PROPERTY)
-@TableGenerator(name = "Process", schema = "roisin")
 public class Process extends DomainEntity {
 
 	private String algorithm;
 
-	private String filterCondition;
-
-	private String label;
+	private SelectedAttribute label;
 
 	private RipperSettings ripperSettings;
 
@@ -27,7 +24,7 @@ public class Process extends DomainEntity {
 
 	private TreeToRulesSettings treeToRulesSettings;
 
-	private Examples examples;
+	private PreprocessedData preprocessedData;
 
 	private Results results;
 
@@ -44,25 +41,7 @@ public class Process extends DomainEntity {
 		this.algorithm = algorithm;
 	}
 
-	@NotBlank
-	public String getFilterCondition() {
-		return filterCondition;
-	}
-
-	public void setFilterCondition(String filterCondition) {
-		this.filterCondition = filterCondition;
-	}
-
-	@NotBlank
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	@OneToOne(mappedBy = "process")
+	@OneToOne(mappedBy = "process", optional = true)
 	public RipperSettings getRipperSettings() {
 		return ripperSettings;
 	}
@@ -71,7 +50,7 @@ public class Process extends DomainEntity {
 		this.ripperSettings = ripperSettings;
 	}
 
-	@OneToOne(mappedBy = "process")
+	@OneToOne(mappedBy = "process", optional = true)
 	public SubgroupSettings getSubgroupSettings() {
 		return subgroupSettings;
 	}
@@ -80,7 +59,7 @@ public class Process extends DomainEntity {
 		this.subgroupSettings = subgroupSettings;
 	}
 
-	@OneToOne(mappedBy = "process")
+	@OneToOne(mappedBy = "process", optional = true)
 	public TreeToRulesSettings getTreeToRulesSettings() {
 		return treeToRulesSettings;
 	}
@@ -91,22 +70,32 @@ public class Process extends DomainEntity {
 
 	@Valid
 	@ManyToOne(optional = true)
-	public Examples getExamples() {
-		return examples;
+	public PreprocessedData getPreprocessedData() {
+		return preprocessedData;
 	}
 
-	public void setExamples(Examples examples) {
-		this.examples = examples;
+	public void setPreprocessedData(PreprocessedData preprocessedData) {
+		this.preprocessedData = preprocessedData;
 	}
 
 	@Valid
-	@OneToOne
+	@OneToOne(mappedBy = "process", cascade = CascadeType.ALL)
 	public Results getResults() {
 		return results;
 	}
 
 	public void setResults(Results results) {
 		this.results = results;
+	}
+
+	@Valid
+	@OneToOne(mappedBy = "process", cascade = CascadeType.ALL)
+	public SelectedAttribute getLabel() {
+		return label;
+	}
+
+	public void setLabel(SelectedAttribute label) {
+		this.label = label;
 	}
 
 }

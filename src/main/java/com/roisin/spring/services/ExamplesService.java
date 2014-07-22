@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.roisin.spring.model.Examples;
+import com.roisin.spring.model.PreprocessedData;
 import com.roisin.spring.repositories.ExamplesRepository;
 
 @Service
@@ -20,22 +20,22 @@ public class ExamplesService {
 		super();
 	}
 
-	public Examples create() {
-		Examples roisinExample = new Examples();
+	public PreprocessedData create() {
+		PreprocessedData roisinExample = new PreprocessedData();
 
 		return roisinExample;
 	}
 
-	public Examples findOne(int exampleId) {
+	public PreprocessedData findOne(int exampleId) {
 		return exampleRepository.findOne(exampleId);
 	}
 
-	public void save(Examples example) {
+	public void save(PreprocessedData example) {
 
 		exampleRepository.save(example);
 	}
 
-	public Collection<Examples> findExamplesByUserId(int userId) {
+	public Collection<PreprocessedData> findExamplesByUserId(int userId) {
 		return exampleRepository.findExamplesByUserId(userId);
 	}
 
