@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.roisin.spring.forms.PreprocessingForm;
-
 @Entity
 @Access(AccessType.PROPERTY)
 public class File extends DomainEntity {
