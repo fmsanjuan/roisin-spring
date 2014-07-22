@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.rapidminer.example.ExampleSet;
-import com.roisin.spring.forms.PreprocessingForm;
 
 @Entity
 @Access(AccessType.PROPERTY)
