@@ -52,7 +52,6 @@ public class File extends DomainEntity {
 		this.description = description;
 	}
 
-	@NotBlank
 	public byte[] getOriginalFile() {
 		return originalFile;
 	}

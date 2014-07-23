@@ -13,12 +13,19 @@
 	</h1>
 </div>
 
-<display:table uid="dietListTable" keepStatus="false" name="examples"
+<display:table uid="filesTable" keepStatus="false" name="files"
 	pagesize="5" class="table table-hover" requestURI="${requestURI}"
 	id="row">
-	<display:column property="filePath" title="Path" sortable="true" />
-	<display:column property="processes.size" title="Process"
+	<display:column property="name" title="Name" sortable="true" />
+	<display:column property="description" title="Description"
 		sortable="true" />
+	<display:column property="hash" title="Hash" sortable="true" />
+	<display:column>
+		<a href="/roisin-spring/file/delete?fileId=${row.id}"> <input
+			class="btn btn-default" type="button" value="Delete"
+			onclick="self.location.href = /roisin-spring/file/delete?dietId=${row.id}" />
+		</a>
+	</display:column>
 </display:table>
 
 <div class="container">

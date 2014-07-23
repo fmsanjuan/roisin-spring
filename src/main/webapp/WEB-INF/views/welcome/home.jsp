@@ -68,6 +68,12 @@
 
 </security:authorize>
 
+<security:authorize access="hasRole('USER')">
+Hey there!
+<br />
+	<a href="data/list">My data</a>
+</security:authorize>
+
 <br />
 <p class="text-center">
 	<spring:message code="welcome.time" />

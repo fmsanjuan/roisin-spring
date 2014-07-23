@@ -46,7 +46,7 @@ public class LoginController {
 
 		ModelAndView result;
 
-		result = new ModelAndView("preprocessing/create");
+		result = new ModelAndView("data/list");
 		result.addObject("credentials", credentials);
 		result.addObject("showError", showError);
 

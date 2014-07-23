@@ -44,4 +44,6 @@ public interface Constants {
 
 	int CHART_HEIGTH = 500;
 
+	String SHA_256 = "SHA-256";
+
 }
