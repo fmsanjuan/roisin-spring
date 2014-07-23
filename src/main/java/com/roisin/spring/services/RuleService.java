@@ -1,5 +1,7 @@
 package com.roisin.spring.services;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,25 +14,32 @@ import com.roisin.spring.repositories.RuleRepository;
 public class RuleService {
 
 	@Autowired
-	private RuleRepository roisinRuleRepository;
+	private RuleRepository ruleRepository;
 
 	public RuleService() {
 		super();
 	}
 
 	public Rule create() {
-		Rule roisinRule = new Rule();
+		Rule rule = new Rule();
 
-		return roisinRule;
+		return rule;
 	}
 
 	public Rule findOne(int roisinRuleId) {
-		return roisinRuleRepository.findOne(roisinRuleId);
+		return ruleRepository.findOne(roisinRuleId);
 	}
 
-	public void save(Rule roisinRule) {
+	public void save(Rule rule) {
+		ruleRepository.save(rule);
+	}
 
-		roisinRuleRepository.save(roisinRule);
+	public void delete(Rule rule) {
+		ruleRepository.delete(rule);
+	}
+
+	public Collection<Rule> findAll() {
+		return ruleRepository.findAll();
 	}
 
 	// TODO: Método para obtener todas las reglas de un proceso.

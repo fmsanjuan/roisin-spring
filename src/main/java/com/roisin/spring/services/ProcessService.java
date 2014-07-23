@@ -1,5 +1,7 @@
 package com.roisin.spring.services;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,24 +14,31 @@ import com.roisin.spring.repositories.ProcessRepository;
 public class ProcessService {
 
 	@Autowired
-	private ProcessRepository roisinProcessRepository;
+	private ProcessRepository processRepository;
 
 	public ProcessService() {
 		super();
 	}
 
 	public Process create() {
-		Process roisinProcess = new Process();
+		Process process = new Process();
 
-		return roisinProcess;
+		return process;
 	}
 
-	public Process findOne(int roisinProcessId) {
-		return roisinProcessRepository.findOne(roisinProcessId);
+	public Collection<Process> findAll() {
+		return processRepository.findAll();
 	}
 
-	public void save(Process roisinProcess) {
+	public Process findOne(int processId) {
+		return processRepository.findOne(processId);
+	}
 
-		roisinProcessRepository.save(roisinProcess);
+	public void save(Process process) {
+		processRepository.save(process);
+	}
+
+	public void delete(Process process) {
+		processRepository.delete(process);
 	}
 }

@@ -1,5 +1,7 @@
 package com.roisin.spring.services;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,24 +14,31 @@ import com.roisin.spring.repositories.ResultsRepository;
 public class ResultsService {
 
 	@Autowired
-	private ResultsRepository roisinResultsRepository;
+	private ResultsRepository resultsRepository;
 
 	public ResultsService() {
 		super();
 	}
 
 	public Results create() {
-		Results roisinResults = new Results();
+		Results results = new Results();
 
-		return roisinResults;
+		return results;
 	}
 
-	public Results findOne(int roisinResultsId) {
-		return roisinResultsRepository.findOne(roisinResultsId);
+	public Collection<Results> findAll() {
+		return resultsRepository.findAll();
 	}
 
-	public void save(Results roisinResults) {
+	public Results findOne(int resultsId) {
+		return resultsRepository.findOne(resultsId);
+	}
 
-		roisinResultsRepository.save(roisinResults);
+	public void save(Results results) {
+		resultsRepository.save(results);
+	}
+
+	public void delete(Results results) {
+		resultsRepository.delete(results);
 	}
 }

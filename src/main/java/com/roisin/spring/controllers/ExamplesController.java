@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.roisin.spring.model.PreprocessedData;
 import com.roisin.spring.model.User;
-import com.roisin.spring.services.ExamplesService;
+import com.roisin.spring.services.PreprocessedDataService;
 import com.roisin.spring.services.UserService;
 
 @Controller
@@ -18,7 +18,7 @@ import com.roisin.spring.services.UserService;
 public class ExamplesController {
 
 	@Autowired
-	private ExamplesService exampleService;
+	private PreprocessedDataService exampleService;
 
 	@Autowired
 	private UserService userService;

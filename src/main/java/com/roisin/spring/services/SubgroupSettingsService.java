@@ -1,10 +1,11 @@
 package com.roisin.spring.services;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.roisin.spring.model.Rule;
 import com.roisin.spring.model.SubgroupSettings;
 import com.roisin.spring.repositories.SubgroupSettingsRepository;
 
@@ -19,10 +20,10 @@ public class SubgroupSettingsService {
 		super();
 	}
 
-	public Rule create() {
-		Rule roisinRule = new Rule();
+	public SubgroupSettings create() {
+		SubgroupSettings subgroupSettings = new SubgroupSettings();
 
-		return roisinRule;
+		return subgroupSettings;
 	}
 
 	public SubgroupSettings findOne(int subgroupSettingsId) {
@@ -32,6 +33,14 @@ public class SubgroupSettingsService {
 	public void save(SubgroupSettings subgroupSettings) {
 
 		subgroupSettingsRepository.save(subgroupSettings);
+	}
+
+	public void delete(SubgroupSettings ripperSettings) {
+		subgroupSettingsRepository.delete(ripperSettings);
+	}
+
+	public Collection<SubgroupSettings> findAll() {
+		return subgroupSettingsRepository.findAll();
 	}
 
 	// TODO: Método para obtener todas las reglas de un proceso.

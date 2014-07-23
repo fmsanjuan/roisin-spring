@@ -1,5 +1,7 @@
 package com.roisin.spring.services;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +31,15 @@ public class RipperSettingsService {
 	}
 
 	public void save(RipperSettings ripperSettings) {
-
 		ripperSettingsRepository.save(ripperSettings);
+	}
+
+	public void delete(RipperSettings ripperSettings) {
+		ripperSettingsRepository.delete(ripperSettings);
+	}
+
+	public Collection<RipperSettings> findAll() {
+		return ripperSettingsRepository.findAll();
 	}
 
 }
