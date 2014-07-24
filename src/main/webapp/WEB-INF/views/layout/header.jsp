@@ -13,8 +13,8 @@
 			<a class="navbar-brand" href="/roisin-spring">Roisin</a>
 		</div>
 		<ul class="nav navbar-nav">
-			<li><a href="preprocessing/create">Preprocessing</a></li>
-			<li><a href="#">Processing</a></li>
+			<li><a href="/roisin-spring/file/list">File</a></li>
+			<li><a href="/roisin-spring/data/list">Data</a></li>
 			<li><a href="#">Results</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
@@ -28,7 +28,7 @@
 							property="principal.username" /></a></li>
 			</security:authorize>
 			<security:authorize access="isAuthenticated()">
-				<li><a href="j_spring_security_logout">Logout</a></li>
+				<li><a href="/roisin-spring/j_spring_security_logout">Logout</a></li>
 			</security:authorize>
 			<li><a href="#">Help</a></li>
 		</ul>

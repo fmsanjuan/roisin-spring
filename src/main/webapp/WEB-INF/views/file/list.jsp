@@ -8,27 +8,31 @@
 
 <div class="page-header text-center">
 	<h1>
-		<spring:message code="preprocessing.header" />
-		<small>Select your data</small>
+		My Files <small>Upload your data</small>
 	</h1>
 </div>
 
-<display:table uid="filesTable" keepStatus="false" name="files"
-	pagesize="5" class="table table-hover" requestURI="${requestURI}"
-	id="row">
-	<display:column property="name" title="Name" sortable="true" />
-	<display:column property="description" title="Description"
-		sortable="true" />
-	<display:column property="hash" title="Hash" sortable="true" />
-	<display:column>
-		<a href="/roisin-spring/file/delete?fileId=${row.id}"> <input
-			class="btn btn-default" type="button" value="Delete"
-			onclick="self.location.href = /roisin-spring/file/delete?dietId=${row.id}" />
-		</a>
-	</display:column>
-</display:table>
-
 <div class="container">
+	<display:table uid="filesTable" keepStatus="false" name="files"
+		pagesize="5" class="table table-hover" requestURI="${requestURI}"
+		id="row">
+		<display:column property="name" title="Name" />
+		<display:column property="description" title="Description" />
+		<display:column property="hash" title="Hash" />
+		<display:column>
+		<a href="../preform/create?fileId=${row.id}"> <input class="btn btn-default"
+				type="button" value="Preprocess"
+				onclick="self.location.href = ../data/create?fileId=${row.id}" />
+			</a>
+		</display:column>
+		<display:column>
+			<a href="delete?fileId=${row.id}"> <input class="btn btn-default"
+				type="button" value="Delete"
+				onclick="self.location.href = delete?dietId=${row.id}" />
+			</a>
+		</display:column>
+	</display:table>
+
 	<form:form method="post" enctype="multipart/form-data"
 		modelAttribute="uploadedFile" action="upload">
 		<div class="col-md-6 col-md-offset-3">

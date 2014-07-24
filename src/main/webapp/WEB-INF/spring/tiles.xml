@@ -13,7 +13,8 @@
 		<value>/WEB-INF/views/preprocessing/tiles.xml</value>
 		<value>/WEB-INF/views/processing/tiles.xml</value>
 		<value>/WEB-INF/views/results/tiles.xml</value>
-		<value>/WEB-INF/views/preprocessedData/tiles.xml</value>
+		<value>/WEB-INF/views/data/tiles.xml</value>
+		<value>/WEB-INF/views/file/tiles.xml</value>
 	</util:list>
 
 </beans>

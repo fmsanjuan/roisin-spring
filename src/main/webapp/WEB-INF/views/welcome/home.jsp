@@ -71,7 +71,9 @@
 <security:authorize access="hasRole('USER')">
 Hey there!
 <br />
-	<a href="data/list">My data</a>
+	<a href="file/list">My Files</a>
+	<br/>
+	<a href="data/list">My Data</a>
 </security:authorize>
 
 <br />
