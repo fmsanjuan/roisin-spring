@@ -34,8 +34,8 @@ public class PreprocessedDataService {
 		return preprocessedDataRepository.findOne(preprocessedDataId);
 	}
 
-	public void save(PreprocessedData preprocessedData) {
-		preprocessedDataRepository.save(preprocessedData);
+	public PreprocessedData save(PreprocessedData preprocessedData) {
+		return preprocessedDataRepository.save(preprocessedData);
 	}
 
 	public void delete(PreprocessedData preprocessedData) {
