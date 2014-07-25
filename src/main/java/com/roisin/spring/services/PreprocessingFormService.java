@@ -34,12 +34,18 @@ public class PreprocessingFormService {
 		return preprocessingFormRepository.findOne(preprocessingFormId);
 	}
 
-	public void save(PreprocessingForm preprocessingForm) {
-		preprocessingFormRepository.save(preprocessingForm);
+	public PreprocessingForm save(PreprocessingForm preprocessingForm) {
+		return preprocessingFormRepository.save(preprocessingForm);
 	}
 
 	public void delete(PreprocessingForm preprocessingForm) {
 		preprocessingFormRepository.delete(preprocessingForm);
+	}
+
+	// Extra methods
+
+	public PreprocessingForm findFormByDataId(int formId) {
+		return preprocessingFormRepository.findFormByDataId(formId);
 	}
 
 }

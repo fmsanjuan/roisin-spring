@@ -1,5 +1,6 @@
 package com.roisin.spring.utils;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,6 +10,7 @@ import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
 import com.roisin.spring.forms.PreprocessingForm;
+import com.roisin.spring.model.DeletedRow;
 
 public class RoisinUtils {
 
@@ -62,6 +64,14 @@ public class RoisinUtils {
 			attributeSelection.add(attributes[i].getName());
 		}
 		return attributeSelection;
+	}
+
+	public static List<Integer> getDeletedRowValues(Collection<DeletedRow> deletedRows) {
+		List<Integer> res = Lists.newArrayList();
+		for (DeletedRow deletedRow : deletedRows) {
+			res.add(deletedRow.getNumber());
+		}
+		return res;
 	}
 
 }

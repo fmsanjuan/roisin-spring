@@ -42,4 +42,10 @@ public class DeletedRowService {
 		deletedRowRepository.delete(deletedRow);
 	}
 
+	// Métodos extras
+
+	public Collection<DeletedRow> findFormDeletedRows(int formId) {
+		return deletedRowRepository.findFormDeletedRows(formId);
+	}
+
 }
