@@ -5,6 +5,8 @@ import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
+import com.roisin.spring.utils.ProcessConstants;
+
 @Entity
 @Access(AccessType.PROPERTY)
 public class TreeToRulesSettings extends DomainEntity {
@@ -31,6 +33,15 @@ public class TreeToRulesSettings extends DomainEntity {
 
 	public TreeToRulesSettings() {
 		super();
+		this.tree2RulesCriterion = ProcessConstants.GAIN_RATIO;
+		this.minimalSizeForSplit = 4;
+		this.minimalLeafSize = 2;
+		this.minimalGain = 0.1;
+		this.maximalDepth = 20;
+		this.confidence = 0.25;
+		this.numberOfPrepruningAlternatives = 3;
+		this.noPrepruning = false;
+		this.noPruning = false;
 	}
 
 	public String getTree2RulesCriterion() {

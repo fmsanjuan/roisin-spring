@@ -34,8 +34,8 @@ public class ProcessService {
 		return processRepository.findOne(processId);
 	}
 
-	public void save(Process process) {
-		processRepository.save(process);
+	public Process save(Process process) {
+		return processRepository.save(process);
 	}
 
 	public void delete(Process process) {

@@ -21,11 +21,20 @@ import com.roisin.spring.model.DeletedRow;
 import com.roisin.spring.model.File;
 import com.roisin.spring.model.PreprocessedData;
 import com.roisin.spring.model.PreprocessingForm;
+import com.roisin.spring.model.Process;
+import com.roisin.spring.model.RipperSettings;
+import com.roisin.spring.model.SelectedAttribute;
+import com.roisin.spring.model.SubgroupSettings;
+import com.roisin.spring.model.TreeToRulesSettings;
 import com.roisin.spring.services.DeletedRowService;
 import com.roisin.spring.services.FileService;
 import com.roisin.spring.services.PreprocessedDataService;
 import com.roisin.spring.services.PreprocessingFormService;
+import com.roisin.spring.services.ProcessService;
+import com.roisin.spring.services.RipperSettingsService;
 import com.roisin.spring.services.SelectedAttributeService;
+import com.roisin.spring.services.SubgroupSettingsService;
+import com.roisin.spring.services.TreeToRulesSettingsService;
 import com.roisin.spring.utils.Constants;
 import com.roisin.spring.utils.FileUtils;
 import com.roisin.spring.utils.RoisinUtils;
@@ -50,13 +59,25 @@ public class PreprocessingFormController {
 	@Autowired
 	private DeletedRowService deletedRowService;
 
+	@Autowired
+	private ProcessService processService;
+
+	@Autowired
+	private RipperSettingsService ripperSettingsService;
+
+	@Autowired
+	private SubgroupSettingsService subgroupSettingsService;
+
+	@Autowired
+	private TreeToRulesSettingsService treeToRulesSettingsService;
+
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create(@RequestParam int fileId) {
 
 		File file = fileService.findOne(fileId);
 		byte[] fileArray = file.getOriginalFile();
 		String fileFormat = StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
-		String tmpPath = "/Users/felix/03.TFG/pruebafiles/" + file.getHash() + Constants.DOT_SYMBOL
+		String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
 				+ fileFormat;
 
 		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
@@ -65,6 +86,7 @@ public class PreprocessingFormController {
 		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
 
 		PreprocessingForm preform = preprocessingFormService.create();
+		preform.setFile(file);
 		preform = preprocessingFormService.save(preform);
 
 		PreprocessedData data = preprocessedDataService.create();
@@ -174,22 +196,62 @@ public class PreprocessingFormController {
 		return res;
 	}
 
-	@RequestMapping(value = "/preprocessData", method = RequestMethod.POST)
-	public ModelAndView preprocessData(@RequestParam int dataId,
-			@ModelAttribute PreproSimpleForm form) {
+	@RequestMapping(value = "/process", method = RequestMethod.POST)
+	public ModelAndView process(@ModelAttribute PreproSimpleForm form) {
 
+		// Aquí en primer lugar se tienen que guardar los datos filtrados.
+		int dataId = Integer.parseInt((StringUtils.substringAfterLast(form.getDataParam(),
+				Constants.EQUALS_SYMBOL)));
 		PreprocessedData data = preprocessedDataService.findOne(dataId);
-		ExampleSet exampleSet = data.getExampleSet();
-		List<Example> examples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
-		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+		// Formulario
+		PreprocessingForm storedForm = data.getPreprocessingForm();
+		String filterCondition = RoisinUtils.calculateFilterCondition(form);
+		storedForm.setFilterCondition(filterCondition);
+		storedForm = preprocessingFormService.save(storedForm);
+		// Attributos seleccionados
+		for (String attributeName : form.getAttributeSelection()) {
+			SelectedAttribute sa = selectedAttributeService.create();
+			sa.setPreprocessingForm(storedForm);
+			sa.setName(attributeName);
+			selectedAttributeService.save(sa);
+		}
+		// Extracción de file de BD
+		File file = storedForm.getFile();
+		byte[] fileArray = file.getOriginalFile();
+		String fileFormat = StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
+		String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
+				+ fileFormat;
+		// Escritura en disco del fichero
+		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
+		// Colección de deleted rows
+		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(storedForm
+				.getId());
+		// Obtención del example set resultante
+		ExampleSet exampleSet = Runner.getPreprocessedExampleSetFromFile(tmpPath,
+				RoisinUtils.getRowsFromDeletedRows(deletedRows), filterCondition,
+				form.getAttributeSelection());
+		// Se almacen el example set
+		data = preprocessedDataService.findOne(dataId);
+		data.setExampleSet(exampleSet);
+		data = preprocessedDataService.save(data);
+		// Finalmente se manda al usuario al formulario de proceso
 
-		ModelAndView res = new ModelAndView("preform/list");
-		res.addObject("examples", examples);
-		res.addObject("attributes", attributes);
-		res.addObject("form", form);
-		res.addObject("requestURI", "list?dataId=" + dataId);
+		// Creación del proceso
+		Process process = processService.create();
+		process.setLabel(selectedAttributeService.findLabel(storedForm.getId(), form.getLabel()));
+		process.setPreprocessedData(data);
+		process.setAlgorithm("roisinnull");
+		process = processService.save(process);
+		// Creación de los formularios
+		RipperSettings ripperSettings = ripperSettingsService.create();
+		SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+		TreeToRulesSettings treeToRulesSettings = treeToRulesSettingsService.create();
+
+		ModelAndView res = new ModelAndView("process/create");
+		res.addObject("ripperSettings", ripperSettings);
+		res.addObject("subgroupSettings", subgroupSettings);
+		res.addObject("treeToRulesSettings", treeToRulesSettings);
 
 		return res;
 	}
-
 }

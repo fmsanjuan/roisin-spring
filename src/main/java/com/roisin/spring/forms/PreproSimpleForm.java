@@ -1,18 +1,14 @@
 package com.roisin.spring.forms;
 
 import java.util.List;
-import java.util.SortedSet;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class PreproSimpleForm {
 
 	private List<String> attributeSelection;
-
-	private SortedSet<Integer> deletedRows;
 
 	private String filterAttribute;
 
@@ -22,9 +18,12 @@ public class PreproSimpleForm {
 
 	private String filterCondition;
 
+	private String label;
+
+	private String dataParam;
+
 	public PreproSimpleForm() {
 		attributeSelection = Lists.newArrayList();
-		deletedRows = Sets.newTreeSet();
 		filterCondition = StringUtils.EMPTY;
 	}
 
@@ -34,14 +33,6 @@ public class PreproSimpleForm {
 
 	public void setAttributeSelection(List<String> attributeSelection) {
 		this.attributeSelection = attributeSelection;
-	}
-
-	public SortedSet<Integer> getDeletedRows() {
-		return deletedRows;
-	}
-
-	public void setDeletedRows(SortedSet<Integer> deletedRows) {
-		this.deletedRows = deletedRows;
 	}
 
 	public String getFilterCondition() {
@@ -74,6 +65,22 @@ public class PreproSimpleForm {
 
 	public void setFilterValue(String filterValue) {
 		this.filterValue = filterValue;
+	}
+
+	public String getDataParam() {
+		return dataParam;
+	}
+
+	public void setDataParam(String dataParam) {
+		this.dataParam = dataParam;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 }

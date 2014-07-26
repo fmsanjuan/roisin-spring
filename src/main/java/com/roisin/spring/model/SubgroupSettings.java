@@ -5,6 +5,8 @@ import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
+import com.roisin.spring.utils.ProcessConstants;
+
 @Entity
 @Access(AccessType.PROPERTY)
 public class SubgroupSettings extends DomainEntity {
@@ -27,6 +29,13 @@ public class SubgroupSettings extends DomainEntity {
 
 	public SubgroupSettings() {
 		super();
+		this.mode = ProcessConstants.K_BEST_RULES;
+		this.utilityFunction = ProcessConstants.WRACC;
+		this.minUtility = 0.0;
+		this.kBestRules = 10;
+		this.ruleGeneration = ProcessConstants.BOTH;
+		this.maxDepth = 5;
+		this.minCoverage = 0.0;
 	}
 
 	public String getMode() {

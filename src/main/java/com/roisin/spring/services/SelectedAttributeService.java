@@ -42,4 +42,10 @@ public class SelectedAttributeService {
 	public Collection<SelectedAttribute> findAll() {
 		return selectedAttributeRepository.findAll();
 	}
+
+	// Extra methods
+
+	public SelectedAttribute findLabel(int formId, String label) {
+		return selectedAttributeRepository.findLabel(formId, label);
+	}
 }

@@ -46,4 +46,6 @@ public interface Constants {
 
 	String SHA_256 = "SHA-256";
 
+	String STORAGE_PATH = "/Users/felix/03.TFG/pruebafiles/";
+
 }

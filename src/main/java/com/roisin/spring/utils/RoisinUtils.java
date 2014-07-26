@@ -2,13 +2,16 @@ package com.roisin.spring.utils;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
+import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.model.DeletedRow;
 
@@ -74,4 +77,43 @@ public class RoisinUtils {
 		return res;
 	}
 
+	public static String calculateFilterCondition(PreproSimpleForm form) {
+		// Transformación de condición provisional
+		if (!StringUtils.isBlank(form.getFilterValue())) {
+			StringBuilder condition = new StringBuilder();
+			condition.append(form.getFilterAttribute());
+			if (form.getFilterOperator().equals(Constants.EQUALS)) {
+				condition.append(Constants.EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.NON_EQUALS)) {
+				condition.append(Constants.NON_EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.GREATER_OR_EQUALS)) {
+				condition.append(Constants.GREATER_OR_EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.SMALLER_OR_EQUALS)) {
+				condition.append(Constants.SMALLER_OR_EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.SMALLER_THAN)) {
+				condition.append(Constants.SMALLER_THAN_SYMBOL);
+			} else if (form.getFilterOperator().equals(Constants.GREATER_THAN)) {
+				condition.append(Constants.GREATER_THAN_SYMBOL);
+			}
+			condition.append(form.getFilterValue());
+			return condition.toString();
+		}
+		return StringUtils.EMPTY;
+	}
+
+	/**
+	 * This method transforms deleted row collections to integer sorted set
+	 * which represents the rows in order. This process is necessary to execute
+	 * processes from core.
+	 * 
+	 * @param deletedRows
+	 * @return
+	 */
+	public static SortedSet<Integer> getRowsFromDeletedRows(Collection<DeletedRow> deletedRows) {
+		SortedSet<Integer> res = Sets.newTreeSet();
+		for (DeletedRow deletedRow : deletedRows) {
+			res.add(deletedRow.getNumber());
+		}
+		return res;
+	}
 }
