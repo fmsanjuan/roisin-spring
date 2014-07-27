@@ -1,8 +1,11 @@
 package com.roisin.spring.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.SortedSet;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +18,7 @@ import com.rapidminer.operator.OperatorException;
 import com.rapidminer.operator.learner.rules.RuleModel;
 import com.rapidminer.operator.learner.subgroups.RuleSet;
 import com.roisin.core.processes.GenericProcesses;
+import com.roisin.core.processes.Preprocessing;
 import com.roisin.core.results.RipperResults;
 import com.roisin.core.results.RoisinResults;
 import com.roisin.core.results.SubgroupResults;
@@ -125,6 +129,43 @@ public class Runner {
 			logger.error("No ha sido posible ejecutar el proceso con Decision Tree to rules");
 		}
 		return results;
+	}
+
+	/**
+	 * This method executes the process that does the preprocessing step and
+	 * stores all the preprocessed information in the server. Finally, it
+	 * returns a ByteArrayOutputStream with the file stored in the server.
+	 * 
+	 * @param inputFormat
+	 * @param inputPath
+	 * @param rowFilt2er
+	 * @param filterCondition
+	 * @param attributeSelection
+	 * @param outputFormat
+	 * @param outputPath
+	 * @return
+	 */
+	public static ByteArrayOutputStream exportData(String inputPath, SortedSet<Integer> rowFilter,
+			String filterCondition, List<String> attributeSelection, String outputPath) {
+
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			Process process = Preprocessing.getPreprocessedDataFile(inputPath, rowFilter,
+					filterCondition, attributeSelection, outputPath);
+			process.run();
+			FileInputStream fis = new FileInputStream(new File(outputPath));
+			byte[] buf = new byte[1024];
+			for (int readNum; (readNum = fis.read(buf)) != -1;) {
+				bos.write(buf, 0, readNum); // no doubt here is 0
+				// Writes len bytes from the specified byte array starting at
+				// offset off to this byte array output stream.
+				System.out.println("read " + readNum + " bytes,");
+			}
+			fis.close();
+		} catch (Exception e) {
+			logger.error("No ha sido posible exportar el fichero", e);
+		}
+		return bos;
 	}
 
 	public static void startRapidminer() {

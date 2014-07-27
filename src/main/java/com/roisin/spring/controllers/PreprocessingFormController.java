@@ -3,8 +3,13 @@ package com.roisin.spring.controllers;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -196,7 +201,7 @@ public class PreprocessingFormController {
 		return res;
 	}
 
-	@RequestMapping(value = "/process", method = RequestMethod.POST)
+	@RequestMapping(value = "/process", method = RequestMethod.POST, params = { "process" })
 	public ModelAndView process(@ModelAttribute PreproSimpleForm form) {
 
 		// Aquí en primer lugar se tienen que guardar los datos filtrados.
@@ -260,5 +265,51 @@ public class PreprocessingFormController {
 		res.addObject("treeSettings", treeToRulesSettings);
 
 		return res;
+	}
+
+	@RequestMapping(value = "/process", method = RequestMethod.POST, params = { "export" })
+	public ResponseEntity<byte[]> export(@ModelAttribute PreproSimpleForm form) {
+		// Aquí en primer lugar se tienen que guardar los datos filtrados.
+		int dataId = Integer.parseInt((StringUtils.substringAfterLast(form.getDataParam(),
+				Constants.EQUALS_SYMBOL)));
+		PreprocessedData data = preprocessedDataService.findOne(dataId);
+		// Formulario
+		PreprocessingForm storedForm = data.getPreprocessingForm();
+		String filterCondition = RoisinUtils.calculateFilterCondition(form);
+		storedForm.setFilterCondition(filterCondition);
+		storedForm = preprocessingFormService.save(storedForm);
+		// Attributos seleccionados
+		for (String attributeName : form.getAttributeSelection()) {
+			SelectedAttribute sa = selectedAttributeService.create();
+			sa.setPreprocessingForm(storedForm);
+			sa.setName(attributeName);
+			selectedAttributeService.save(sa);
+		}
+		// Extracción de file de BD
+		File file = storedForm.getFile();
+		byte[] fileArray = file.getOriginalFile();
+		String fileFormat = StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
+		String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
+				+ fileFormat;
+		String outputPath = Constants.DOWNLOAD_PATH + file.getHash() + Constants.DOT_SYMBOL
+				+ fileFormat;
+		// Escritura en disco del fichero
+		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
+		// Colección de deleted rows
+		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(storedForm
+				.getId());
+		// Obtención del example set resultante
+		ByteArrayOutputStream document = Runner.exportData(tmpPath,
+				RoisinUtils.getRowsFromDeletedRows(deletedRows), filterCondition,
+				form.getAttributeSelection(), outputPath);
+		// Create and configure headers to return the file
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType("application/" + fileFormat));
+		headers.setContentDispositionFormData(file.getName(), file.getName());
+		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(document.toByteArray(),
+				headers, HttpStatus.OK);
+
+		return response;
 	}
 }

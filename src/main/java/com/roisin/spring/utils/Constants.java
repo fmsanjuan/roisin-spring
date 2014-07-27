@@ -48,4 +48,6 @@ public interface Constants {
 
 	String STORAGE_PATH = "/Users/felix/03.TFG/pruebafiles/";
 
+	String DOWNLOAD_PATH = "/Users/felix/03.TFG/pruebafiles/downloads/";
+
 }
