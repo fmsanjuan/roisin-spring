@@ -1,9 +1,10 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <form:form method="post" class="form-horizontal"
-	action="/roisin-spring/processing/ripper" role="form"
-	modelAttribute="ripperSettings">
-
+	action="../process/ripper" role="form" modelAttribute="ripperSettings">
+	
+	<form:hidden path="id" />
+	<form:hidden path="version" />
 	<form:hidden path="process" />
 
 	<div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
@@ -32,7 +33,7 @@
 				</button></a>
 		</c:otherwise>
 	</c:choose>
-	<form:button type="submit" class="btn btn-default">Run Ripper</form:button>
+	<form:button type="submit" name="ripper" class="btn btn-default">Run Ripper</form:button>
 	<div class="modal fade" id="ripperModal" tabindex="-1" role="dialog"
 		aria-labelledby="ripperModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -92,7 +93,7 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Go
 						Back</button>
-					<form:button type="submit" class="btn btn-default">Run Ripper</form:button>
+					<form:button type="submit" name="ripper" class="btn btn-default">Run Ripper</form:button>
 				</div>
 			</div>
 		</div>

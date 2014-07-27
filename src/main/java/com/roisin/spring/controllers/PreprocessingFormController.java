@@ -238,19 +238,26 @@ public class PreprocessingFormController {
 
 		// Creación del proceso
 		Process process = processService.create();
-		process.setLabel(selectedAttributeService.findLabel(storedForm.getId(), form.getLabel()));
 		process.setPreprocessedData(data);
 		process.setAlgorithm("roisinnull");
 		process = processService.save(process);
+		// Se establece la label (clase) para este proceso
+		SelectedAttribute label = selectedAttributeService.findLabel(storedForm.getId(),
+				form.getLabel());
+		label.setProcess(process);
+		label = selectedAttributeService.save(label);
 		// Creación de los formularios
 		RipperSettings ripperSettings = ripperSettingsService.create();
+		ripperSettings.setProcess(process);
 		SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+		subgroupSettings.setProcess(process);
 		TreeToRulesSettings treeToRulesSettings = treeToRulesSettingsService.create();
+		treeToRulesSettings.setProcess(process);
 
 		ModelAndView res = new ModelAndView("process/create");
 		res.addObject("ripperSettings", ripperSettings);
 		res.addObject("subgroupSettings", subgroupSettings);
-		res.addObject("treeToRulesSettings", treeToRulesSettings);
+		res.addObject("treeSettings", treeToRulesSettings);
 
 		return res;
 	}

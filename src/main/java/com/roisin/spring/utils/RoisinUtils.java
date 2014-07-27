@@ -14,6 +14,7 @@ import com.rapidminer.example.ExampleSet;
 import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.model.DeletedRow;
+import com.roisin.spring.model.SelectedAttribute;
 
 public class RoisinUtils {
 
@@ -113,6 +114,15 @@ public class RoisinUtils {
 		SortedSet<Integer> res = Sets.newTreeSet();
 		for (DeletedRow deletedRow : deletedRows) {
 			res.add(deletedRow.getNumber());
+		}
+		return res;
+	}
+
+	public static List<String> getAttributesFromSelectedAttributes(
+			Collection<SelectedAttribute> selectedAttributes) {
+		List<String> res = Lists.newArrayList();
+		for (SelectedAttribute selectedAttribute : selectedAttributes) {
+			res.add(selectedAttribute.getName());
 		}
 		return res;
 	}

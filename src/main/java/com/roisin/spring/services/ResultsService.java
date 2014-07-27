@@ -34,8 +34,8 @@ public class ResultsService {
 		return resultsRepository.findOne(resultsId);
 	}
 
-	public void save(Results results) {
-		resultsRepository.save(results);
+	public Results save(Results results) {
+		return resultsRepository.save(results);
 	}
 
 	public void delete(Results results) {

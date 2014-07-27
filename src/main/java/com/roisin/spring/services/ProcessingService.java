@@ -3,7 +3,6 @@ package com.roisin.spring.services;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -56,8 +55,7 @@ public class ProcessingService {
 	public RoisinResults getSubgroupResults(PreprocessingForm form) {
 		SubgroupResults results = null;
 		try {
-			Process process = GenericProcesses.getSubgroupDiscoveryDiscretization(StringUtils
-					.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL), form
+			Process process = GenericProcesses.getSubgroupDiscoveryDiscretization(form
 					.getFilePath(), form.getLabel(), form.getDeletedRows(), form
 					.getFilterCondition(), form.getAttributeSelection(), form.getMode(), form
 					.getUtilityFunction(), form.getMinUtility().toString(), form.getkBestRules()
@@ -76,15 +74,14 @@ public class ProcessingService {
 	public RoisinResults getTreeToRulesResults(PreprocessingForm form) {
 		RipperResults results = null;
 		try {
-			Process process = GenericProcesses.getDecisionTreeToRules(StringUtils
-					.substringAfterLast(form.getFilePath(), Constants.DOT_SYMBOL), form
-					.getFilePath(), form.getLabel(), form.getDeletedRows(), form
-					.getFilterCondition(), form.getAttributeSelection(), form
-					.getTree2RulesCriterion(), form.getMinimalSizeForSplit().toString(), form
-					.getMinimalLeafSize().toString(), form.getMinimalGain().toString(), form
-					.getMaximalDepth().toString(), form.getConfidence().toString(), form
-					.getNumberOfPrepruningAlternatives().toString(), form.getNoPrepruning()
-					.toString(), form.getNoPruning().toString());
+			Process process = GenericProcesses.getDecisionTreeToRules(form.getFilePath(), form
+					.getLabel(), form.getDeletedRows(), form.getFilterCondition(), form
+					.getAttributeSelection(), form.getTree2RulesCriterion(), form
+					.getMinimalSizeForSplit().toString(), form.getMinimalLeafSize().toString(),
+					form.getMinimalGain().toString(), form.getMaximalDepth().toString(), form
+							.getConfidence().toString(), form.getNumberOfPrepruningAlternatives()
+							.toString(), form.getNoPrepruning().toString(), form.getNoPruning()
+							.toString());
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);

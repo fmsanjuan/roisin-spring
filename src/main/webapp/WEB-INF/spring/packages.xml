@@ -7,12 +7,13 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 	">
 
+	<context:component-scan base-package="com.roisin.spring.converters" />
 	<context:component-scan base-package="com.roisin.spring.controllers" />
 	<context:component-scan base-package="com.roisin.spring.model" />
 	<context:component-scan base-package="com.roisin.spring.forms" />
 	<context:component-scan base-package="com.roisin.spring.repositories" />
 	<context:component-scan base-package="com.roisin.spring.services" />
 	<context:component-scan base-package="com.roisin.spring.security" />
-	
+
 
 </beans>

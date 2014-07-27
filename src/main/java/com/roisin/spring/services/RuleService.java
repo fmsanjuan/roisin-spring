@@ -44,4 +44,8 @@ public class RuleService {
 
 	// TODO: Método para obtener todas las reglas de un proceso.
 
+	public Collection<Rule> findRulesByResultsId(int resultsId) {
+		return ruleRepository.findRulesByResultsId(resultsId);
+	}
+
 }

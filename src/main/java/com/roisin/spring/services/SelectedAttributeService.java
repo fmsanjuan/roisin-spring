@@ -30,9 +30,8 @@ public class SelectedAttributeService {
 		return selectedAttributeRepository.findOne(selectedAttributeId);
 	}
 
-	public void save(SelectedAttribute selectedAttribute) {
-
-		selectedAttributeRepository.save(selectedAttribute);
+	public SelectedAttribute save(SelectedAttribute selectedAttribute) {
+		return selectedAttributeRepository.save(selectedAttribute);
 	}
 
 	public void delete(SelectedAttribute selectedAttribute) {
@@ -47,5 +46,9 @@ public class SelectedAttributeService {
 
 	public SelectedAttribute findLabel(int formId, String label) {
 		return selectedAttributeRepository.findLabel(formId, label);
+	}
+
+	public Collection<SelectedAttribute> findSelectedAttributesByFormId(int formId) {
+		return selectedAttributeRepository.findSelectedAttributesByFormId(formId);
 	}
 }

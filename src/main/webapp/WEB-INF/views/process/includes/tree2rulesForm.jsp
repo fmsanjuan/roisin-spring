@@ -1,10 +1,10 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <form:form method="post" class="form-horizontal"
-	action="/roisin-spring/processing/tree" role="form"
-	modelAttribute="treeToRulesSettings">
+	action="../process/tree" role="form"
+	modelAttribute="treeSettings">
 
-	<form:hidden path="process"/>
+	<form:hidden path="process" />
 
 	<div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
 		<h3 class="text-center">Tree to Rules</h3>
@@ -29,7 +29,7 @@
 					class="btn btn-default">Advanced Settings</button></a>
 		</c:otherwise>
 	</c:choose>
-	<form:button type="submit" class="btn btn-default">Run Tree to Rules</form:button>
+	<form:button type="submit" name="tree" class="btn btn-default">Run Tree to Rules</form:button>
 	<div class="modal fade" id="tree2rulesModal" tabindex="-1"
 		role="dialog" aria-labelledby="tree2rulesModalLabel"
 		aria-hidden="true">
@@ -138,7 +138,7 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Go
 						Back</button>
-					<form:button type="submit" class="btn btn-default">Run Tree to Rules</form:button>
+					<form:button type="submit" name="tree" class="btn btn-default">Run Tree to Rules</form:button>
 				</div>
 			</div>
 		</div>

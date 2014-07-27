@@ -1,7 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <form:form method="post" class="form-horizontal"
-	action="/roisin-spring/processing/subgroup" role="form"
+	action="../process/subgroup" role="form"
 	modelAttribute="subgroupSettings">
 
 	<form:hidden path="process" />
@@ -29,7 +29,7 @@
 					class="btn btn-default">Advanced Settings</button></a>
 		</c:otherwise>
 	</c:choose>
-	<form:button type="submit" class="btn btn-default">Run Subgroup</form:button>
+	<form:button type="submit" name="subgroup" class="btn btn-default">Run Subgroup</form:button>
 
 	<div class="modal fade" id="subgroupModal" tabindex="-1" role="dialog"
 		aria-labelledby="subgroupModalLabel" aria-hidden="true">
@@ -137,7 +137,7 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Go
 						Back</button>
-					<form:button type="submit" class="btn btn-default">Run Subgroup</form:button>
+					<form:button type="submit" name="subgroup" class="btn btn-default">Run Subgroup</form:button>
 				</div>
 			</div>
 		</div>
