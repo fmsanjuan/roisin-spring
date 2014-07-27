@@ -41,4 +41,11 @@ public class ProcessService {
 	public void delete(Process process) {
 		processRepository.delete(process);
 	}
+
+	// Extra methods
+
+	public Process saveProcessAlgorithm(Process process, String algorithm) {
+		process.setAlgorithm(algorithm);
+		return save(process);
+	}
 }

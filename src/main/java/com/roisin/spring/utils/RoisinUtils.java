@@ -1,6 +1,7 @@
 package com.roisin.spring.utils;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -8,9 +9,20 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.googlecode.charts4j.Color;
+import com.googlecode.charts4j.Data;
+import com.googlecode.charts4j.DataUtil;
+import com.googlecode.charts4j.Fills;
+import com.googlecode.charts4j.GCharts;
+import com.googlecode.charts4j.Plots;
+import com.googlecode.charts4j.XYLine;
+import com.googlecode.charts4j.XYLineChart;
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
+import com.roisin.core.results.RoisinResults;
+import com.roisin.core.results.RoisinRule;
+import com.roisin.core.utils.RoisinRuleComparator;
 import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.model.DeletedRow;
@@ -125,5 +137,47 @@ public class RoisinUtils {
 			res.add(selectedAttribute.getName());
 		}
 		return res;
+	}
+
+	/**
+	 * This method returns the chart with the AUC representation.
+	 * 
+	 * @param roisinResults
+	 * @return
+	 */
+	public static XYLineChart getAucChart(RoisinResults roisinResults) {
+
+		List<RoisinRule> rules = roisinResults.getRoisinRules();
+		Collections.sort(rules, new RoisinRuleComparator());
+		int rulesSize = rules.size();
+
+		// Curve
+		double[] xValues = new double[rulesSize + 2];
+		double[] yValues = new double[rulesSize + 2];
+		xValues[0] = Constants.ZERO;
+		yValues[0] = Constants.ZERO;
+
+		int i;
+
+		for (i = 0; i < rules.size(); i++) {
+			xValues[i + 1] = rules.get(i).getFalsePositiveRate();
+			yValues[i + 1] = rules.get(i).getTruePositiveRate();
+		}
+
+		xValues[i + 1] = Constants.ONE;
+		yValues[i + 1] = Constants.ONE;
+
+		Data xData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, xValues);
+		Data yData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, yValues);
+
+		XYLine line = Plots.newXYLine(xData, yData);
+		line.setFillAreaColor(Color.YELLOW);
+		XYLineChart chart = GCharts.newXYLineChart(line);
+		chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
+		chart.setTitle("Area under the curve = " + roisinResults.getRulesAuc());
+
+		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
+
+		return chart;
 	}
 }
