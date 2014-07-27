@@ -147,6 +147,7 @@ public class ProcessController {
 		res.addObject("rules", rules);
 		res.addObject("requestURI", "results/view");
 		res.addObject("chart", chart.toURLString());
+		res.addObject("resultsId", results.getId());
 
 		return res;
 	}
