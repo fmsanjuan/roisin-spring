@@ -20,9 +20,6 @@ import com.googlecode.charts4j.XYLineChart;
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
-import com.roisin.core.results.RoisinResults;
-import com.roisin.core.results.RoisinRule;
-import com.roisin.core.utils.RoisinRuleComparator;
 import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.model.DeletedRow;
@@ -140,17 +137,62 @@ public class RoisinUtils {
 		return res;
 	}
 
+	// /**
+	// * This method returns the chart with the AUC representation.
+	// *
+	// * @param roisinResults
+	// * @return
+	// */
+	// public static XYLineChart getAucChart(RoisinResults roisinResults) {
+	//
+	// List<RoisinRule> rules = roisinResults.getRoisinRules();
+	// Collections.sort(rules, new RoisinRuleComparator());
+	// int rulesSize = rules.size();
+	//
+	// // Curve
+	// double[] xValues = new double[rulesSize + 2];
+	// double[] yValues = new double[rulesSize + 2];
+	// xValues[0] = Constants.ZERO;
+	// yValues[0] = Constants.ZERO;
+	//
+	// int i;
+	//
+	// for (i = 0; i < rules.size(); i++) {
+	// xValues[i + 1] = rules.get(i).getFalsePositiveRate();
+	// yValues[i + 1] = rules.get(i).getTruePositiveRate();
+	// }
+	//
+	// xValues[i + 1] = Constants.ONE;
+	// yValues[i + 1] = Constants.ONE;
+	//
+	// Data xData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE,
+	// xValues);
+	// Data yData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE,
+	// yValues);
+	//
+	// XYLine line = Plots.newXYLine(xData, yData);
+	// line.setFillAreaColor(Color.YELLOW);
+	// XYLineChart chart = GCharts.newXYLineChart(line);
+	// chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
+	// chart.setTitle("Area under the curve = " + roisinResults.getRulesAuc());
+	//
+	// chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
+	//
+	// return chart;
+	// }
+
 	/**
 	 * This method returns the chart with the AUC representation.
 	 * 
-	 * @param roisinResults
+	 * @param rules
+	 * @param auc
 	 * @return
 	 */
-	public static XYLineChart getAucChart(RoisinResults roisinResults) {
+	public static XYLineChart getAucChart(Collection<Rule> rules, double auc) {
 
-		List<RoisinRule> rules = roisinResults.getRoisinRules();
-		Collections.sort(rules, new RoisinRuleComparator());
-		int rulesSize = rules.size();
+		List<Rule> sortedRules = Lists.newArrayList(rules);
+		Collections.sort(sortedRules, new RuleComparator());
+		int rulesSize = sortedRules.size();
 
 		// Curve
 		double[] xValues = new double[rulesSize + 2];
@@ -160,9 +202,9 @@ public class RoisinUtils {
 
 		int i;
 
-		for (i = 0; i < rules.size(); i++) {
-			xValues[i + 1] = rules.get(i).getFalsePositiveRate();
-			yValues[i + 1] = rules.get(i).getTruePositiveRate();
+		for (i = 0; i < sortedRules.size(); i++) {
+			xValues[i + 1] = sortedRules.get(i).getFpr();
+			yValues[i + 1] = sortedRules.get(i).getTpr();
 		}
 
 		xValues[i + 1] = Constants.ONE;
@@ -175,7 +217,7 @@ public class RoisinUtils {
 		line.setFillAreaColor(Color.YELLOW);
 		XYLineChart chart = GCharts.newXYLineChart(line);
 		chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
-		chart.setTitle("Area under the curve = " + roisinResults.getRulesAuc());
+		chart.setTitle("Area under the curve = " + auc);
 
 		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
 
@@ -207,4 +249,72 @@ public class RoisinUtils {
 
 		return chart;
 	}
+
+	/**
+	 * This method applies ROC Analysis and returns all the rules that should be
+	 * removed from the results.
+	 * 
+	 * @param rules
+	 * @return
+	 */
+	public static Collection<Rule> getRocAnalysisRemovedRules(Collection<Rule> rules) {
+		// Ordenación de reglas (obligatorio)
+		List<Rule> sortedRules = Lists.newArrayList(rules);
+		Collections.sort(sortedRules, new RuleComparator());
+		// Reglas eliminadas
+		List<Rule> deletedRules = Lists.newArrayList();
+
+		for (int i = 0; i < rules.size() - 1; i++) {
+			Rule curRule = sortedRules.get(i);
+
+			Line line;
+			if (i != 0 && i != (rules.size() - 1)) {
+				Rule prevRule = sortedRules.get(i - 1);
+				Rule nextRule = sortedRules.get(i + 1);
+				line = calculateLine(prevRule.getFpr(), prevRule.getTpr(), nextRule.getFpr(),
+						nextRule.getTpr());
+			} else if (i == 0) {
+				Rule nextRule = sortedRules.get(i + 1);
+				line = calculateLine(0.0, 0.0, nextRule.getFpr(), nextRule.getTpr());
+			} else {
+				Rule prevRule = sortedRules.get(i - 1);
+				line = calculateLine(prevRule.getFpr(), prevRule.getTpr(), 1.0, 1.0);
+			}
+
+			if (isUnderTheLine(curRule.getFpr(), curRule.getTpr(), line)) {
+				deletedRules.add(curRule);
+			}
+		}
+
+		return deletedRules;
+	}
+
+	/**
+	 * This method calculates if the point given is under the line.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param line
+	 * @return
+	 */
+	public static boolean isUnderTheLine(double x, double y, Line line) {
+		double yLine = (x * line.getM()) + line.getK();
+		return yLine > y;
+	}
+
+	/**
+	 * This method calculates the line defined by the points given.
+	 * 
+	 * @param xa
+	 * @param ya
+	 * @param xc
+	 * @param yc
+	 * @return
+	 */
+	public static Line calculateLine(double xa, double ya, double xc, double yc) {
+		double m = (ya - yc) / (xa - yc);
+		double k = ya - (xa * m);
+		return new Line(m, k);
+	}
+
 }

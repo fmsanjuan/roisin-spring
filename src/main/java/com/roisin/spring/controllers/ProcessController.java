@@ -81,8 +81,10 @@ public class ProcessController {
 				.getRowsFromDeletedRows(deletedRows));
 		// Truncate results
 		roisinResults.truncateResults();
+		Results results = resultsService.saveResultRules(roisinResults);
+		process.setResults(results);
 
-		return createResultsModelAndView(roisinResults);
+		return createResultsModelAndView(results);
 	}
 
 	@RequestMapping(value = "/subgroup", method = RequestMethod.POST)
@@ -108,8 +110,10 @@ public class ProcessController {
 				.getRowsFromDeletedRows(deletedRows));
 		// Truncate results
 		roisinResults.truncateResults();
+		Results results = resultsService.saveResultRules(roisinResults);
+		process.setResults(results);
 
-		return createResultsModelAndView(roisinResults);
+		return createResultsModelAndView(results);
 	}
 
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
@@ -134,20 +138,21 @@ public class ProcessController {
 				.getRowsFromDeletedRows(deletedRows));
 		// Truncate results
 		roisinResults.truncateResults();
+		Results results = resultsService.saveResultRules(roisinResults);
+		process.setResults(results);
 
-		return createResultsModelAndView(roisinResults);
+		return createResultsModelAndView(results);
 	}
 
-	public ModelAndView createResultsModelAndView(RoisinResults roisinResults) {
-		Results results = resultsService.saveResultRules(roisinResults);
-		XYLineChart chart = RoisinUtils.getAucChart(roisinResults);
+	public ModelAndView createResultsModelAndView(Results results) {
 		Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
+		XYLineChart chart = RoisinUtils.getAucChart(rules, results.getAuc());
 
 		ModelAndView res = new ModelAndView("results/view");
 		res.addObject("rules", rules);
 		res.addObject("requestURI", "results/view");
 		res.addObject("chart", chart.toURLString());
-		res.addObject("resultsId", results.getId());
+		res.addObject("results", results);
 
 		return res;
 	}

@@ -8,4 +8,8 @@
 		<put-attribute name="title" value="Results" />
 		<put-attribute name="body" value="/WEB-INF/views/results/results.jsp" />
 	</definition>
+	<definition name="results/roc" extends="base.definition">
+		<put-attribute name="title" value="ROC" />
+		<put-attribute name="body" value="/WEB-INF/views/results/roc.jsp" />
+	</definition>
 </tiles-definitions>

@@ -12,9 +12,12 @@
 		<!-- Process -->
 		<bean class="com.roisin.spring.converters.ProcessToStringConverter" />
 		<bean class="com.roisin.spring.converters.StringToProcessConverter" />
-		<!-- Selected Attribute Conververters -->
+		<!-- Selected Attribute Converters -->
 		<bean class="com.roisin.spring.converters.SelectedAttributeToStringConverter" />
 		<bean class="com.roisin.spring.converters.StringToSelectedAttributeConverter" />
+		<!-- Results Converters -->
+		<bean class="com.roisin.spring.converters.ResultsToStringConverter" />
+		<bean class="com.roisin.spring.converters.StringToResultsConverter" />
 		
 	</util:list>
 

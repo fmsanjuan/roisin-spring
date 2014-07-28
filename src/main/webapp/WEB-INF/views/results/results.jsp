@@ -39,13 +39,35 @@
 			<img alt="AUC Chart" src="${chart }" />
 		</div>
 		<div class="col-md-3">
-			<br /> <br /> <br /> <br /> <br /> <br /><br /><br /> <a
-				href="../results/export?resultsId=${resultsId }"> <input
-				class="btn btn-primary btn-lg" type="button"
-				value="Download Results"
-				onclick="self.location.href = ../results/export?resultsId=${resultsId }" />
-			</a> <br />
-			<br /> <a href="${chart }"><button
+			<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+			<form:form method="post" class="form-horizontal"
+				action="../results/export" role="form" modelAttribute="results">
+				<form:hidden path="id"/>
+				<form:hidden path="version"/>
+				<form:hidden path="auc" />
+				<form:hidden path="process" />
+<%-- 				<form:hidden path="rules" /> --%>
+				<form:button class="btn btn-primary btn-lg" type="submit">Download Results</form:button>
+			</form:form><br />
+			<%-- 			<a href="../results/export?resultsId=${resultsId }"> <input --%>
+			<!-- 				class="btn btn-primary btn-lg" type="button" -->
+			<!-- 				value="Download Results" -->
+			<%-- 				onclick="self.location.href = ../results/export?resultsId=${resultsId }" /></a> --%>
+			<br />
+			<form:form method="post" class="form-horizontal"
+				action="../results/roc" role="form" modelAttribute="results">
+				<form:hidden path="id"/>
+				<form:hidden path="version"/>
+				<form:hidden path="auc" />
+				<form:hidden path="process" />
+<%-- 				<form:hidden path="rules" /> --%>
+				<form:button class="btn btn-primary btn-lg" type="submit">Roc Analysis</form:button>
+			</form:form>
+			<%-- 			 <a href="../results/export?resultsId=${resultsId }"> <input --%>
+			<!-- 				class="btn btn-primary btn-lg" type="button" -->
+			<!-- 				value="Download Results" -->
+			<%-- 				onclick="self.location.href = ../results/export?resultsId=${resultsId }" /> </a> --%>
+			<br /> <br /> <a href="${chart }"><button
 					class="btn btn-primary btn-lg">Download Chart</button></a>
 		</div>
 	</div>
