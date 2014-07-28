@@ -28,7 +28,10 @@
 			<display:column property="tn" title="TN" />
 			<display:column property="fp" title="FP" />
 			<display:column property="fn" title="FN" />
-			<display:column property="auc" title="AUC" />
+			<display:column title="AUC">
+				<a href="../rule/view?ruleId=${row.getId() }">${row.getAuc() }</a>
+			</display:column>
+
 		</display:table>
 	</div>
 	<div class="row">
@@ -36,15 +39,13 @@
 			<img alt="AUC Chart" src="${chart }" />
 		</div>
 		<div class="col-md-3">
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br /> <a href="../results/export?resultsId=${resultsId }"> <input
-				class="btn btn-default" type="button" value="Download Results"
+			<br /> <br /> <br /> <br /> <br /> <br /><br /><br /> <a
+				href="../results/export?resultsId=${resultsId }"> <input
+				class="btn btn-primary btn-lg" type="button"
+				value="Download Results"
 				onclick="self.location.href = ../results/export?resultsId=${resultsId }" />
-			</a> <br /> <a href="${chart }"><button
+			</a> <br />
+			<br /> <a href="${chart }"><button
 					class="btn btn-primary btn-lg">Download Chart</button></a>
 		</div>
 	</div>

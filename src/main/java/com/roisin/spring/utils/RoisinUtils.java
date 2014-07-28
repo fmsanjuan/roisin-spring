@@ -26,6 +26,7 @@ import com.roisin.core.utils.RoisinRuleComparator;
 import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.forms.PreprocessingForm;
 import com.roisin.spring.model.DeletedRow;
+import com.roisin.spring.model.Rule;
 import com.roisin.spring.model.SelectedAttribute;
 
 public class RoisinUtils {
@@ -175,6 +176,32 @@ public class RoisinUtils {
 		XYLineChart chart = GCharts.newXYLineChart(line);
 		chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
 		chart.setTitle("Area under the curve = " + roisinResults.getRulesAuc());
+
+		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
+
+		return chart;
+	}
+
+	public static XYLineChart getSingleRuleAucChart(Rule rule) {
+		// Curve
+		double[] xValues = new double[3];
+		double[] yValues = new double[3];
+
+		xValues[0] = Constants.ZERO;
+		yValues[0] = Constants.ZERO;
+		xValues[1] = rule.getFpr();
+		yValues[1] = rule.getTpr();
+		xValues[2] = Constants.ONE;
+		yValues[2] = Constants.ONE;
+
+		Data xData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, xValues);
+		Data yData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, yValues);
+
+		XYLine line = Plots.newXYLine(xData, yData);
+		line.setFillAreaColor(Color.YELLOW);
+		XYLineChart chart = GCharts.newXYLineChart(line);
+		chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
+		chart.setTitle("Area under the curve = " + rule.getAuc());
 
 		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
 

@@ -4,8 +4,8 @@
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 
 <tiles-definitions>
-	<definition name="process/create" extends="base.definition">
-		<put-attribute name="title" value="Process Definition" />
-		<put-attribute name="body" value="/WEB-INF/views/process/process.jsp" />
+	<definition name="results/create" extends="base.definition">
+		<put-attribute name="title" value="Resultados" />
+		<put-attribute name="body" value="/WEB-INF/views/results/results.jsp" />
 	</definition>
 </tiles-definitions>

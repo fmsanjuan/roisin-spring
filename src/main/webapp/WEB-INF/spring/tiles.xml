@@ -17,6 +17,7 @@
 		<value>/WEB-INF/views/file/tiles.xml</value>
 		<value>/WEB-INF/views/preform/tiles.xml</value>
 		<value>/WEB-INF/views/process/tiles.xml</value>
+		<value>/WEB-INF/views/rule/tiles.xml</value>
 	</util:list>
 
 </beans>
