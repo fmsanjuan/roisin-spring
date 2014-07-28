@@ -46,7 +46,7 @@ public class LoginController {
 
 		ModelAndView result;
 
-		result = new ModelAndView("data/list");
+		result = new ModelAndView("welcome/home");
 		result.addObject("credentials", credentials);
 		result.addObject("showError", showError);
 
@@ -57,9 +57,12 @@ public class LoginController {
 
 	@RequestMapping("/loginFailure")
 	public ModelAndView failure() {
-		ModelAndView result;
 
-		result = new ModelAndView("redirect:login.do?showError=true");
+		Credentials credentials = new Credentials();
+
+		ModelAndView result = new ModelAndView("welcome/home");
+		result.addObject("showError", true);
+		result.addObject("credentials", credentials);
 
 		return result;
 	}

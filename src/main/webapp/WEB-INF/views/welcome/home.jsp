@@ -24,27 +24,26 @@
 </style>
 
 	<div class="container">
-
 		<div class="row" style="margin-top: 20px">
 			<div
 				class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-				<form:form action="j_spring_security_check"
+				<form:form action="/j_spring_security_check"
 					modelAttribute="credentials" role="form">
 					<fieldset>
-						<h2>SIGN IN</h2>
+						<h2>Sign In</h2>
 						<hr class="colorgraph">
 						<div class="form-group">
-							<input path="username" type="text" name="username" id="username"
-								class="form-control input-lg" placeholder="Username">
+							<form:input path="username" type="text" name="username"
+								id="username" class="form-control input-lg"
+								placeholder="Username" />
 							<form:errors class="error" path="username" />
 						</div>
 						<div class="form-group">
-							<input path="password" type="password" name="password"
+							<form:input path="password" type="password" name="password"
 								id="password" class="form-control input-lg"
-								placeholder="Password">
+								placeholder="Password" />
 							<form:errors class="error" path="username" />
 						</div>
-						<br />
 						<div class="row">
 
 							<div class="col-xs-12 col-sm-12 col-md-12">
@@ -53,31 +52,32 @@
 							</div>
 						</div>
 						<br />
+						<c:if test="${showError == true}">
+							<div class="alert alert-danger alert-dismissable">
+								Incorrect username or password.</div>
+						</c:if>
+						<c:if test="${showError == false}">
+							<br />
+						<br />
+						<br />
+						<br />
+						<br /> <br />
+						</c:if>
 					</fieldset>
 				</form:form>
 			</div>
 		</div>
-
-
-
 	</div>
-
 	<br />
 	<br />
-	<br />
-
 </security:authorize>
 
 <security:authorize access="hasRole('USER')">
 Hey there!
 <br />
 	<a href="file/list">My Files</a>
-	<br/>
+	<br />
 	<a href="data/list">My Data</a>
 </security:authorize>
 
 <br />
-<p class="text-center">
-	<spring:message code="welcome.time" />
-	${serverTime}.
-</p>

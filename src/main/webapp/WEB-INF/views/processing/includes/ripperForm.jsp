@@ -1,5 +1,5 @@
 <form:form method="post" class="form-horizontal"
-	action="/roisin-spring/processing/ripper" role="form"
+	action="/processing/ripper" role="form"
 	modelAttribute="form">
 	<%@include file="/WEB-INF/views/includes/commonHidden.jsp"%>
 	<!-- Tree2Rules Hidden -->

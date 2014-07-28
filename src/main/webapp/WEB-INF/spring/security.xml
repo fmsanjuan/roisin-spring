@@ -27,9 +27,19 @@
 			access="permitAll" />
 		<security:intercept-url pattern="/styles/**"
 			access="permitAll" />
-			
-		<security:intercept-url pattern="/preprocessing/**"
-			access="isAuthenticated()" />
+		<security:intercept-url pattern="/security/login"
+			access="permitAll" />
+		<security:intercept-url pattern="/security/loginFailure"
+			access="permitAll" />
+
+		<security:intercept-url pattern="/file/**"
+			access="hasRole('USER')" />
+		<security:intercept-url pattern="/data/**"
+			access="hasRole('USER')" />
+		<security:intercept-url pattern="/process/**"
+			access="hasRole('USER')" />
+		<security:intercept-url pattern="/results/**"
+			access="hasRole('USER')" />
 
 		<security:form-login login-page="/security/login"
 			password-parameter="password" username-parameter="username"
