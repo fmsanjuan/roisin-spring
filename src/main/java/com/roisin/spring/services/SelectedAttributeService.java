@@ -44,7 +44,7 @@ public class SelectedAttributeService {
 
 	// Extra methods
 
-	public SelectedAttribute findLabel(int formId, String label) {
+	public Collection<SelectedAttribute> findLabel(int formId, String label) {
 		return selectedAttributeRepository.findLabel(formId, label);
 	}
 

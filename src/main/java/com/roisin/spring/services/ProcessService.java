@@ -48,4 +48,11 @@ public class ProcessService {
 		process.setAlgorithm(algorithm);
 		return save(process);
 	}
+
+	public void cleanTempProcesses(int dataId) {
+		Collection<Process> nullProcesses = processRepository.findNullDataProcesses(dataId);
+		for (Process process : nullProcesses) {
+			delete(process);
+		}
+	}
 }

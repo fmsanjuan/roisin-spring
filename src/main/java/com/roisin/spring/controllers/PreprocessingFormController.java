@@ -213,6 +213,12 @@ public class PreprocessingFormController {
 		String filterCondition = RoisinUtils.calculateFilterCondition(form);
 		storedForm.setFilterCondition(filterCondition);
 		storedForm = preprocessingFormService.save(storedForm);
+		// Borrado de attributos seleccionados en caso de que ya existan
+		Collection<SelectedAttribute> selectedList = selectedAttributeService
+				.findSelectedAttributesByFormId(storedForm.getId());
+		for (SelectedAttribute selectedAttribute : selectedList) {
+			selectedAttributeService.delete(selectedAttribute);
+		}
 		// Attributos seleccionados
 		for (String attributeName : form.getAttributeSelection()) {
 			SelectedAttribute sa = selectedAttributeService.create();
@@ -240,15 +246,15 @@ public class PreprocessingFormController {
 		data.setExampleSet(exampleSet);
 		data = preprocessedDataService.save(data);
 		// Finalmente se manda al usuario al formulario de proceso
-
+		processService.cleanTempProcesses(dataId);
 		// Creación del proceso
 		Process process = processService.create();
 		process.setPreprocessedData(data);
 		process.setAlgorithm("roisinnull");
 		process = processService.save(process);
 		// Se establece la label (clase) para este proceso
-		SelectedAttribute label = selectedAttributeService.findLabel(storedForm.getId(),
-				form.getLabel());
+		SelectedAttribute label = selectedAttributeService
+				.findLabel(storedForm.getId(), form.getLabel()).iterator().next();
 		label.setProcess(process);
 		label = selectedAttributeService.save(label);
 		// Creación de los formularios
@@ -278,6 +284,12 @@ public class PreprocessingFormController {
 		String filterCondition = RoisinUtils.calculateFilterCondition(form);
 		storedForm.setFilterCondition(filterCondition);
 		storedForm = preprocessingFormService.save(storedForm);
+		// Borrado de attributos seleccionados en caso de que ya existan
+		Collection<SelectedAttribute> selectedList = selectedAttributeService
+				.findSelectedAttributesByFormId(storedForm.getId());
+		for (SelectedAttribute selectedAttribute : selectedList) {
+			selectedAttributeService.delete(selectedAttribute);
+		}
 		// Attributos seleccionados
 		for (String attributeName : form.getAttributeSelection()) {
 			SelectedAttribute sa = selectedAttributeService.create();

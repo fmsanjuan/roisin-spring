@@ -81,8 +81,7 @@ public class ProcessController {
 				.getRowsFromDeletedRows(deletedRows));
 		// Truncate results
 		roisinResults.truncateResults();
-		Results results = resultsService.saveResultRules(roisinResults);
-		process.setResults(results);
+		Results results = resultsService.saveResultRules(roisinResults, process);
 
 		return createResultsModelAndView(results);
 	}
@@ -110,8 +109,7 @@ public class ProcessController {
 				.getRowsFromDeletedRows(deletedRows));
 		// Truncate results
 		roisinResults.truncateResults();
-		Results results = resultsService.saveResultRules(roisinResults);
-		process.setResults(results);
+		Results results = resultsService.saveResultRules(roisinResults, process);
 
 		return createResultsModelAndView(results);
 	}
@@ -138,8 +136,7 @@ public class ProcessController {
 				.getRowsFromDeletedRows(deletedRows));
 		// Truncate results
 		roisinResults.truncateResults();
-		Results results = resultsService.saveResultRules(roisinResults);
-		process.setResults(results);
+		Results results = resultsService.saveResultRules(roisinResults, process);
 
 		return createResultsModelAndView(results);
 	}

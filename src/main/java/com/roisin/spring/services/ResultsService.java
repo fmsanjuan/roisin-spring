@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.roisin.core.results.RoisinResults;
 import com.roisin.core.results.RoisinRule;
+import com.roisin.spring.model.Process;
 import com.roisin.spring.model.Results;
 import com.roisin.spring.model.Rule;
 import com.roisin.spring.repositories.ResultsRepository;
@@ -56,9 +57,10 @@ public class ResultsService {
 
 	// Extra methods
 
-	public Results saveResultRules(RoisinResults roisinResults) {
+	public Results saveResultRules(RoisinResults roisinResults, Process process) {
 		Results results = create();
 		results.setAuc(roisinResults.getRulesAuc());
+		results.setProcess(process);
 		results = save(results);
 
 		for (RoisinRule roisinRule : roisinResults.getRoisinRules()) {
