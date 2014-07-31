@@ -6,7 +6,7 @@
 
 <div class="page-header text-center">
 	<h1>
-		Results <small>ROC</small>
+		Results <small>AUC optimization</small>
 	</h1>
 </div>
 
@@ -63,14 +63,14 @@
 			<img alt="AUC Chart" src="${chart }" />
 		</div>
 		<div class="col-md-3">
-<!-- 			<br /> <br /> <br /> <br /> <br /> <br /><br /><br /> <a -->
-<%-- 				href="../results/export?resultsId=${resultsId }"> <input --%>
+			<br /> <br /> <br /> <br /> <br /> <br /><br /><br /> 
+<%-- 			<a	href="../results/export?resultsId=${resultsId }"> <input --%>
 <!-- 				class="btn btn-primary btn-lg" type="button" -->
 <!-- 				value="Download Results" -->
 <%-- 				onclick="self.location.href = ../results/export?resultsId=${resultsId }" /> --%>
 <!-- 			</a> <br /> -->
-<%-- 			<br /> <a href="${chart }"><button --%>
-<!-- 					class="btn btn-primary btn-lg">Download Chart</button></a> -->
+			<br /> <a href="${chart }"><button
+					class="btn btn-primary btn-lg">Download Chart</button></a>
 		</div>
 	</div>
 </div>

@@ -51,7 +51,7 @@ public class ResultsController {
 		return response;
 	}
 
-	@RequestMapping(value = "/roc", method = RequestMethod.POST)
+	@RequestMapping(value = "/optimization", method = RequestMethod.POST)
 	public ModelAndView roc(@ModelAttribute Results results) {
 
 		Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
@@ -60,7 +60,7 @@ public class ResultsController {
 
 		XYLineChart chart = RoisinUtils.getAucChart(rules, results.getAuc());
 
-		ModelAndView res = new ModelAndView("results/roc");
+		ModelAndView res = new ModelAndView("results/optimization");
 		res.addObject("rules", rules);
 		res.addObject("removedRules", removedRules);
 		res.addObject("chart", chart.toURLString());

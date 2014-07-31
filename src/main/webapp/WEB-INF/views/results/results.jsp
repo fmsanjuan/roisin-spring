@@ -55,13 +55,13 @@
 			<%-- 				onclick="self.location.href = ../results/export?resultsId=${resultsId }" /></a> --%>
 			<br />
 			<form:form method="post" class="form-horizontal"
-				action="../results/roc" role="form" modelAttribute="results">
+				action="../results/optimization" role="form" modelAttribute="results">
 				<form:hidden path="id"/>
 				<form:hidden path="version"/>
 				<form:hidden path="auc" />
 				<form:hidden path="process" />
 <%-- 				<form:hidden path="rules" /> --%>
-				<form:button class="btn btn-primary btn-lg" type="submit">Roc Analysis</form:button>
+				<form:button class="btn btn-primary btn-lg" type="submit">AUC Optimization</form:button>
 			</form:form>
 			<%-- 			 <a href="../results/export?resultsId=${resultsId }"> <input --%>
 			<!-- 				class="btn btn-primary btn-lg" type="button" -->
