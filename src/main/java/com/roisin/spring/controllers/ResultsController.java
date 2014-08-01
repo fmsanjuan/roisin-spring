@@ -38,7 +38,23 @@ public class ResultsController {
 	@RequestMapping(value = "/export", method = RequestMethod.POST)
 	public ResponseEntity<byte[]> exportResults(@ModelAttribute Results results) {
 
-		ByteArrayOutputStream document = resultsService.getExcelResults(results.getId());
+		ByteArrayOutputStream document = resultsService.getExcelResults(results);
+
+		// Create and configure headers to return the file
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType("application/xls"));
+		headers.setContentDispositionFormData("roisin_exported_data", "roisin_exported_data.xls");
+		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(document.toByteArray(),
+				headers, HttpStatus.OK);
+
+		return response;
+	}
+
+	@RequestMapping(value = "/exportoptimization", method = RequestMethod.POST)
+	public ResponseEntity<byte[]> exportOptimization(@ModelAttribute Results results) {
+
+		ByteArrayOutputStream document = resultsService.getOptimizationExcelResults(results);
 
 		// Create and configure headers to return the file
 		HttpHeaders headers = new HttpHeaders();
@@ -52,18 +68,19 @@ public class ResultsController {
 	}
 
 	@RequestMapping(value = "/optimization", method = RequestMethod.POST)
-	public ModelAndView roc(@ModelAttribute Results results) {
+	public ModelAndView optimization(@ModelAttribute Results results) {
 
 		Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
-		Collection<Rule> removedRules = RoisinUtils.getRocAnalysisRemovedRules(rules);
+		Collection<Rule> removedRules = RoisinUtils.getAucOptimizationRemovedRules(rules);
 		rules.removeAll(removedRules);
 
-		XYLineChart chart = RoisinUtils.getAucChart(rules, results.getAuc());
+		XYLineChart chart = RoisinUtils.getAucChart(rules, RoisinUtils.calculateRulesAuc(rules));
 
 		ModelAndView res = new ModelAndView("results/optimization");
 		res.addObject("rules", rules);
 		res.addObject("removedRules", removedRules);
 		res.addObject("chart", chart.toURLString());
+		res.addObject("results", results);
 
 		return res;
 	}

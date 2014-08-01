@@ -137,50 +137,6 @@ public class RoisinUtils {
 		return res;
 	}
 
-	// /**
-	// * This method returns the chart with the AUC representation.
-	// *
-	// * @param roisinResults
-	// * @return
-	// */
-	// public static XYLineChart getAucChart(RoisinResults roisinResults) {
-	//
-	// List<RoisinRule> rules = roisinResults.getRoisinRules();
-	// Collections.sort(rules, new RoisinRuleComparator());
-	// int rulesSize = rules.size();
-	//
-	// // Curve
-	// double[] xValues = new double[rulesSize + 2];
-	// double[] yValues = new double[rulesSize + 2];
-	// xValues[0] = Constants.ZERO;
-	// yValues[0] = Constants.ZERO;
-	//
-	// int i;
-	//
-	// for (i = 0; i < rules.size(); i++) {
-	// xValues[i + 1] = rules.get(i).getFalsePositiveRate();
-	// yValues[i + 1] = rules.get(i).getTruePositiveRate();
-	// }
-	//
-	// xValues[i + 1] = Constants.ONE;
-	// yValues[i + 1] = Constants.ONE;
-	//
-	// Data xData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE,
-	// xValues);
-	// Data yData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE,
-	// yValues);
-	//
-	// XYLine line = Plots.newXYLine(xData, yData);
-	// line.setFillAreaColor(Color.YELLOW);
-	// XYLineChart chart = GCharts.newXYLineChart(line);
-	// chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
-	// chart.setTitle("Area under the curve = " + roisinResults.getRulesAuc());
-	//
-	// chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
-	//
-	// return chart;
-	// }
-
 	/**
 	 * This method returns the chart with the AUC representation.
 	 * 
@@ -257,7 +213,7 @@ public class RoisinUtils {
 	 * @param rules
 	 * @return
 	 */
-	public static Collection<Rule> getRocAnalysisRemovedRules(Collection<Rule> rules) {
+	public static Collection<Rule> getAucOptimizationRemovedRules(Collection<Rule> rules) {
 		// Ordenación de reglas (obligatorio)
 		List<Rule> sortedRules = Lists.newArrayList(rules);
 		Collections.sort(sortedRules, new RuleComparator());
@@ -315,6 +271,38 @@ public class RoisinUtils {
 		double m = (ya - yc) / (xa - yc);
 		double k = ya - (xa * m);
 		return new Line(m, k);
+	}
+
+	public static double calculateRulesAuc(Collection<Rule> rules) {
+		SortedSet<Rule> sortedRules = Sets.newTreeSet(new RuleComparator());
+		sortedRules.addAll(rules);
+		int ruleCounter = 1;
+		double auc = 0.0;
+		double prevFpr = 0.0;
+		double prevTpr = 0.0;
+		for (Rule roisinRule : sortedRules) {
+			if (ruleCounter > 1) {
+				// Se debe de calcular el triángulo y el rectángulo teniendo en
+				// cuenta los datos de esta regla y la anterior.
+				// Triángulo:
+				auc += Math
+						.abs((((roisinRule.getFpr() - prevFpr) * (roisinRule.getTpr() - prevTpr)) / 2.0));
+				// Rectángulo
+				auc += Math.abs((roisinRule.getFpr() - prevFpr) * prevTpr);
+				// Cambiamos el valor de las variables prev
+				prevFpr = roisinRule.getFpr();
+				prevTpr = roisinRule.getTpr();
+			} else {
+				// Sólo hay que calcular el primer triángulo.
+				prevFpr = roisinRule.getFpr();
+				prevTpr = roisinRule.getTpr();
+				auc += Math.abs(((prevFpr * prevTpr) / 2.0));
+			}
+			ruleCounter++;
+		}
+		auc += Math.abs((1 - prevFpr) * prevTpr);
+		auc += Math.abs(((1 - prevFpr) * (1 - prevTpr)) / 2.0);
+		return auc;
 	}
 
 }

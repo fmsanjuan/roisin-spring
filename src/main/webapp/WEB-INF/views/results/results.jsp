@@ -60,7 +60,6 @@
 				<form:hidden path="version"/>
 				<form:hidden path="auc" />
 				<form:hidden path="process" />
-<%-- 				<form:hidden path="rules" /> --%>
 				<form:button class="btn btn-primary btn-lg" type="submit">AUC Optimization</form:button>
 			</form:form>
 			<%-- 			 <a href="../results/export?resultsId=${resultsId }"> <input --%>

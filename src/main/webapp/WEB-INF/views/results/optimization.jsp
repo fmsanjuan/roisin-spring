@@ -64,11 +64,14 @@
 		</div>
 		<div class="col-md-3">
 			<br /> <br /> <br /> <br /> <br /> <br /><br /><br /> 
-<%-- 			<a	href="../results/export?resultsId=${resultsId }"> <input --%>
-<!-- 				class="btn btn-primary btn-lg" type="button" -->
-<!-- 				value="Download Results" -->
-<%-- 				onclick="self.location.href = ../results/export?resultsId=${resultsId }" /> --%>
-<!-- 			</a> <br /> -->
+			<form:form method="post" class="form-horizontal"
+				action="../results/exportoptimization" role="form" modelAttribute="results">
+				<form:hidden path="id"/>
+				<form:hidden path="version"/>
+				<form:hidden path="auc" />
+				<form:hidden path="process" />
+				<form:button class="btn btn-primary btn-lg" type="submit">Export Optimization</form:button>
+			</form:form>
 			<br /> <a href="${chart }"><button
 					class="btn btn-primary btn-lg">Download Chart</button></a>
 		</div>
