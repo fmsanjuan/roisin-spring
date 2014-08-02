@@ -163,6 +163,8 @@ public class PreprocessedDataController {
 		// Se almacen el example set
 		data = preprocessedDataService.findOne(data.getId());
 		data.setExampleSet(exampleSet);
+		data.setName(form.getName());
+		data.setDescription(form.getDescription());
 		data = preprocessedDataService.save(data);
 		// Finalmente se manda al usuario al formulario de proceso
 		processService.cleanTempProcesses(data.getId());

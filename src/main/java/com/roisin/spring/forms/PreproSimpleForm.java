@@ -14,6 +14,10 @@ public class PreproSimpleForm {
 
 	private String exportFormat;
 
+	private String name;
+
+	private String description;
+
 	public PreproSimpleForm() {
 		attributeSelection = Lists.newArrayList();
 	}
@@ -48,6 +52,22 @@ public class PreproSimpleForm {
 
 	public void setExportFormat(String exportFormat) {
 		this.exportFormat = exportFormat;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }
