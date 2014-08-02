@@ -84,6 +84,24 @@
 										</div>
 									</div>
 								</div>
+								<div class="form-group">
+									<div class="row">
+										<label for="exportFormatSelect"
+											class="col-md-4 col-md-offset-2 control-label">Format</label>
+										<div class="col-md-5">
+											<form:select class="form-control"
+												id="exportFormatSelect" multiple="true"
+												path="exportFormat">
+													<form:option value="xlsx" />
+													<form:option value="xls" />
+													<form:option value="arff" />
+													<form:option value="xrff" />
+													<form:option value="csv" />
+											</form:select>
+											<form:errors path="exportFormat" />
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"

@@ -32,9 +32,13 @@ public class FileUtils {
 		return Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL + getFileFormat(file);
 	}
 
-	public static String getFileDownloadPath(File file) {
-		return Constants.DOWNLOAD_PATH + file.getHash() + Constants.DOT_SYMBOL
-				+ getFileFormat(file);
+	public static String getFileDownloadPath(File file, String fileFormat) {
+		return Constants.DOWNLOAD_PATH + file.getHash() + Constants.DOT_SYMBOL + fileFormat;
+	}
+
+	public static String getExportFileName(String originalFileName, String exportFormat) {
+		String name = StringUtils.substringBeforeLast(originalFileName, Constants.DOT_SYMBOL);
+		return name + Constants.DOT_SYMBOL + exportFormat;
 	}
 
 }

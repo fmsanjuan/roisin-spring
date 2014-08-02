@@ -159,7 +159,8 @@ public class PreprocessedDataController {
 				data.getPreprocessingForm(), form);
 		// Extracción de file de BD
 		File file = storedForm.getFile();
-		String fileFormat = FileUtils.getFileFormat(file);
+		String exportFormat = form.getExportFormat();
+		String exportFileName = FileUtils.getExportFileName(file.getName(), exportFormat);
 		String tmpPath = FileUtils.getFileTmpPath(file);
 		// Escritura en disco del fichero
 		FileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
@@ -169,11 +170,11 @@ public class PreprocessedDataController {
 		// Obtención del example set resultante
 		ByteArrayOutputStream document = Runner.exportData(tmpPath,
 				RoisinUtils.getRowsFromDeletedRows(deletedRows), storedForm.getFilterCondition(),
-				form.getAttributeSelection(), FileUtils.getFileDownloadPath(file));
+				form.getAttributeSelection(), FileUtils.getFileDownloadPath(file, exportFormat));
 		// Create and configure headers to return the file
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.parseMediaType("application/" + fileFormat));
-		headers.setContentDispositionFormData(file.getName(), file.getName());
+		headers.setContentType(MediaType.parseMediaType("application/" + exportFormat));
+		headers.setContentDispositionFormData(exportFileName, exportFileName);
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(document.toByteArray(),
 				headers, HttpStatus.OK);

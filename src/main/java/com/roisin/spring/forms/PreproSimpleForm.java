@@ -12,6 +12,8 @@ public class PreproSimpleForm {
 
 	private String dataId;
 
+	private String exportFormat;
+
 	public PreproSimpleForm() {
 		attributeSelection = Lists.newArrayList();
 	}
@@ -38,6 +40,14 @@ public class PreproSimpleForm {
 
 	public void setDataId(String dataId) {
 		this.dataId = dataId;
+	}
+
+	public String getExportFormat() {
+		return exportFormat;
+	}
+
+	public void setExportFormat(String exportFormat) {
+		this.exportFormat = exportFormat;
 	}
 
 }
