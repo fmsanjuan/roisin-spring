@@ -30,8 +30,8 @@ public class RipperSettingsService {
 		return ripperSettingsRepository.findOne(ripperSettingsId);
 	}
 
-	public void save(RipperSettings ripperSettings) {
-		ripperSettingsRepository.save(ripperSettings);
+	public RipperSettings save(RipperSettings ripperSettings) {
+		return ripperSettingsRepository.save(ripperSettings);
 	}
 
 	public void delete(RipperSettings ripperSettings) {

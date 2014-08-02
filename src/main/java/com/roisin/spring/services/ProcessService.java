@@ -45,8 +45,16 @@ public class ProcessService {
 	// Extra methods
 
 	public Process saveProcessAlgorithm(Process process, String algorithm) {
-		process.setAlgorithm(algorithm);
-		return save(process);
+		if (process.getAlgorithm().equals("roisinnull")) {
+			process.setAlgorithm(algorithm);
+			return save(process);
+		} else {
+			Process newProcess = create();
+			newProcess.setLabel(process.getLabel());
+			newProcess.setPreprocessedData(process.getPreprocessedData());
+			newProcess.setAlgorithm(algorithm);
+			return save(newProcess);
+		}
 	}
 
 	public void cleanTempProcesses(int dataId) {

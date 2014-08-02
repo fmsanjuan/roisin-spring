@@ -318,6 +318,15 @@ public class RoisinUtils {
 		return auc;
 	}
 
+	public static boolean isNumericLabel(Attribute[] attributes, String label) {
+		for (int i = 0; i < attributes.length; i++) {
+			if (attributes[i].getName().equals(label)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static boolean hasNumerical(Attribute[] attributes) {
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].isNumerical()) {

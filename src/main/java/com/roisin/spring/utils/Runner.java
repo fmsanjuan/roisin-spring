@@ -74,7 +74,7 @@ public class Runner {
 
 	public static RoisinResults getRipperResults(RipperSettings form, String filePath,
 			String label, String filterCondition, List<String> attributeSelection,
-			SortedSet<Integer> deletedRows) {
+			SortedSet<Integer> deletedRows, boolean discretizeLabel) {
 		checkStarted();
 
 		RipperResults results = null;
@@ -82,7 +82,7 @@ public class Runner {
 			Process process = GenericProcesses.getRipper(filePath, label, deletedRows,
 					filterCondition, attributeSelection, form.getRipperCriterion(), form
 							.getSampleRatio().toString(), form.getPureness().toString(), form
-							.getMinimalPruneBenefit().toString());
+							.getMinimalPruneBenefit().toString(), discretizeLabel);
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
@@ -117,7 +117,7 @@ public class Runner {
 
 	public static RoisinResults getTreeToRulesResults(TreeToRulesSettings form, String filePath,
 			String label, String filterCondition, List<String> attributeSelection,
-			SortedSet<Integer> deletedRows) {
+			SortedSet<Integer> deletedRows, boolean discretizeLabel) {
 		checkStarted();
 
 		RipperResults results = null;
@@ -128,7 +128,7 @@ public class Runner {
 							.toString(), form.getMinimalGain().toString(), form.getMaximalDepth()
 							.toString(), form.getConfidence().toString(), form
 							.getNumberOfPrepruningAlternatives().toString(), form.getNoPrepruning()
-							.toString(), form.getNoPruning().toString());
+							.toString(), form.getNoPruning().toString(), discretizeLabel);
 			IOContainer container = process.run();
 			RuleModel ruleModel = (RuleModel) container.asList().get(0);
 			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);

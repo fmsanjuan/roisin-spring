@@ -30,9 +30,8 @@ public class TreeToRulesSettingsService {
 		return treeToRulesSettingsRepository.findOne(treeToRulesSettingsId);
 	}
 
-	public void save(TreeToRulesSettings treeToRulesSettings) {
-
-		treeToRulesSettingsRepository.save(treeToRulesSettings);
+	public TreeToRulesSettings save(TreeToRulesSettings treeToRulesSettings) {
+		return treeToRulesSettingsRepository.save(treeToRulesSettings);
 	}
 
 	public void delete(TreeToRulesSettings treeToRulesSettings) {

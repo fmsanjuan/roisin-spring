@@ -30,9 +30,8 @@ public class SubgroupSettingsService {
 		return subgroupSettingsRepository.findOne(subgroupSettingsId);
 	}
 
-	public void save(SubgroupSettings subgroupSettings) {
-
-		subgroupSettingsRepository.save(subgroupSettings);
+	public SubgroupSettings save(SubgroupSettings subgroupSettings) {
+		return subgroupSettingsRepository.save(subgroupSettings);
 	}
 
 	public void delete(SubgroupSettings ripperSettings) {
