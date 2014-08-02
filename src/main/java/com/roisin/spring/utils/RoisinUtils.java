@@ -219,26 +219,40 @@ public class RoisinUtils {
 		// Reglas eliminadas
 		List<Rule> deletedRules = Lists.newArrayList();
 
-		for (int i = 0; i < rules.size() - 1; i++) {
-			Rule curRule = sortedRules.get(i);
+		boolean removed = true;
+		// Se debe iterar sobre las reglas hasta que no queden reglas por
+		// eliminar
+		while (removed) {
+			removed = false;
+			for (int i = 0; i < sortedRules.size(); i++) {
+				Rule curRule = sortedRules.get(i);
 
-			Line line;
-			if (i != 0 && i != (rules.size() - 1)) {
-				Rule prevRule = sortedRules.get(i - 1);
-				Rule nextRule = sortedRules.get(i + 1);
-				line = calculateLine(prevRule.getFpr(), prevRule.getTpr(), nextRule.getFpr(),
-						nextRule.getTpr());
-			} else if (i == 0) {
-				Rule nextRule = sortedRules.get(i + 1);
-				line = calculateLine(0.0, 0.0, nextRule.getFpr(), nextRule.getTpr());
-			} else {
-				Rule prevRule = sortedRules.get(i - 1);
-				line = calculateLine(prevRule.getFpr(), prevRule.getTpr(), 1.0, 1.0);
+				Line line;
+				if (i != 0 && i != (sortedRules.size() - 1)) {
+					Rule prevRule = sortedRules.get(i - 1);
+					Rule nextRule = sortedRules.get(i + 1);
+					line = calculateLine(prevRule.getFpr(), prevRule.getTpr(), nextRule.getFpr(),
+							nextRule.getTpr());
+				} else if (i == 0) {
+					Rule nextRule = sortedRules.get(i + 1);
+					line = calculateLine(0.0, 0.0, nextRule.getFpr(), nextRule.getTpr());
+				} else {
+					Rule prevRule = sortedRules.get(i - 1);
+					line = calculateLine(prevRule.getFpr(), prevRule.getTpr(), 1.0, 1.0);
+				}
+
+				if (isUnderTheLine(curRule.getFpr(), curRule.getTpr(), line)) {
+					deletedRules.add(curRule);
+					sortedRules.remove(curRule);
+					// Se controla si se siguen borrando reglas para parar el
+					// bucle while
+					removed = true;
+					// Se sale del for para volver a iterar sobre el nuevo
+					// conjunto de reglas
+					break;
+				}
 			}
 
-			if (isUnderTheLine(curRule.getFpr(), curRule.getTpr(), line)) {
-				deletedRules.add(curRule);
-			}
 		}
 
 		return deletedRules;
@@ -267,7 +281,7 @@ public class RoisinUtils {
 	 * @return
 	 */
 	public static Line calculateLine(double xa, double ya, double xc, double yc) {
-		double m = (ya - yc) / (xa - yc);
+		double m = (ya - yc) / (xa - xc);
 		double k = ya - (xa * m);
 		return new Line(m, k);
 	}
