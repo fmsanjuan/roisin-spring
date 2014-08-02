@@ -123,8 +123,6 @@
 	<!-- Validator -->
 
 	<beans:bean id="fileValidator" class="com.roisin.spring.validator.FileValidator" />
-	<beans:bean id="formValidator"
-		class="com.roisin.spring.validator.PreprocessingFormValidator" />
 
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />

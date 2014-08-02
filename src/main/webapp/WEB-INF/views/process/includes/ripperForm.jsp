@@ -2,7 +2,7 @@
 
 <form:form method="post" class="form-horizontal"
 	action="../process/ripper" role="form" modelAttribute="ripperSettings">
-	
+
 	<form:hidden path="id" />
 	<form:hidden path="version" />
 	<form:hidden path="process" />
@@ -23,14 +23,12 @@
 		<c:when test="${error !=null && error=='Ripper' }">
 			<a href="#aboutRipperModal" data-toggle="modal"
 				data-target="#ripperModal"><button type="button"
-					class="btn btn-danger">Advanced Settings</button>
-				</button></a>
+					class="btn btn-danger">Advanced Settings</button> </a>
 		</c:when>
 		<c:otherwise>
 			<a href="#aboutRipperModal" data-toggle="modal"
 				data-target="#ripperModal"><button type="button"
-					class="btn btn-default">Advanced Settings</button>
-				</button></a>
+					class="btn btn-default">Advanced Settings</button> </a>
 		</c:otherwise>
 	</c:choose>
 	<form:button type="submit" name="ripper" class="btn btn-default">Run Ripper</form:button>

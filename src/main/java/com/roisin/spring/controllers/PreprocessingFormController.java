@@ -3,13 +3,7 @@ package com.roisin.spring.controllers;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,16 +15,12 @@ import com.google.common.collect.Lists;
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
+import com.roisin.spring.forms.FilterConditionForm;
 import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.model.DeletedRow;
 import com.roisin.spring.model.File;
 import com.roisin.spring.model.PreprocessedData;
 import com.roisin.spring.model.PreprocessingForm;
-import com.roisin.spring.model.Process;
-import com.roisin.spring.model.RipperSettings;
-import com.roisin.spring.model.SelectedAttribute;
-import com.roisin.spring.model.SubgroupSettings;
-import com.roisin.spring.model.TreeToRulesSettings;
 import com.roisin.spring.services.DeletedRowService;
 import com.roisin.spring.services.FileService;
 import com.roisin.spring.services.PreprocessedDataService;
@@ -81,12 +71,11 @@ public class PreprocessingFormController {
 
 		File file = fileService.findOne(fileId);
 		byte[] fileArray = file.getOriginalFile();
-		String fileFormat = StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
-		String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
-				+ fileFormat;
+		String tmpPath = FileUtils.getFileTmpPath(file);
 
 		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
-		ExampleSet exampleSet = Runner.getExampleSetFromFile(fileFormat, tmpPath);
+		ExampleSet exampleSet = Runner
+				.getExampleSetFromFile(FileUtils.getFileFormat(file), tmpPath);
 		List<Example> examples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
 		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
 
@@ -104,14 +93,16 @@ public class PreprocessingFormController {
 		PreproSimpleForm form = new PreproSimpleForm();
 		form.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
 
-		String dataParam = "dataId=" + data.getId();
+		FilterConditionForm filterForm = new FilterConditionForm();
+		filterForm.setDataId(data.getId());
 
 		ModelAndView res = new ModelAndView("preform/list");
 		res.addObject("examples", examples);
 		res.addObject("attributes", attributes);
 		res.addObject("form", form);
-		res.addObject("dataParam", dataParam);
-		res.addObject("requestURI", "list?dataId=" + data.getId() + "&formId=" + preform.getId());
+		res.addObject("dataId", data.getId());
+		res.addObject("requestURI", "list");
+		res.addObject("filterConditionForm", filterForm);
 
 		return res;
 	}
@@ -135,14 +126,16 @@ public class PreprocessingFormController {
 		PreproSimpleForm form = new PreproSimpleForm();
 		form.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
 
-		String dataParam = "dataId=" + dataId;
+		FilterConditionForm filterForm = new FilterConditionForm();
+		filterForm.setDataId(dataId);
 
 		ModelAndView res = new ModelAndView("preform/list");
 		res.addObject("examples", examples);
 		res.addObject("attributes", attributes);
 		res.addObject("form", form);
-		res.addObject("dataParam", dataParam);
-		res.addObject("requestURI", "list?" + dataParam);
+		res.addObject("dataId", data.getId());
+		res.addObject("requestURI", "list");
+		res.addObject("filterConditionForm", filterForm);
 
 		return res;
 	}
@@ -189,139 +182,195 @@ public class PreprocessingFormController {
 		preproForm
 				.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
 
-		String dataParam = "dataId=" + dataId;
+		FilterConditionForm filterForm = new FilterConditionForm();
+		filterForm.setDataId(dataId);
 
 		ModelAndView res = new ModelAndView("preform/list");
 		res.addObject("examples", examples);
 		res.addObject("attributes", attributes);
 		res.addObject("form", preproForm);
-		res.addObject("dataParam", dataParam);
-		res.addObject("requestURI", "list?" + dataParam);
+		res.addObject("dataId", data.getId());
+		res.addObject("requestURI", "list");
+		res.addObject("filterConditionForm", filterForm);
 
 		return res;
 	}
 
-	@RequestMapping(value = "/process", method = RequestMethod.POST, params = { "process" })
-	public ModelAndView process(@ModelAttribute PreproSimpleForm form) {
+	@RequestMapping(value = "/filternumerical", method = RequestMethod.POST)
+	public ModelAndView filterNumerical(@ModelAttribute FilterConditionForm form) {
 
-		// Aquí en primer lugar se tienen que guardar los datos filtrados.
-		int dataId = Integer.parseInt((StringUtils.substringAfterLast(form.getDataParam(),
-				Constants.EQUALS_SYMBOL)));
-		PreprocessedData data = preprocessedDataService.findOne(dataId);
-		// Formulario
-		PreprocessingForm storedForm = data.getPreprocessingForm();
-		String filterCondition = RoisinUtils.calculateFilterCondition(form);
-		storedForm.setFilterCondition(filterCondition);
-		storedForm = preprocessingFormService.save(storedForm);
-		// Borrado de attributos seleccionados en caso de que ya existan
-		Collection<SelectedAttribute> selectedList = selectedAttributeService
-				.findSelectedAttributesByFormId(storedForm.getId());
-		for (SelectedAttribute selectedAttribute : selectedList) {
-			selectedAttributeService.delete(selectedAttribute);
+		PreprocessingForm storedForm = preprocessingFormService.findFormByDataId(form.getDataId());
+		PreprocessedData data = preprocessedDataService.findOne(form.getDataId());
+		ExampleSet exampleSet = data.getExampleSet();
+		// Lista original
+		List<Example> originalExamples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
+		// Lista modificable
+		List<Example> examples = Lists.newArrayList(originalExamples);
+		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+
+		Attribute filterAttribute = null;
+		for (int i = 0; i < attributes.length; i++) {
+			if (attributes[i].getName().equals(form.getFilterAttribute())) {
+				filterAttribute = attributes[i];
+			}
 		}
-		// Attributos seleccionados
-		for (String attributeName : form.getAttributeSelection()) {
-			SelectedAttribute sa = selectedAttributeService.create();
-			sa.setPreprocessingForm(storedForm);
-			sa.setName(attributeName);
-			selectedAttributeService.save(sa);
-		}
-		// Extracción de file de BD
-		File file = storedForm.getFile();
-		byte[] fileArray = file.getOriginalFile();
-		String fileFormat = StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
-		String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
-				+ fileFormat;
-		// Escritura en disco del fichero
-		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
-		// Colección de deleted rows
+
 		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(storedForm
 				.getId());
-		// Obtención del example set resultante
-		ExampleSet exampleSet = Runner.getPreprocessedExampleSetFromFile(tmpPath,
-				RoisinUtils.getRowsFromDeletedRows(deletedRows), filterCondition,
-				form.getAttributeSelection());
-		// Se almacen el example set
-		data = preprocessedDataService.findOne(dataId);
-		data.setExampleSet(exampleSet);
-		data = preprocessedDataService.save(data);
-		// Finalmente se manda al usuario al formulario de proceso
-		processService.cleanTempProcesses(dataId);
-		// Creación del proceso
-		Process process = processService.create();
-		process.setPreprocessedData(data);
-		process.setAlgorithm("roisinnull");
-		process = processService.save(process);
-		// Se establece la label (clase) para este proceso
-		SelectedAttribute label = selectedAttributeService
-				.findLabel(storedForm.getId(), form.getLabel()).iterator().next();
-		label.setProcess(process);
-		label = selectedAttributeService.save(label);
-		// Creación de los formularios
-		RipperSettings ripperSettings = ripperSettingsService.create();
-		ripperSettings.setProcess(process);
-		SubgroupSettings subgroupSettings = subgroupSettingsService.create();
-		subgroupSettings.setProcess(process);
-		TreeToRulesSettings treeToRulesSettings = treeToRulesSettingsService.create();
-		treeToRulesSettings.setProcess(process);
+		for (DeletedRow dRow : deletedRows) {
+			examples.remove(originalExamples.get(dRow.getNumber() - 1));
+		}
 
-		ModelAndView res = new ModelAndView("process/create");
-		res.addObject("ripperSettings", ripperSettings);
-		res.addObject("subgroupSettings", subgroupSettings);
-		res.addObject("treeSettings", treeToRulesSettings);
+		if (form.getFilterOperator().equals(Constants.EQUALS)) {
+			for (Example example : originalExamples) {
+				if (example.getNumericalValue(filterAttribute) == Double.parseDouble(form
+						.getFilterValue()) && examples.contains(example)) {
+					DeletedRow deletedRow = deletedRowService.create();
+					deletedRow.setNumber(originalExamples.indexOf(example) + 1);
+					deletedRow.setPreprocessingForm(storedForm);
+					deletedRowService.save(deletedRow);
+					examples.remove(example);
+				}
+			}
+		} else if (form.getFilterOperator().equals(Constants.NON_EQUALS)) {
+			for (Example example : originalExamples) {
+				if (example.getNumericalValue(filterAttribute) != Double.parseDouble(form
+						.getFilterValue()) && examples.contains(example)) {
+					DeletedRow deletedRow = deletedRowService.create();
+					deletedRow.setNumber(originalExamples.indexOf(example) + 1);
+					deletedRow.setPreprocessingForm(storedForm);
+					deletedRowService.save(deletedRow);
+					examples.remove(example);
+				}
+			}
+		} else if (form.getFilterOperator().equals(Constants.GREATER_OR_EQUALS)) {
+			for (Example example : originalExamples) {
+				if (example.getNumericalValue(filterAttribute) >= Double.parseDouble(form
+						.getFilterValue()) && examples.contains(example)) {
+					DeletedRow deletedRow = deletedRowService.create();
+					deletedRow.setNumber(originalExamples.indexOf(example) + 1);
+					deletedRow.setPreprocessingForm(storedForm);
+					deletedRowService.save(deletedRow);
+					examples.remove(example);
+				}
+			}
+		} else if (form.getFilterOperator().equals(Constants.SMALLER_OR_EQUALS)) {
+			for (Example example : originalExamples) {
+				if (example.getNumericalValue(filterAttribute) <= Double.parseDouble(form
+						.getFilterValue()) && examples.contains(example)) {
+					DeletedRow deletedRow = deletedRowService.create();
+					deletedRow.setNumber(originalExamples.indexOf(example) + 1);
+					deletedRow.setPreprocessingForm(storedForm);
+					deletedRowService.save(deletedRow);
+					examples.remove(example);
+				}
+			}
+		} else if (form.getFilterOperator().equals(Constants.SMALLER_THAN)) {
+			for (Example example : originalExamples) {
+				if (example.getNumericalValue(filterAttribute) < Double.parseDouble(form
+						.getFilterValue()) && examples.contains(example)) {
+					DeletedRow deletedRow = deletedRowService.create();
+					deletedRow.setNumber(originalExamples.indexOf(example) + 1);
+					deletedRow.setPreprocessingForm(storedForm);
+					deletedRowService.save(deletedRow);
+					examples.remove(example);
+				}
+			}
+		} else if (form.getFilterOperator().equals(Constants.GREATER_THAN)) {
+			for (Example example : originalExamples) {
+				if (example.getNumericalValue(filterAttribute) > Double.parseDouble(form
+						.getFilterValue()) && examples.contains(example)) {
+					DeletedRow deletedRow = deletedRowService.create();
+					deletedRow.setNumber(originalExamples.indexOf(example) + 1);
+					deletedRow.setPreprocessingForm(storedForm);
+					deletedRowService.save(deletedRow);
+					examples.remove(example);
+				}
+			}
+		}
+
+		PreproSimpleForm preproForm = new PreproSimpleForm();
+		preproForm
+				.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
+
+		FilterConditionForm filterForm = new FilterConditionForm();
+		filterForm.setDataId(storedForm.getId());
+
+		ModelAndView res = new ModelAndView("preform/list");
+		res.addObject("examples", examples);
+		res.addObject("attributes", attributes);
+		res.addObject("form", preproForm);
+		res.addObject("dataId", data.getId());
+		res.addObject("requestURI", "list");
+		res.addObject("filterConditionForm", filterForm);
 
 		return res;
 	}
 
-	@RequestMapping(value = "/process", method = RequestMethod.POST, params = { "export" })
-	public ResponseEntity<byte[]> export(@ModelAttribute PreproSimpleForm form) {
-		// Aquí en primer lugar se tienen que guardar los datos filtrados.
-		int dataId = Integer.parseInt((StringUtils.substringAfterLast(form.getDataParam(),
-				Constants.EQUALS_SYMBOL)));
-		PreprocessedData data = preprocessedDataService.findOne(dataId);
-		// Formulario
-		PreprocessingForm storedForm = data.getPreprocessingForm();
-		String filterCondition = RoisinUtils.calculateFilterCondition(form);
-		storedForm.setFilterCondition(filterCondition);
-		storedForm = preprocessingFormService.save(storedForm);
-		// Borrado de attributos seleccionados en caso de que ya existan
-		Collection<SelectedAttribute> selectedList = selectedAttributeService
-				.findSelectedAttributesByFormId(storedForm.getId());
-		for (SelectedAttribute selectedAttribute : selectedList) {
-			selectedAttributeService.delete(selectedAttribute);
+	@RequestMapping(value = "/filternominal", method = RequestMethod.POST)
+	public ModelAndView filterNominal(@ModelAttribute FilterConditionForm form) {
+
+		PreprocessingForm storedForm = preprocessingFormService.findFormByDataId(form.getDataId());
+		PreprocessedData data = preprocessedDataService.findOne(form.getDataId());
+		ExampleSet exampleSet = data.getExampleSet();
+		// Lista original
+		List<Example> originalExamples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
+		// Lista modificable
+		List<Example> examples = Lists.newArrayList(originalExamples);
+		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+
+		Attribute filterAttribute = null;
+		for (int i = 0; i < attributes.length; i++) {
+			if (attributes[i].getName().equals(form.getFilterAttribute())) {
+				filterAttribute = attributes[i];
+			}
 		}
-		// Attributos seleccionados
-		for (String attributeName : form.getAttributeSelection()) {
-			SelectedAttribute sa = selectedAttributeService.create();
-			sa.setPreprocessingForm(storedForm);
-			sa.setName(attributeName);
-			selectedAttributeService.save(sa);
-		}
-		// Extracción de file de BD
-		File file = storedForm.getFile();
-		byte[] fileArray = file.getOriginalFile();
-		String fileFormat = StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
-		String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
-				+ fileFormat;
-		String outputPath = Constants.DOWNLOAD_PATH + file.getHash() + Constants.DOT_SYMBOL
-				+ fileFormat;
-		// Escritura en disco del fichero
-		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
-		// Colección de deleted rows
+
 		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(storedForm
 				.getId());
-		// Obtención del example set resultante
-		ByteArrayOutputStream document = Runner.exportData(tmpPath,
-				RoisinUtils.getRowsFromDeletedRows(deletedRows), filterCondition,
-				form.getAttributeSelection(), outputPath);
-		// Create and configure headers to return the file
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.parseMediaType("application/" + fileFormat));
-		headers.setContentDispositionFormData(file.getName(), file.getName());
-		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(document.toByteArray(),
-				headers, HttpStatus.OK);
+		for (DeletedRow dRow : deletedRows) {
+			examples.remove(originalExamples.get(dRow.getNumber() - 1));
+		}
 
-		return response;
+		if (form.getFilterOperator().equals(Constants.EQUALS)) {
+			for (Example example : originalExamples) {
+				if (example.getNominalValue(filterAttribute).equals(form.getFilterValue())
+						&& examples.contains(example)) {
+					DeletedRow deletedRow = deletedRowService.create();
+					deletedRow.setNumber(originalExamples.indexOf(example) + 1);
+					deletedRow.setPreprocessingForm(storedForm);
+					deletedRowService.save(deletedRow);
+					examples.remove(example);
+				}
+			}
+		} else if (form.getFilterOperator().equals(Constants.NON_EQUALS)) {
+			for (Example example : originalExamples) {
+				if (!example.getNominalValue(filterAttribute).equals(form.getFilterValue())
+						&& examples.contains(example)) {
+					DeletedRow deletedRow = deletedRowService.create();
+					deletedRow.setNumber(originalExamples.indexOf(example) + 1);
+					deletedRow.setPreprocessingForm(storedForm);
+					deletedRowService.save(deletedRow);
+					examples.remove(example);
+				}
+			}
+		}
+
+		PreproSimpleForm preproForm = new PreproSimpleForm();
+		preproForm
+				.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
+
+		FilterConditionForm filterForm = new FilterConditionForm();
+		filterForm.setDataId(storedForm.getId());
+
+		ModelAndView res = new ModelAndView("preform/list");
+		res.addObject("examples", examples);
+		res.addObject("attributes", attributes);
+		res.addObject("form", preproForm);
+		res.addObject("dataId", data.getId());
+		res.addObject("requestURI", "list");
+		res.addObject("filterConditionForm", filterForm);
+
+		return res;
 	}
 }

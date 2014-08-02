@@ -20,36 +20,35 @@ import com.googlecode.charts4j.XYLineChart;
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
-import com.roisin.spring.forms.PreproSimpleForm;
-import com.roisin.spring.forms.PreprocessingForm;
+import com.roisin.spring.forms.FilterConditionForm;
 import com.roisin.spring.model.DeletedRow;
 import com.roisin.spring.model.Rule;
 import com.roisin.spring.model.SelectedAttribute;
 
 public class RoisinUtils {
 
-	public static PreprocessingForm calculateFilterCondition(PreprocessingForm form) {
+	public static String calculateFilterCondition(String filterAttribute, String filterOperator,
+			String filterValue) {
 		// Transformación de condición provisional
-		if (!StringUtils.isBlank(form.getFilterValue())) {
-			StringBuilder condition = new StringBuilder();
-			condition.append(form.getFilterAttribute());
-			if (form.getFilterOperator().equals(Constants.EQUALS)) {
+		StringBuilder condition = new StringBuilder();
+		if (!StringUtils.isBlank(filterValue)) {
+			condition.append(filterAttribute);
+			if (filterOperator.equals(Constants.EQUALS)) {
 				condition.append(Constants.EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.NON_EQUALS)) {
+			} else if (filterOperator.equals(Constants.NON_EQUALS)) {
 				condition.append(Constants.NON_EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.GREATER_OR_EQUALS)) {
+			} else if (filterOperator.equals(Constants.GREATER_OR_EQUALS)) {
 				condition.append(Constants.GREATER_OR_EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.SMALLER_OR_EQUALS)) {
+			} else if (filterOperator.equals(Constants.SMALLER_OR_EQUALS)) {
 				condition.append(Constants.SMALLER_OR_EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.SMALLER_THAN)) {
+			} else if (filterOperator.equals(Constants.SMALLER_THAN)) {
 				condition.append(Constants.SMALLER_THAN_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.GREATER_THAN)) {
+			} else if (filterOperator.equals(Constants.GREATER_THAN)) {
 				condition.append(Constants.GREATER_THAN_SYMBOL);
 			}
-			condition.append(form.getFilterValue());
-			form.setFilterCondition(condition.toString());
+			condition.append(filterValue);
 		}
-		return form;
+		return condition.toString();
 	}
 
 	/**
@@ -88,7 +87,7 @@ public class RoisinUtils {
 		return res;
 	}
 
-	public static String calculateFilterCondition(PreproSimpleForm form) {
+	public static String calculateFilterCondition(FilterConditionForm form) {
 		// Transformación de condición provisional
 		if (!StringUtils.isBlank(form.getFilterValue())) {
 			StringBuilder condition = new StringBuilder();

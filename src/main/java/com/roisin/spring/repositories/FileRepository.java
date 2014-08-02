@@ -12,4 +12,7 @@ public interface FileRepository extends JpaRepository<File, Integer> {
 	@Query("select f from File f where f.user.id= ?1")
 	Collection<File> findFilesByUserId(int userId);
 
+	@Query("select f from File f join f.preprocessingForms pf where pf.id = ?1")
+	File findFileByFormId(int formId);
+
 }

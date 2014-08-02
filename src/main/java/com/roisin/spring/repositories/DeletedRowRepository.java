@@ -12,4 +12,7 @@ public interface DeletedRowRepository extends JpaRepository<DeletedRow, Integer>
 	@Query("select dr from DeletedRow dr where dr.preprocessingForm.id = ?1")
 	Collection<DeletedRow> findFormDeletedRows(int formId);
 
+	@Query("select dr from DeletedRow dr where dr.preprocessingForm.id = ?1 and dr.number = ?2")
+	DeletedRow findSpecificDeletedRow(int formId, int number);
+
 }

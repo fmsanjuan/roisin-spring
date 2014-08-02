@@ -51,4 +51,5 @@ public class SelectedAttributeService {
 	public Collection<SelectedAttribute> findSelectedAttributesByFormId(int formId) {
 		return selectedAttributeRepository.findSelectedAttributesByFormId(formId);
 	}
+
 }

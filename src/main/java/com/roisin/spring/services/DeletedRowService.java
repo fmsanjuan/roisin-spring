@@ -48,4 +48,12 @@ public class DeletedRowService {
 		return deletedRowRepository.findFormDeletedRows(formId);
 	}
 
+	public void saveAndOverwrite(DeletedRow deletedRow) {
+		DeletedRow checkDeletedRow = deletedRowRepository.findSpecificDeletedRow(deletedRow
+				.getPreprocessingForm().getId(), deletedRow.getNumber());
+		if (checkDeletedRow == null) {
+			save(deletedRow);
+		}
+	}
+
 }

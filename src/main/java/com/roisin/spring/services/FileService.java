@@ -70,4 +70,8 @@ public class FileService {
 
 		return tmpPath;
 	}
+
+	public File findFileByFormId(int formId) {
+		return fileRepository.findFileByFormId(formId);
+	}
 }

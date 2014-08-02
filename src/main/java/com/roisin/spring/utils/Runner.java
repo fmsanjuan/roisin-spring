@@ -53,6 +53,8 @@ public class Runner {
 
 	public static ExampleSet getPreprocessedExampleSetFromFile(String inputPath,
 			SortedSet<Integer> rowFilter, String filterCondition, List<String> attributeSelection) {
+		checkStarted();
+
 		ExampleSet res = null;
 		Process process;
 		try {
@@ -73,6 +75,8 @@ public class Runner {
 	public static RoisinResults getRipperResults(RipperSettings form, String filePath,
 			String label, String filterCondition, List<String> attributeSelection,
 			SortedSet<Integer> deletedRows) {
+		checkStarted();
+
 		RipperResults results = null;
 		try {
 			Process process = GenericProcesses.getRipper(filePath, label, deletedRows,
@@ -92,6 +96,8 @@ public class Runner {
 	public static RoisinResults getSubgroupResults(SubgroupSettings form, String filePath,
 			String label, String filterCondition, List<String> attributeSelection,
 			SortedSet<Integer> deletedRows) {
+		checkStarted();
+
 		SubgroupResults results = null;
 		try {
 			Process process = GenericProcesses.getSubgroupDiscoveryDiscretization(filePath, label,
@@ -112,6 +118,8 @@ public class Runner {
 	public static RoisinResults getTreeToRulesResults(TreeToRulesSettings form, String filePath,
 			String label, String filterCondition, List<String> attributeSelection,
 			SortedSet<Integer> deletedRows) {
+		checkStarted();
+
 		RipperResults results = null;
 		try {
 			Process process = GenericProcesses.getDecisionTreeToRules(filePath, label, deletedRows,
@@ -148,6 +156,8 @@ public class Runner {
 	public static ByteArrayOutputStream exportData(String inputPath, SortedSet<Integer> rowFilter,
 			String filterCondition, List<String> attributeSelection, String outputPath) {
 
+		checkStarted();
+
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
 			Process process = Preprocessing.getPreprocessedDataFile(inputPath, rowFilter,
@@ -166,6 +176,21 @@ public class Runner {
 			logger.error("No ha sido posible exportar el fichero", e);
 		}
 		return bos;
+	}
+
+	public static ExampleSet getRequestedExamples(String inputPath, String filterCondition) {
+		Process process = com.roisin.core.processes.Preprocessing.getConditionFilteredData(
+				inputPath, filterCondition);
+		IOContainer container;
+		ExampleSet res = null;
+		try {
+			container = process.run();
+			res = (ExampleSet) container.asList().get(0);
+			return res;
+		} catch (OperatorException e) {
+			logger.error("No ha sido posible extraer información del fichero");
+		}
+		return res;
 	}
 
 	public static void startRapidminer() {

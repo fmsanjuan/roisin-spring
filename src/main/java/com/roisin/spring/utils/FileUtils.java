@@ -3,8 +3,11 @@ package com.roisin.spring.utils;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.roisin.spring.model.File;
 
 public class FileUtils {
 
@@ -19,6 +22,19 @@ public class FileUtils {
 		} catch (IOException e) {
 			logger.error("No ha sido posible recuperar el fichero de base de datos para almacenarlo en el servidor");
 		}
+	}
+
+	public static String getFileFormat(File file) {
+		return StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
+	}
+
+	public static String getFileTmpPath(File file) {
+		return Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL + getFileFormat(file);
+	}
+
+	public static String getFileDownloadPath(File file) {
+		return Constants.DOWNLOAD_PATH + file.getHash() + Constants.DOT_SYMBOL
+				+ getFileFormat(file);
 	}
 
 }
