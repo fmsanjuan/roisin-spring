@@ -8,16 +8,23 @@
 
 <div class="page-header text-center">
 	<h1>
-		My Data
-		<small>Select your data</small>
+		Preprocessed Data from  <small>${file.getName() }</small>
 	</h1>
 </div>
 
-<display:table uid="dataTable" keepStatus="false" name="data"
-	pagesize="5" class="table table-hover" requestURI="${requestURI}"
-	id="row">
-	<display:column property="name" title="Name" sortable="true" />
-	<display:column property="description" title="Description"
-		sortable="true" />
-</display:table>
-
+<div class="container">
+	<div class="row">
+		<display:table uid="dataTable" keepStatus="false" name="forms"
+			pagesize="5" class="table table-hover" requestURI="${requestURI}"
+			id="row">
+			<display:column property="name" title="Name" />
+			<display:column property="description" title="Description" />
+			<display:column>
+				<a href="../data/details?dataId=${row.id}"> <input
+					class="btn btn-default" type="button" value="Details"
+					onclick="self.location.href = ../data/details?dataId=${row.id}" />
+				</a>
+			</display:column>
+		</display:table>
+	</div>
+</div>

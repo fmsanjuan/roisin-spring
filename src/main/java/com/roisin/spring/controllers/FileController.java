@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.roisin.spring.forms.DataViewForm;
 import com.roisin.spring.model.File;
 import com.roisin.spring.model.UploadedFile;
 import com.roisin.spring.model.User;
@@ -47,6 +48,7 @@ public class FileController {
 		ModelAndView res = new ModelAndView("file/list");
 		res.addObject("files", files);
 		res.addObject("requestURI", "list");
+		res.addObject("form", new DataViewForm());
 
 		return res;
 	}
@@ -85,14 +87,7 @@ public class FileController {
 		File file = fileService.findOne(fileId);
 		fileService.delete(file);
 
-		User user = userService.findByPrincipal();
-		Collection<File> files = fileService.findFilesByUserId(user.getId());
-
-		ModelAndView res = new ModelAndView("file/list");
-		res.addObject("files", files);
-		res.addObject("requestURI", "list");
-
-		return res;
+		return list();
 	}
 
 }

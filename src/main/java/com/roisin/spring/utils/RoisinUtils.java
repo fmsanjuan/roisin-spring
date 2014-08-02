@@ -59,7 +59,7 @@ public class RoisinUtils {
 	 */
 	public static List<Example> getExampleListFromExampleSet(ExampleSet exampleSet) {
 		List<Example> examples = Lists.newArrayList();
-		for (int i = 0; i < exampleSet.getExampleTable().size(); i++) {
+		for (int i = 0; i < exampleSet.size(); i++) {
 			examples.add(exampleSet.getExample(i));
 		}
 		return examples;

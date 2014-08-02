@@ -1,6 +1,7 @@
 package com.roisin.spring.controllers;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
@@ -15,9 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rapidminer.example.Attribute;
+import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
+import com.roisin.spring.forms.DataViewForm;
 import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.model.DeletedRow;
 import com.roisin.spring.model.File;
@@ -29,6 +34,7 @@ import com.roisin.spring.model.SelectedAttribute;
 import com.roisin.spring.model.SubgroupSettings;
 import com.roisin.spring.model.TreeToRulesSettings;
 import com.roisin.spring.services.DeletedRowService;
+import com.roisin.spring.services.FileService;
 import com.roisin.spring.services.PreprocessedDataService;
 import com.roisin.spring.services.PreprocessingFormService;
 import com.roisin.spring.services.ProcessService;
@@ -75,13 +81,49 @@ public class PreprocessedDataController {
 	@Autowired
 	private TreeToRulesSettingsService treeToRulesSettingsService;
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
+	@Autowired
+	private FileService fileService;
 
-		Collection<PreprocessedData> dataList = preprocessedDataService.findAll();
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list(@RequestParam int fileId) {
+
+		File file = fileService.findOne(fileId);
+		Collection<PreprocessedData> forms = preprocessedDataService.findDataByFileId(fileId);
 		ModelAndView res = new ModelAndView("data/list");
-		res.addObject("dataList", dataList);
-		res.addObject("requestURI", "list");
+		res.addObject("forms", forms);
+		res.addObject("file", file);
+		res.addObject("requestURI", "list?fileId=" + fileId);
+
+		return res;
+	}
+
+	@RequestMapping(value = "/view", method = RequestMethod.POST)
+	public ModelAndView viewFilePreprocessedData(@ModelAttribute DataViewForm form) {
+
+		File file = fileService.findOne(form.getFileId());
+		Collection<PreprocessedData> forms = preprocessedDataService.findDataByFileId(form
+				.getFileId());
+
+		ModelAndView res = new ModelAndView("data/list");
+		res.addObject("forms", forms);
+		res.addObject("file", file);
+		res.addObject("requestURI", "list?fileId=" + form.getFileId());
+
+		return res;
+	}
+
+	@RequestMapping(value = "/details", method = RequestMethod.GET)
+	public ModelAndView details(@RequestParam int dataId) {
+
+		PreprocessedData data = preprocessedDataService.findOne(dataId);
+		ExampleSet exampleSet = data.getExampleSet();
+		List<Example> examples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
+		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+
+		ModelAndView res = new ModelAndView("data/details");
+		res.addObject("examples", examples);
+		res.addObject("attributes", attributes);
+		res.addObject("requestURI", "details?dataId=" + dataId);
 
 		return res;
 	}

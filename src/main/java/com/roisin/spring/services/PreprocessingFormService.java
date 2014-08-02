@@ -72,4 +72,8 @@ public class PreprocessingFormService {
 		return storedForm;
 	}
 
+	public Collection<PreprocessingForm> findFormsByFileId(int fileId) {
+		return preprocessingFormRepository.findFormsByFileId(fileId);
+	}
+
 }

@@ -18,10 +18,16 @@
 		id="row">
 		<display:column property="name" title="Name" />
 		<display:column property="description" title="Description" />
-		<display:column property="hash" title="Hash" />
 		<display:column>
-		<a href="../preform/create?fileId=${row.id}"> <input class="btn btn-default"
-				type="button" value="Preprocess"
+			<form:form method="post" action="../data/view" modelAttribute="form"
+				role="form" class="horizontal-form">
+				<form:hidden path="fileId" value="${row.getId() }"/>
+				<form:button type="submit" class="btn btn-default">View Data</form:button>
+			</form:form>
+		</display:column>
+		<display:column>
+			<a href="../preform/create?fileId=${row.id}"> <input
+				class="btn btn-default" type="button" value="Preprocess"
 				onclick="self.location.href = ../data/create?fileId=${row.id}" />
 			</a>
 		</display:column>

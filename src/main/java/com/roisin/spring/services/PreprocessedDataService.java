@@ -42,4 +42,10 @@ public class PreprocessedDataService {
 		preprocessedDataRepository.delete(preprocessedData);
 	}
 
+	// Extra methods
+
+	public Collection<PreprocessedData> findDataByFileId(int fileId) {
+		return preprocessedDataRepository.findDataByFileId(fileId);
+	}
+
 }
