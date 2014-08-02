@@ -24,97 +24,22 @@
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal"
 								aria-hidden="true"></button>
-							<h4 class="modal-title" id="ripperModalLabel">Fitler
+							<h4 class="modal-title" id="ripperModalLabel">Filter
 								Attributes</h4>
 						</div>
 						<div class="modal-body">
-							<div class="form-group">
-								<form:form method="post" action="filternominal"
-									modelAttribute="filterConditionForm" role="form"
-									class="form-inline">
-									<form:hidden path="dataId" value="${dataId }" />
-									<div class="row">
-										<div class="col-md-offset-1">
-											<h4>Nominal</h4>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-4">
-											<form:select path="filterAttribute" class="form-control"
-												id="nominalFilterSelect">
-												<c:forEach items="${attributes }" var="attribute">
-													<c:if test="${attribute.isNominal() }">
-														<form:option value="${attribute.getName() }" />
-													</c:if>
-												</c:forEach>
-											</form:select>
-										</div>
-										<div class="col-md-4">
-											<form:select path="filterOperator" class="form-control">
-												<form:option value="eq">equals</form:option>
-												<form:option value="neq">non equals</form:option>
-											</form:select>
-										</div>
-										<div class="col-md-4">
-											<form:input path="filterValue" type="text"
-												class="form-control" placeholder="value" />
-										</div>
-									</div>
-									<br />
-									<div class="row">
-										<div class="col-md-offset-9">
-											<form:button type="submit" name="filter" value="Filter"
-												class="btn btn-default btn-md">Delete Nominal</form:button>
-										</div>
-									</div>
-								</form:form>
-							</div>
-
-							<div class="form-group">
-								<form:form method="post" action="filternumerical"
-									modelAttribute="filterConditionForm" role="form">
-									<form:hidden path="dataId" value="${dataId }" />
-
-									<div class="row">
-										<div class="col-md-offset-1">
-											<h4>Nominal</h4>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-4">
-											<form:select path="filterAttribute" class="form-control"
-												id="nominalFilterSelect">
-												<c:forEach items="${attributes }" var="attribute">
-													<c:if test="${attribute.isNumerical() }">
-														<form:option value="${attribute.getName() }" />
-													</c:if>
-												</c:forEach>
-											</form:select>
-										</div>
-										<div class="col-md-4">
-											<form:select path="filterOperator" class="form-control">
-												<form:option value="eq">equals</form:option>
-												<form:option value="neq">non equals</form:option>
-												<form:option value="goe">greater or equals</form:option>
-												<form:option value="gt">greater</form:option>
-												<form:option value="soe">smaller or equals</form:option>
-												<form:option value="st">smaller</form:option>
-											</form:select>
-										</div>
-										<div class="col-md-4">
-											<form:input path="filterValue" type="text"
-												class="form-control" placeholder="value" />
-										</div>
-									</div>
-									<br />
-									<div class="row">
-										<div class="col-md-offset-9">
-											<form:button type="submit" name="filter" value="Filter"
-												class="btn btn-default btn-md">Delete Numerical</form:button>
-										</div>
-									</div>
-								</form:form>
-							</div>
+							<c:choose>
+								<c:when test="${hasNominal && !hasNumerical }">
+									<%@include file="includes/nominalFilter.jsp"%>
+								</c:when>
+								<c:when test="${!hasNominal && hasNumerical }">
+									<%@include file="includes/numericalFilter.jsp"%>
+								</c:when>
+								<c:otherwise>
+									<%@include file="includes/nominalFilter.jsp"%>
+									<%@include file="includes/numericalFilter.jsp"%>
+								</c:otherwise>
+							</c:choose>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default"
@@ -253,66 +178,4 @@
 			</display:column>
 		</display:table>
 	</div>
-	<!-- 	<div class="row"> -->
-	<!-- 		<div class="col-md-7"> -->
-	<!-- 			<h3>Filter condition</h3> -->
-	<!-- 			<br /> -->
-	<!-- 			<div class="col-md-3"> -->
-	<%-- 				<form:form method="post" action="filternominal" --%>
-	<%-- 					modelAttribute="filterConditionForm" role="form"> --%>
-	<%-- 					<form:hidden path="dataId" value="${dataId }" /> --%>
-	<!-- 					<div class="row"> -->
-	<%-- 						<form:select path="filterAttribute" class="form-control"> --%>
-	<%-- 							<c:forEach items="${attributes }" var="attribute"> --%>
-	<%-- 								<c:if test="${attribute.isNominal() }"> --%>
-	<%-- 									<form:option value="${attribute.getName() }" /> --%>
-	<%-- 								</c:if> --%>
-	<%-- 							</c:forEach> --%>
-	<%-- 						</form:select> --%>
-	<!-- 						<div class="col-md-3"> -->
-	<%-- 							<form:select path="filterOperator" class="form-control"> --%>
-	<%-- 								<form:option value="eq">equals</form:option> --%>
-	<%-- 								<form:option value="neq">non equals</form:option> --%>
-	<%-- 							</form:select> --%>
-	<!-- 						</div> -->
-	<!-- 						<div class="col-md-6"> -->
-	<%-- 							<form:input path="filterValue" type="text" class="form-control" --%>
-	<%-- 								placeholder="value" /> --%>
-	<!-- 						</div> -->
-	<%-- 						<form:button type="submit" name="filter" value="Filter" --%>
-	<%-- 							class="btn btn-success btn-lg">Delete Nominal</form:button> --%>
-	<!-- 					</div> -->
-	<%-- 				</form:form> --%>
-	<%-- 				<form:form method="post" action="filternumerical" --%>
-	<%-- 					modelAttribute="filterConditionForm" role="form"> --%>
-	<%-- 					<form:hidden path="dataId" value="${dataId }" /> --%>
-	<!-- 					<div class="row"> -->
-	<%-- 						<form:select path="filterAttribute" class="form-control"> --%>
-	<%-- 							<c:forEach items="${attributes }" var="attribute"> --%>
-	<%-- 								<c:if test="${attribute.isNumerical() }"> --%>
-	<%-- 									<form:option value="${attribute.getName() }" /> --%>
-	<%-- 								</c:if> --%>
-	<%-- 							</c:forEach> --%>
-	<%-- 						</form:select> --%>
-	<!-- 						<div class="col-md-3"> -->
-	<%-- 							<form:select path="filterOperator" class="form-control"> --%>
-	<%-- 								<form:option value="eq">equals</form:option> --%>
-	<%-- 								<form:option value="neq">non equals</form:option> --%>
-	<%-- 								<form:option value="goe">greater or equals</form:option> --%>
-	<%-- 								<form:option value="gt">greater</form:option> --%>
-	<%-- 								<form:option value="soe">smaller or equals</form:option> --%>
-	<%-- 								<form:option value="st">smaller</form:option> --%>
-	<%-- 							</form:select> --%>
-	<!-- 						</div> -->
-	<!-- 						<div class="col-md-6"> -->
-	<%-- 							<form:input path="filterValue" type="text" class="form-control" --%>
-	<%-- 								placeholder="value" /> --%>
-	<!-- 						</div> -->
-	<%-- 						<form:button type="submit" name="filter" value="Filter" --%>
-	<%-- 							class="btn btn-success btn-lg">Delete Numerical</form:button> --%>
-	<!-- 					</div> -->
-	<%-- 				</form:form> --%>
-	<!-- 			</div> -->
-	<!-- 		</div> -->
-	<!-- 	</div> -->
 </div>

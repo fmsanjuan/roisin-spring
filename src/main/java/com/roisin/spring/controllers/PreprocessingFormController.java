@@ -103,6 +103,8 @@ public class PreprocessingFormController {
 		res.addObject("dataId", data.getId());
 		res.addObject("requestURI", "list");
 		res.addObject("filterConditionForm", filterForm);
+		res.addObject("hasNumerical", RoisinUtils.hasNumerical(attributes));
+		res.addObject("hasNominal", RoisinUtils.hasNominal(attributes));
 
 		return res;
 	}
@@ -136,6 +138,8 @@ public class PreprocessingFormController {
 		res.addObject("dataId", data.getId());
 		res.addObject("requestURI", "list");
 		res.addObject("filterConditionForm", filterForm);
+		res.addObject("hasNumerical", RoisinUtils.hasNumerical(attributes));
+		res.addObject("hasNominal", RoisinUtils.hasNominal(attributes));
 
 		return res;
 	}
@@ -192,6 +196,8 @@ public class PreprocessingFormController {
 		res.addObject("dataId", data.getId());
 		res.addObject("requestURI", "list");
 		res.addObject("filterConditionForm", filterForm);
+		res.addObject("hasNumerical", RoisinUtils.hasNumerical(attributes));
+		res.addObject("hasNominal", RoisinUtils.hasNominal(attributes));
 
 		return res;
 	}
@@ -303,6 +309,8 @@ public class PreprocessingFormController {
 		res.addObject("dataId", data.getId());
 		res.addObject("requestURI", "list");
 		res.addObject("filterConditionForm", filterForm);
+		res.addObject("hasNumerical", RoisinUtils.hasNumerical(attributes));
+		res.addObject("hasNominal", RoisinUtils.hasNominal(attributes));
 
 		return res;
 	}
@@ -370,6 +378,8 @@ public class PreprocessingFormController {
 		res.addObject("dataId", data.getId());
 		res.addObject("requestURI", "list");
 		res.addObject("filterConditionForm", filterForm);
+		res.addObject("hasNumerical", RoisinUtils.hasNumerical(attributes));
+		res.addObject("hasNominal", RoisinUtils.hasNominal(attributes));
 
 		return res;
 	}

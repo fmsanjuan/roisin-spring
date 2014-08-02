@@ -304,4 +304,22 @@ public class RoisinUtils {
 		return auc;
 	}
 
+	public static boolean hasNumerical(Attribute[] attributes) {
+		for (int i = 0; i < attributes.length; i++) {
+			if (attributes[i].isNumerical()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean hasNominal(Attribute[] attributes) {
+		for (int i = 0; i < attributes.length; i++) {
+			if (attributes[i].isNominal()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
