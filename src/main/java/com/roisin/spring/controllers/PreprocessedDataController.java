@@ -13,11 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
@@ -48,6 +51,7 @@ import com.roisin.spring.utils.Constants;
 import com.roisin.spring.utils.FileUtils;
 import com.roisin.spring.utils.RoisinUtils;
 import com.roisin.spring.utils.Runner;
+import com.roisin.spring.validator.PreproSimpleFormValidator;
 
 @Controller
 @RequestMapping("/data")
@@ -84,6 +88,9 @@ public class PreprocessedDataController {
 
 	@Autowired
 	private FileService fileService;
+
+	@Autowired
+	private PreproSimpleFormValidator psfValidator;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam int fileId) {
@@ -146,57 +153,73 @@ public class PreprocessedDataController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = { "process" })
-	public ModelAndView process(@ModelAttribute PreproSimpleForm form) {
+	public ModelAndView process(@ModelAttribute PreproSimpleForm form, BindingResult result,
+			RedirectAttributes redirect) {
 
-		PreprocessedData data = preprocessedDataService.findOne(Integer.parseInt(form.getDataId()));
-		// Formulario
-		PreprocessingForm storedForm = preprocessingFormService.saveSubmitedSimpleForm(
-				data.getPreprocessingForm(), form);
-		// Extracción de file de BD
-		File file = storedForm.getFile();
-		String fileFormat = StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
-		String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
-				+ fileFormat;
-		// Escritura en disco del fichero
-		FileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
-		// Colección de deleted rows
-		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(storedForm
-				.getId());
-		// Obtención del example set resultante
-		ExampleSet exampleSet = Runner.getPreprocessedExampleSetFromFile(tmpPath,
-				RoisinUtils.getRowsFromDeletedRows(deletedRows), storedForm.getFilterCondition(),
-				form.getAttributeSelection());
-		// Se almacen el example set
-		data = preprocessedDataService.findOne(data.getId());
-		data.setExampleSet(exampleSet);
-		data.setName(form.getName());
-		data.setDescription(form.getDescription());
-		data = preprocessedDataService.save(data);
-		// Finalmente se manda al usuario al formulario de proceso
-		processService.cleanTempProcesses(data.getId());
-		// Creación del proceso
-		Process process = processService.create();
-		process.setPreprocessedData(data);
-		process.setAlgorithm("roisinnull");
-		// Se establece la label (clase) para este proceso
-		SelectedAttribute label = selectedAttributeService
-				.findLabel(storedForm.getId(), form.getLabel()).iterator().next();
-		process.setLabel(label);
-		process = processService.save(process);
-		// Creación de los formularios
-		RipperSettings ripperSettings = ripperSettingsService.create();
-		ripperSettings.setProcess(process);
-		SubgroupSettings subgroupSettings = subgroupSettingsService.create();
-		subgroupSettings.setProcess(process);
-		TreeToRulesSettings treeToRulesSettings = treeToRulesSettingsService.create();
-		treeToRulesSettings.setProcess(process);
+		psfValidator.validateProcess(form, result);
 
-		ModelAndView res = new ModelAndView("process/create");
-		res.addObject("ripperSettings", ripperSettings);
-		res.addObject("subgroupSettings", subgroupSettings);
-		res.addObject("treeSettings", treeToRulesSettings);
+		if (result.hasErrors()) {
+			for (FieldError fieldError : result.getFieldErrors()) {
+				redirect.addFlashAttribute(fieldError.getField() + Constants.ERROR,
+						fieldError.getDefaultMessage());
+			}
+			redirect.addFlashAttribute("error", true);
+			ModelAndView res = new ModelAndView("redirect:/preform/list?dataId=" + form.getDataId());
+			return res;
+		} else {
 
-		return res;
+			PreprocessedData data = preprocessedDataService.findOne(Integer.parseInt(form
+					.getDataId()));
+			// Formulario
+			PreprocessingForm storedForm = preprocessingFormService.saveSubmitedSimpleForm(
+					data.getPreprocessingForm(), form);
+			// Extracción de file de BD
+			File file = storedForm.getFile();
+			String fileFormat = StringUtils
+					.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
+			String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
+					+ fileFormat;
+			// Escritura en disco del fichero
+			FileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
+			// Colección de deleted rows
+			Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(storedForm
+					.getId());
+			// Obtención del example set resultante
+			ExampleSet exampleSet = Runner.getPreprocessedExampleSetFromFile(tmpPath,
+					RoisinUtils.getRowsFromDeletedRows(deletedRows),
+					storedForm.getFilterCondition(), form.getAttributeSelection());
+			// Se almacen el example set
+			data = preprocessedDataService.findOne(data.getId());
+			data.setExampleSet(exampleSet);
+			data.setName(form.getName());
+			data.setDescription(form.getDescription());
+			data = preprocessedDataService.save(data);
+			// Finalmente se manda al usuario al formulario de proceso
+			processService.cleanTempProcesses(data.getId());
+			// Creación del proceso
+			Process process = processService.create();
+			process.setPreprocessedData(data);
+			process.setAlgorithm("roisinnull");
+			// Se establece la label (clase) para este proceso
+			SelectedAttribute label = selectedAttributeService
+					.findLabel(storedForm.getId(), form.getLabel()).iterator().next();
+			process.setLabel(label);
+			process = processService.save(process);
+			// Creación de los formularios
+			RipperSettings ripperSettings = ripperSettingsService.create();
+			ripperSettings.setProcess(process);
+			SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+			subgroupSettings.setProcess(process);
+			TreeToRulesSettings treeToRulesSettings = treeToRulesSettingsService.create();
+			treeToRulesSettings.setProcess(process);
+
+			ModelAndView res = new ModelAndView("process/create");
+			res.addObject("ripperSettings", ripperSettings);
+			res.addObject("subgroupSettings", subgroupSettings);
+			res.addObject("treeSettings", treeToRulesSettings);
+
+			return res;
+		}
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = { "export" })

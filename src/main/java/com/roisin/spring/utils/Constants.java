@@ -8,46 +8,58 @@ package com.roisin.spring.utils;
  */
 public interface Constants {
 
-	String DOT_SYMBOL = ".";
+	final static String DOT_SYMBOL = ".";
 
-	String EQUALS = "eq";
+	final static String EQUALS = "eq";
 
-	String EQUALS_SYMBOL = "=";
+	final static String EQUALS_SYMBOL = "=";
 
-	String NON_EQUALS = "neq";
+	final static String NON_EQUALS = "neq";
 
-	String NON_EQUALS_SYMBOL = "!=";
+	final static String NON_EQUALS_SYMBOL = "!=";
 
-	String GREATER_THAN = "gt";
+	final static String GREATER_THAN = "gt";
 
-	String GREATER_THAN_SYMBOL = ">";
+	final static String GREATER_THAN_SYMBOL = ">";
 
-	String SMALLER_THAN = "st";
+	final static String SMALLER_THAN = "st";
 
-	String SMALLER_THAN_SYMBOL = "<";
+	final static String SMALLER_THAN_SYMBOL = "<";
 
-	String GREATER_OR_EQUALS = "goe";
+	final static String GREATER_OR_EQUALS = "goe";
 
-	String GREATER_OR_EQUALS_SYMBOL = ">=";
+	final static String GREATER_OR_EQUALS_SYMBOL = ">=";
 
-	String SMALLER_OR_EQUALS = "soe";
+	final static String SMALLER_OR_EQUALS = "soe";
 
-	String SMALLER_OR_EQUALS_SYMBOL = "<=";
+	final static String SMALLER_OR_EQUALS_SYMBOL = "<=";
 
-	String SLASH_SYMBOL = "/";
+	final static String SLASH_SYMBOL = "/";
 
-	double ZERO = 0.0;
+	final static double ZERO = 0.0;
 
-	double ONE = 1.0;
+	final static double ONE = 1.0;
 
-	int CHART_WIDTH = 500;
+	final static int CHART_WIDTH = 500;
 
-	int CHART_HEIGTH = 500;
+	final static int CHART_HEIGTH = 500;
 
-	String SHA_256 = "SHA-256";
+	final static String SHA_256 = "SHA-256";
 
-	String STORAGE_PATH = "/Users/felix/03.TFG/pruebafiles/";
+	final static String STORAGE_PATH = "/Users/felix/03.TFG/pruebafiles/";
 
-	String DOWNLOAD_PATH = "/Users/felix/03.TFG/pruebafiles/downloads/";
+	final static String DOWNLOAD_PATH = "/Users/felix/03.TFG/pruebafiles/downloads/";
+
+	final static String FORMAT_XLSX = "xlsx";
+
+	final static String FORMAT_XLS = "xls";
+
+	final static String FORMAT_ARFF = "arff";
+
+	final static String FORMAT_XRFF = "xrff";
+
+	final static String FORMAT_CSV = "csv";
+
+	final static String ERROR = "Error";
 
 }

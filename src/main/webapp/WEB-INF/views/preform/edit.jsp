@@ -12,6 +12,33 @@
 </div>
 
 <div class="container">
+	<c:if test="${error == true}">
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4">
+				<div class="alert alert-danger alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert"
+						aria-hidden="true">&times;</button>
+					<strong>Error! </strong>
+					<c:if test="${nameError != null }">
+						<br />${nameError }
+			</c:if>
+
+					<c:if test="${descriptionError != null }">
+						<br />${descriptionError }
+			</c:if>
+
+					<c:if test="${labelError != null }">
+						<br />${labelError }
+			</c:if>
+
+					<c:if test="${labelError != null }">
+						<br />${attributeSelectionError }
+			</c:if>
+				</div>
+			</div>
+		</div>
+	</c:if>
+
 	<div class="row">
 		<div class="col-md-2">
 			<a href="#aboutFilterModal" data-toggle="modal"
@@ -76,9 +103,7 @@
 											<form:select class="form-control"
 												id="attributeSelectionSelect" multiple="true"
 												path="attributeSelection">
-												<c:forEach items="${attributes }" var="attribute">
-													<form:option value="${attribute.getName() }" />
-												</c:forEach>
+												<form:options items="${attributes }" />
 											</form:select>
 											<form:errors path="attributeSelection" />
 										</div>
@@ -89,14 +114,13 @@
 										<label for="exportFormatSelect"
 											class="col-md-4 col-md-offset-2 control-label">Format</label>
 										<div class="col-md-5">
-											<form:select class="form-control"
-												id="exportFormatSelect" multiple="true"
-												path="exportFormat">
-													<form:option value="xlsx" />
-													<form:option value="xls" />
-													<form:option value="arff" />
-													<form:option value="xrff" />
-													<form:option value="csv" />
+											<form:select class="form-control" id="exportFormatSelect"
+												multiple="true" path="exportFormat">
+												<form:option value="xlsx" />
+												<form:option value="xls" />
+												<form:option value="arff" />
+												<form:option value="xrff" />
+												<form:option value="csv" />
 											</form:select>
 											<form:errors path="exportFormat" />
 										</div>
@@ -127,6 +151,32 @@
 									and attributes</h4>
 							</div>
 							<div class="modal-body">
+								<c:if test="${error == true}">
+									<div class="row">
+										<div class="col-md-8 col-md-offset-2">
+											<div class="alert alert-danger alert-dismissable">
+												<button type="button" class="close" data-dismiss="alert"
+													aria-hidden="true">&times;</button>
+												<strong>Error! </strong>
+												<c:if test="${nameError != null }">
+													<br />${nameError }
+											</c:if>
+
+												<c:if test="${descriptionError != null }">
+													<br />${descriptionError }
+											</c:if>
+
+												<c:if test="${labelError != null }">
+													<br />${labelError }
+											</c:if>
+
+												<c:if test="${labelError != null }">
+													<br />${attributeSelectionError }
+											</c:if>
+											</div>
+										</div>
+									</div>
+								</c:if>
 								<div class="row">
 									<div class="form-group">
 										<label for="attributeSelectionSelect"
@@ -138,11 +188,12 @@
 									</div>
 								</div>
 								<div class="row">
-								<div class="form-group">
+									<div class="form-group">
 										<label for="attributeSelectionSelect"
 											class="col-md-4 col-md-offset-2 control-label">Description</label>
 										<div class="col-md-5">
-											<form:input type="text" path="description" class="form-control" />
+											<form:input type="text" path="description"
+												class="form-control" />
 											<form:errors path="description" />
 										</div>
 									</div>
@@ -177,7 +228,7 @@
 													<form:option value="${attribute.getName() }" />
 												</c:forEach>
 											</form:select>
-											<form:errors path="attributeSelection" />
+
 										</div>
 									</div>
 								</div>

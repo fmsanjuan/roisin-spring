@@ -110,14 +110,15 @@ public class PreprocessingFormController {
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam int dataId, @RequestParam int formId) {
+	public ModelAndView list(@RequestParam int dataId) {
 
 		PreprocessedData data = preprocessedDataService.findOne(dataId);
 		ExampleSet exampleSet = data.getExampleSet();
 		List<Example> examples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
 		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
 
-		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(formId);
+		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(data
+				.getPreprocessingForm().getId());
 		if (!deletedRows.isEmpty()) {
 			List<Integer> deletedRowValues = RoisinUtils.getDeletedRowValues(deletedRows);
 			for (Integer deletedRowValue : deletedRowValues) {
