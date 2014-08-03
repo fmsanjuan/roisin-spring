@@ -43,14 +43,7 @@ public class FileController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 
-		User user = userService.findByPrincipal();
-		Collection<File> files = fileService.findFilesByUserId(user.getId());
-		ModelAndView res = new ModelAndView("file/list");
-		res.addObject("files", files);
-		res.addObject("requestURI", "list");
-		res.addObject("form", new DataViewForm());
-
-		return res;
+		return createListModelAndView(false);
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -61,9 +54,7 @@ public class FileController {
 		fileValidator.validate(uploadedFile, result);
 
 		if (result.hasErrors()) {
-			ModelAndView res = new ModelAndView("file/list");
-			res.addObject("error", true);
-			return res;
+			return createListModelAndView(true);
 		} else {
 			File roisinFile = fileService.create();
 			roisinFile.setName(file.getOriginalFilename());
@@ -88,6 +79,20 @@ public class FileController {
 		fileService.delete(file);
 
 		return list();
+	}
+
+	public ModelAndView createListModelAndView(boolean error) {
+
+		User user = userService.findByPrincipal();
+		Collection<File> files = fileService.findFilesByUserId(user.getId());
+
+		ModelAndView res = new ModelAndView("file/list");
+		res.addObject("files", files);
+		res.addObject("requestURI", "list");
+		res.addObject("form", new DataViewForm());
+		res.addObject("error", error);
+
+		return res;
 	}
 
 }
