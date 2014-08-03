@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.roisin.spring.model.Process;
+import com.roisin.spring.model.SelectedAttribute;
 import com.roisin.spring.repositories.ProcessRepository;
 
 @Service
@@ -15,6 +16,9 @@ public class ProcessService {
 
 	@Autowired
 	private ProcessRepository processRepository;
+
+	@Autowired
+	private SelectedAttributeService selectedAttributeService;
 
 	public ProcessService() {
 		super();
@@ -50,9 +54,13 @@ public class ProcessService {
 			return save(process);
 		} else {
 			Process newProcess = create();
-			newProcess.setLabel(process.getLabel());
 			newProcess.setPreprocessedData(process.getPreprocessedData());
 			newProcess.setAlgorithm(algorithm);
+			SelectedAttribute label = process.getLabel();
+			newProcess.setLabel(process.getLabel());
+			newProcess.setLabel(label);
+			newProcess = save(newProcess);
+
 			return save(newProcess);
 		}
 	}
@@ -62,5 +70,9 @@ public class ProcessService {
 		for (Process process : nullProcesses) {
 			delete(process);
 		}
+	}
+
+	public Collection<Process> findByAlgorithmAndDataId(int dataId, String algorithm) {
+		return processRepository.findByAlgorithmAndDataId(dataId, algorithm);
 	}
 }

@@ -8,4 +8,16 @@
 		<put-attribute name="title" value="Process Definition" />
 		<put-attribute name="body" value="/WEB-INF/views/process/process.jsp" />
 	</definition>
+	<definition name="details/ripper" extends="base.definition">
+		<put-attribute name="title" value="Ripper Processes Details" />
+		<put-attribute name="body" value="/WEB-INF/views/process/details/ripper.jsp" />
+	</definition>
+	<definition name="details/subgroup" extends="base.definition">
+		<put-attribute name="title" value="Subgroup Discovery Processes Details" />
+		<put-attribute name="body" value="/WEB-INF/views/process/details/subgroup.jsp" />
+	</definition>
+	<definition name="details/tree" extends="base.definition">
+		<put-attribute name="title" value="Tree To Rules Processes Details" />
+		<put-attribute name="body" value="/WEB-INF/views/process/details/tree.jsp" />
+	</definition>
 </tiles-definitions>

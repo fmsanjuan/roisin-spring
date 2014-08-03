@@ -15,4 +15,7 @@ public interface ProcessRepository extends JpaRepository<Process, Integer> {
 	@Query("select p from Process p where p.preprocessedData.id = ?1 and p.algorithm = 'roisinnull'")
 	Collection<Process> findNullDataProcesses(int dataId);
 
+	@Query("select p from Process p where p.preprocessedData.id = ?1 and p.algorithm = ?2")
+	Collection<Process> findByAlgorithmAndDataId(int dataId, String algorithm);
+
 }

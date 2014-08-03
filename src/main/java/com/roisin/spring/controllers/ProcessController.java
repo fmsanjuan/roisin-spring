@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.googlecode.charts4j.XYLineChart;
@@ -26,6 +27,7 @@ import com.roisin.spring.model.SubgroupSettings;
 import com.roisin.spring.model.TreeToRulesSettings;
 import com.roisin.spring.services.DeletedRowService;
 import com.roisin.spring.services.FileService;
+import com.roisin.spring.services.PreprocessedDataService;
 import com.roisin.spring.services.ProcessService;
 import com.roisin.spring.services.ResultsService;
 import com.roisin.spring.services.RipperSettingsService;
@@ -66,6 +68,9 @@ public class ProcessController {
 
 	@Autowired
 	private TreeToRulesSettingsService treeToRulesSettingsService;
+
+	@Autowired
+	private PreprocessedDataService preprocessedDataService;
 
 	@Autowired
 	private RuleService ruleService;
@@ -181,4 +186,45 @@ public class ProcessController {
 		return res;
 	}
 
+	@RequestMapping(value = "/details", method = RequestMethod.POST, params = { "ripper" })
+	public ModelAndView ripperDetails(@RequestParam int dataId) {
+
+		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId,
+				ProcessConstants.RIPPER);
+		PreprocessedData data = preprocessedDataService.findOne(dataId);
+
+		ModelAndView res = new ModelAndView("details/ripper");
+		res.addObject("processes", processes);
+		res.addObject("dataName", data.getName());
+
+		return res;
+	}
+
+	@RequestMapping(value = "/details", method = RequestMethod.POST, params = { "subgroup" })
+	public ModelAndView subgroupDetails(@RequestParam int dataId) {
+
+		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId,
+				ProcessConstants.SUBGROUP_DISCOVERY);
+		PreprocessedData data = preprocessedDataService.findOne(dataId);
+
+		ModelAndView res = new ModelAndView("details/subgroup");
+		res.addObject("processes", processes);
+		res.addObject("dataName", data.getName());
+
+		return res;
+	}
+
+	@RequestMapping(value = "/details", method = RequestMethod.POST, params = { "tree" })
+	public ModelAndView treeDetails(@RequestParam int dataId) {
+
+		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId,
+				ProcessConstants.TREE_TO_RULES);
+		PreprocessedData data = preprocessedDataService.findOne(dataId);
+
+		ModelAndView res = new ModelAndView("details/tree");
+		res.addObject("processes", processes);
+		res.addObject("dataName", data.getName());
+
+		return res;
+	}
 }

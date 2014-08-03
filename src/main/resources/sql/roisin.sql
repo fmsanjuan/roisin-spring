@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 23-07-2014 a las 01:15:37
+-- Tiempo de generación: 03-08-2014 a las 16:18:20
 -- Versión del servidor: 5.6.12
 -- Versión de PHP: 5.5.3
 
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `File` (
   `description` varchar(255) DEFAULT NULL,
   `hash` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `originalFile` tinyblob,
+  `originalFile` longblob,
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_hpo4utwhhxcalm7ml3jwq0iob` (`user_id`)
@@ -139,8 +139,10 @@ CREATE TABLE IF NOT EXISTS `Process` (
   `id` int(11) NOT NULL,
   `version` int(11) NOT NULL,
   `algorithm` varchar(255) DEFAULT NULL,
+  `label_id` int(11) DEFAULT NULL,
   `preprocessedData_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `FK_ptcp0r2oejrt2nk0t8pu7lj1u` (`label_id`),
   KEY `FK_ju0bhbyfw9cdkywnyogbfio4h` (`preprocessedData_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -213,10 +215,8 @@ CREATE TABLE IF NOT EXISTS `SelectedAttribute` (
   `version` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `preprocessingForm_id` int(11) DEFAULT NULL,
-  `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_qo6jqtuogeou696ddcod3971l` (`preprocessingForm_id`),
-  KEY `FK_rkbht68y8ebj6sogd3cely24b` (`process_id`)
+  KEY `FK_qo6jqtuogeou696ddcod3971l` (`preprocessingForm_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -376,7 +376,8 @@ ALTER TABLE `PreprocessingForm`
 -- Filtros para la tabla `Process`
 --
 ALTER TABLE `Process`
-  ADD CONSTRAINT `FK_ju0bhbyfw9cdkywnyogbfio4h` FOREIGN KEY (`preprocessedData_id`) REFERENCES `PreprocessedData` (`id`);
+  ADD CONSTRAINT `FK_ju0bhbyfw9cdkywnyogbfio4h` FOREIGN KEY (`preprocessedData_id`) REFERENCES `PreprocessedData` (`id`),
+  ADD CONSTRAINT `FK_ptcp0r2oejrt2nk0t8pu7lj1u` FOREIGN KEY (`label_id`) REFERENCES `SelectedAttribute` (`id`);
 
 --
 -- Filtros para la tabla `Results`
@@ -400,7 +401,6 @@ ALTER TABLE `Rule`
 -- Filtros para la tabla `SelectedAttribute`
 --
 ALTER TABLE `SelectedAttribute`
-  ADD CONSTRAINT `FK_rkbht68y8ebj6sogd3cely24b` FOREIGN KEY (`process_id`) REFERENCES `Process` (`id`),
   ADD CONSTRAINT `FK_qo6jqtuogeou696ddcod3971l` FOREIGN KEY (`preprocessingForm_id`) REFERENCES `PreprocessingForm` (`id`);
 
 --

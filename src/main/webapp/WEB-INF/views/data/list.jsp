@@ -8,7 +8,7 @@
 
 <div class="page-header text-center">
 	<h1>
-		Preprocessed Data from  <small>${file.getName() }</small>
+		Preprocessed Data from <small>${file.getName() }</small>
 	</h1>
 </div>
 
@@ -19,6 +19,30 @@
 			id="row">
 			<display:column property="name" title="Name" />
 			<display:column property="description" title="Description" />
+			<!-- Ejecuciones con Ripper -->
+			<display:column>
+				<form:form method="post" action="../process/details"
+					modelAttribute="dataIdForm" role="form" class="horizontal-form">
+					<form:hidden path="dataId" value="${row.getId() }" />
+					<form:button type="submit" name="ripper" class="btn btn-default">Show Ripper</form:button>
+				</form:form>
+			</display:column>
+			<!-- Ejecuciones con Subgroup Discovery -->
+			<display:column>
+				<form:form method="post" action="../process/details"
+					modelAttribute="dataIdForm" role="form" class="horizontal-form">
+					<form:hidden path="dataId" value="${row.getId() }" />
+					<form:button type="submit" name="subgroup" class="btn btn-default">Show Subgroup</form:button>
+				</form:form>
+			</display:column>
+			<!-- Ejecuciones con Tree to Rules -->
+			<display:column>
+				<form:form method="post" action="../process/details"
+					modelAttribute="dataIdForm" role="form" class="horizontal-form">
+					<form:hidden path="dataId" value="${row.getId() }" />
+					<form:button type="submit" name="tree" class="btn btn-default">Show Tree To Rules</form:button>
+				</form:form>
+			</display:column>
 			<display:column>
 				<a href="../data/details?dataId=${row.id}"> <input
 					class="btn btn-default" type="button" value="Details"

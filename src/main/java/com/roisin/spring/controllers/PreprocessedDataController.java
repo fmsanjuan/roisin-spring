@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.Example;
 import com.rapidminer.example.ExampleSet;
+import com.roisin.spring.forms.DataIdForm;
 import com.roisin.spring.forms.DataViewForm;
 import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.model.DeletedRow;
@@ -92,6 +93,7 @@ public class PreprocessedDataController {
 		ModelAndView res = new ModelAndView("data/list");
 		res.addObject("forms", forms);
 		res.addObject("file", file);
+		res.addObject("dataIdForm", new DataIdForm());
 		res.addObject("requestURI", "list?fileId=" + fileId);
 
 		return res;
@@ -107,6 +109,7 @@ public class PreprocessedDataController {
 		ModelAndView res = new ModelAndView("data/list");
 		res.addObject("forms", forms);
 		res.addObject("file", file);
+		res.addObject("dataIdForm", new DataIdForm());
 		res.addObject("requestURI", "list?fileId=" + form.getFileId());
 
 		return res;
@@ -172,12 +175,11 @@ public class PreprocessedDataController {
 		Process process = processService.create();
 		process.setPreprocessedData(data);
 		process.setAlgorithm("roisinnull");
-		process = processService.save(process);
 		// Se establece la label (clase) para este proceso
 		SelectedAttribute label = selectedAttributeService
 				.findLabel(storedForm.getId(), form.getLabel()).iterator().next();
-		label.setProcess(process);
-		label = selectedAttributeService.save(label);
+		process.setLabel(label);
+		process = processService.save(process);
 		// Creación de los formularios
 		RipperSettings ripperSettings = ripperSettingsService.create();
 		ripperSettings.setProcess(process);

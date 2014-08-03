@@ -89,7 +89,7 @@ public class Process extends DomainEntity {
 	}
 
 	@Valid
-	@OneToOne(mappedBy = "process", cascade = CascadeType.ALL)
+	@ManyToOne(optional = true)
 	public SelectedAttribute getLabel() {
 		return label;
 	}

@@ -1,10 +1,12 @@
 package com.roisin.spring.model;
 
+import java.util.Collection;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -17,7 +19,7 @@ public class SelectedAttribute extends DomainEntity {
 
 	private PreprocessingForm preprocessingForm;
 
-	private Process process;
+	private Collection<Process> processes;
 
 	public SelectedAttribute() {
 		super();
@@ -42,13 +44,14 @@ public class SelectedAttribute extends DomainEntity {
 		this.preprocessingForm = preprocessingForm;
 	}
 
-	@OneToOne
-	public Process getProcess() {
-		return process;
+	@Valid
+	@OneToMany(mappedBy = "label")
+	public Collection<Process> getProcess() {
+		return processes;
 	}
 
-	public void setProcess(Process process) {
-		this.process = process;
+	public void setProcess(Collection<Process> processes) {
+		this.processes = processes;
 	}
 
 }
