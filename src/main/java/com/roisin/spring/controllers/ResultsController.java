@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.googlecode.charts4j.XYLineChart;
@@ -80,6 +81,23 @@ public class ResultsController {
 		res.addObject("rules", rules);
 		res.addObject("removedRules", removedRules);
 		res.addObject("chart", chart.toURLString());
+		res.addObject("results", results);
+
+		return res;
+	}
+
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public ModelAndView details(@RequestParam int resultsId) {
+
+		Collection<Rule> rules = ruleService.findRulesByResultsId(resultsId);
+		XYLineChart chart = RoisinUtils.getAucChart(rules, resultsId);
+		Results results = resultsService.findOne(resultsId);
+
+		ModelAndView res = new ModelAndView("results/view");
+		res.addObject("rules", rules);
+		res.addObject("requestURI", "results/view?=resultsId=" + resultsId);
+		res.addObject("chart", chart.toURLString());
+		res.addObject("rules", rules);
 		res.addObject("results", results);
 
 		return res;

@@ -179,7 +179,7 @@ public class ProcessController {
 
 		ModelAndView res = new ModelAndView("results/view");
 		res.addObject("rules", rules);
-		res.addObject("requestURI", "results/view");
+		res.addObject("requestURI", "results/view?resultsId=" + results.getId());
 		res.addObject("chart", chart.toURLString());
 		res.addObject("results", results);
 

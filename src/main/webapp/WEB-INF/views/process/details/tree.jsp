@@ -44,6 +44,12 @@
 		<display:column title="No Pruning">
 		${process.getTreeToRulesSettings().getNoPruning() }
 		</display:column>
+		<display:column>
+			<a
+				href="../results/view?resultsId=${process.getResults().getId()}">
+				<input class="btn btn-default" type="button" value="Show Results"
+				onclick="self.location.href = ../results/view?resultsId=${process.getResults().getId()}" />
+			</a>
+		</display:column>
 	</display:table>
-
 </div>
