@@ -17,7 +17,6 @@
 		pagesize="5" class="table table-hover" requestURI="${requestURI}"
 		id="row">
 		<display:column property="name" title="Name" />
-		<display:column property="description" title="Description" />
 		<display:column>
 			<form:form method="post" action="../data/view" modelAttribute="form"
 				role="form" class="horizontal-form">

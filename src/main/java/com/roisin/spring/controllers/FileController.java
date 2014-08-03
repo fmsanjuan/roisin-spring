@@ -3,6 +3,7 @@ package com.roisin.spring.controllers;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class FileController {
 		} else {
 			File roisinFile = fileService.create();
 			roisinFile.setName(file.getOriginalFilename());
-			roisinFile.setDescription("descripcion");
+			roisinFile.setDescription(StringUtils.EMPTY);
 			try {
 				String hash = HashUtils.fileChecksum(file.getBytes(), Constants.SHA_256);
 				roisinFile.setHash(hash);
