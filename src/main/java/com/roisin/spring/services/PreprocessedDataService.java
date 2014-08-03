@@ -48,4 +48,14 @@ public class PreprocessedDataService {
 		return preprocessedDataRepository.findDataByFileId(fileId);
 	}
 
+	public Collection<PreprocessedData> findNullData(int fileId) {
+		return preprocessedDataRepository.findNullDataByFileId(fileId);
+	}
+
+	public void deleteNullData(Collection<PreprocessedData> nullData) {
+		for (PreprocessedData preprocessedData : nullData) {
+			delete(preprocessedData);
+		}
+	}
+
 }

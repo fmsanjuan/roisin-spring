@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
@@ -62,7 +63,7 @@ public class PreprocessedData extends DomainEntity {
 		this.exampleSet = exampleSet;
 	}
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	public PreprocessingForm getPreprocessingForm() {
 		return preprocessingForm;
 	}

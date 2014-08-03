@@ -103,6 +103,9 @@ public class PreprocessedDataController {
 	public ModelAndView viewFilePreprocessedData(@ModelAttribute DataViewForm form) {
 
 		File file = fileService.findOne(form.getFileId());
+		Collection<PreprocessedData> nullData = preprocessedDataService.findNullData(form
+				.getFileId());
+		preprocessedDataService.deleteNullData(nullData);
 		Collection<PreprocessedData> forms = preprocessedDataService.findDataByFileId(form
 				.getFileId());
 
