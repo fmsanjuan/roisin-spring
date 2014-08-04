@@ -38,9 +38,6 @@ public class RipperSettingsValidator implements Validator {
 			errors.rejectValue("minimalPruneBenefit", "form.minimalPruneBenefit",
 					"Must be between 0 and 1");
 		}
-
-		validate(form, errors);
-
 	}
 
 }

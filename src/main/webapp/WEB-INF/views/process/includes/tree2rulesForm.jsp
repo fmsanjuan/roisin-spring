@@ -52,7 +52,7 @@
 								<form:option value="gini_index" />
 								<form:option value="accuracy" />
 							</form:select>
-							<form:errors path="tree2RulesCriterion" />
+							<font color="red"><form:errors path="tree2RulesCriterion" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -62,7 +62,7 @@
 							<form:input type="text" class="form-control"
 								id="subgroupMinSizeSplit" placeholder="Minimal Size for Split"
 								path="minimalSizeForSplit" />
-							<form:errors path="minimalSizeForSplit" />
+							<font color="red"><form:errors path="minimalSizeForSplit" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -72,7 +72,7 @@
 							<form:input type="text" class="form-control"
 								id="subgroupMinLeafSize" placeholder="Minimal Leaf Size"
 								path="minimalLeafSize" />
-							<form:errors path="minimalLeafSize" />
+							<font color="red"><form:errors path="minimalLeafSize" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -82,7 +82,7 @@
 							<form:input type="text" class="form-control"
 								id="subgroupMinimalGain" placeholder="Minimal Gain"
 								path="minimalGain" />
-							<form:errors path="minimalGain" />
+							<font color="red"><form:errors path="minimalGain" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -92,7 +92,7 @@
 							<form:input type="text" class="form-control"
 								id="subgroupMaxDepth" placeholder="Maximal Depth"
 								path="maximalDepth" />
-							<form:errors path="maximalDepth" />
+							<font color="red"><form:errors path="maximalDepth" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -101,7 +101,7 @@
 							<form:input type="text" class="form-control"
 								id="subgroupConfidence" placeholder="Confidence"
 								path="confidence" />
-							<form:errors path="confidence" />
+							<font color="red"><form:errors path="confidence" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -113,7 +113,7 @@
 								id="subgroupNumberOfPrepruning"
 								placeholder="Number of prepruning"
 								path="numberOfPrepruningAlternatives" />
-							<form:errors path="numberOfPrepruningAlternatives" />
+							<font color="red"><form:errors path="numberOfPrepruningAlternatives" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -122,7 +122,7 @@
 						<div class="col-sm-4">
 							<form:checkbox class="form-control" id="subgroupNoPrepruning"
 								path="noPrepruning" />
-							<form:errors path="noPrepruning" />
+							<font color="red"><form:errors path="noPrepruning" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -131,7 +131,7 @@
 						<div class="col-sm-4">
 							<form:checkbox class="form-control" id="subgroupNoPruning"
 								path="noPruning" />
-							<form:errors path="noPruning" />
+							<font color="red"><form:errors path="noPruning" /></font>
 						</div>
 					</div>
 				</div>

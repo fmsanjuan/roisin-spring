@@ -52,7 +52,7 @@
 								<form:option value="information_gain" selected="selected" />
 								<form:option value="accuracy" />
 							</form:select>
-							<form:errors path="ripperCriterion" />
+							<font color="red"><form:errors path="ripperCriterion" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -63,7 +63,7 @@
 							<form:input type="text" class="form-control"
 								id="ripperSampleRatio" placeholder="Sample Ratio"
 								path="sampleRatio" />
-							<form:errors path="sampleRatio" />
+							<font color="red"><form:errors path="sampleRatio" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -72,7 +72,7 @@
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control" id="ripperPureness"
 								placeholder="Pureness" path="pureness" />
-							<form:errors path="pureness" />
+							<font color="red"><form:errors path="pureness" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -83,7 +83,7 @@
 							<form:input type="text" class="form-control"
 								id="ripperMinimalPruneBenefit"
 								placeholder="Minimal Prune Benefit" path="minimalPruneBenefit" />
-							<form:errors path="minimalPruneBenefit" />
+							<font color="red"><form:errors path="minimalPruneBenefit" /></font>
 						</div>
 					</div>
 

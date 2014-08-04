@@ -90,8 +90,35 @@ div.product-chooser div.product-chooser-item input.non-visible {
 				<div class="alert alert-danger alert-dismissable">
 					<button type="button" class="close" data-dismiss="alert"
 						aria-hidden="true">&times;</button>
-					<strong>Error! </strong> Please, revise the configuration for the
+					<strong>Error! </strong> Please, check the configuration for the
 					algorithm ${error }.
+					<spring:hasBindErrors htmlEscape="true" name="result">
+						<c:forEach items="${result.allErrors}" var="error">
+							<spring:message code="${error.code}"
+								arguments="${error.arguments}" text="${error.defaultMessage}" />
+							<br />
+						</c:forEach>
+					</spring:hasBindErrors>
+					<%-- 					<form:errors path="ripperCriterion" /> --%>
+					<%-- 					<form:errors path="sampleRatio" /> --%>
+					<%-- 					<form:errors path="pureness" /> --%>
+					<%-- 					<form:errors path="minimalPruneBenefit" /> --%>
+					<%-- 					<form:errors path="mode" /> --%>
+					<%-- 					<form:errors path="utilityFunction" /> --%>
+					<%-- 					<form:errors path="minUtility" /> --%>
+					<%-- 					<form:errors path="kBestRules" /> --%>
+					<%-- 					<form:errors path="ruleGeneration" /> --%>
+					<%-- 					<form:errors path="maxDepth" /> --%>
+					<%-- 					<form:errors path="minCoverage" /> --%>
+					<%-- 					<form:errors path="tree2RulesCriterion" /> --%>
+					<%-- 					<form:errors path="minimalSizeForSplit" /> --%>
+					<%-- 					<form:errors path="minimalLeafSize" /> --%>
+					<%-- 					<form:errors path="minimalGain" /> --%>
+					<%-- 					<form:errors path="maximalDepth" /> --%>
+					<%-- 					<form:errors path="confidence" /> --%>
+					<%-- 					<form:errors path="numberOfPrepruningAlternatives" /> --%>
+					<%-- 					<form:errors path="noPrepruning" /> --%>
+					<%-- 					<form:errors path="noPruning" /> --%>
 				</div>
 			</div>
 		</div>

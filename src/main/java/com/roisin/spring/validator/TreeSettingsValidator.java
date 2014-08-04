@@ -48,7 +48,7 @@ public class TreeSettingsValidator implements Validator {
 					"Must be greater than or equal to -1");
 		}
 
-		if (form.getConfidence() > 0.5 || form.getConfidence() < 0.0) {
+		if (form.getConfidence() > 0.5 || form.getConfidence() < Math.pow(Math.E, -7)) {
 			errors.rejectValue("confidence", "form.confidence", "Must be between 0 and 0.5");
 		}
 
@@ -64,9 +64,6 @@ public class TreeSettingsValidator implements Validator {
 		if (form.getNoPruning() == null) {
 			errors.rejectValue("maximalDepth", "form.maximalDepth", "Cannot be null");
 		}
-
-		validate(form, errors);
-
 	}
 
 }

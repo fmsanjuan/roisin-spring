@@ -61,9 +61,6 @@ public class SubgroupSettingsValidator implements Validator {
 		if (form.getMinCoverage().doubleValue() < 0.0 || form.getMinCoverage().doubleValue() > 1.0) {
 			errors.rejectValue("minCoverage", "form.minCoverage", "Must be between 0 and 1");
 		}
-
-		validate(form, errors);
-
 	}
 
 }

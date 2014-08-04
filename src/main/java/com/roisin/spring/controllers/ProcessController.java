@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +39,9 @@ import com.roisin.spring.services.TreeToRulesSettingsService;
 import com.roisin.spring.utils.ProcessConstants;
 import com.roisin.spring.utils.RoisinUtils;
 import com.roisin.spring.utils.Runner;
+import com.roisin.spring.validator.RipperSettingsValidator;
+import com.roisin.spring.validator.SubgroupSettingsValidator;
+import com.roisin.spring.validator.TreeSettingsValidator;
 
 @Controller
 @RequestMapping("/process")
@@ -75,102 +79,170 @@ public class ProcessController {
 	@Autowired
 	private RuleService ruleService;
 
+	@Autowired
+	private RipperSettingsValidator ripperValidator;
+
+	@Autowired
+	private SubgroupSettingsValidator subgroupValidator;
+
+	@Autowired
+	private TreeSettingsValidator treeValidator;
+
 	@RequestMapping(value = "/ripper", method = RequestMethod.POST)
-	public ModelAndView ripper(@ModelAttribute RipperSettings ripperSettings) {
+	public ModelAndView ripper(@ModelAttribute RipperSettings ripperSettings, BindingResult result) {
 
-		// Process
-		Process process = ripperSettings.getProcess();
-		process = processService.saveProcessAlgorithm(process, ProcessConstants.RIPPER);
-		// Se vuelve a salvar por si se ha creado un proceso nuevo
-		ripperSettings.setProcess(process);
-		ripperSettings = ripperSettingsService.save(ripperSettings);
-		// Data and form
-		PreprocessedData data = process.getPreprocessedData();
-		PreprocessingForm form = data.getPreprocessingForm();
-		// Extracción de file de BD
-		File file = form.getFile();
-		String tmpPath = fileService.writeFileFromDb(file);
-		// Getting selected attributes and deleted rows
-		Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
-				.findSelectedAttributesByFormId(form.getId());
-		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form.getId());
-		// Numerical label
-		boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet().getExampleTable()
-				.getAttributes(), process.getLabel().getName());
-		// Roisin core is used to get RoisinResults
-		RoisinResults roisinResults = Runner.getRipperResults(ripperSettings, tmpPath, process
-				.getLabel().getName(), form.getFilterCondition(), RoisinUtils
-				.getAttributesFromSelectedAttributes(selectedAttributes), RoisinUtils
-				.getRowsFromDeletedRows(deletedRows), numericalLabel);
-		// Truncate results
-		roisinResults.truncateResults();
-		Results results = resultsService.saveResultRules(roisinResults, process);
+		ripperValidator.validate(ripperSettings, result);
 
-		return createResultsModelAndView(results);
+		if (result.hasErrors()) {
+			SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+			subgroupSettings.setProcess(ripperSettings.getProcess());
+			TreeToRulesSettings treeSettings = treeToRulesSettingsService.create();
+			treeSettings.setProcess(ripperSettings.getProcess());
+
+			ModelAndView res = new ModelAndView("process/create");
+			res.addObject("ripperSettings", ripperSettings);
+			res.addObject("subgroupSettings", subgroupSettings);
+			res.addObject("treeSettings", treeSettings);
+			res.addObject("error", ProcessConstants.RIPPER);
+
+			return res;
+
+		} else {
+			// Process
+			Process process = ripperSettings.getProcess();
+			process = processService.saveProcessAlgorithm(process, ProcessConstants.RIPPER);
+			// Se vuelve a salvar por si se ha creado un proceso nuevo
+			ripperSettings.setProcess(process);
+			ripperSettings = ripperSettingsService.save(ripperSettings);
+			// Data and form
+			PreprocessedData data = process.getPreprocessedData();
+			PreprocessingForm form = data.getPreprocessingForm();
+			// Extracción de file de BD
+			File file = form.getFile();
+			String tmpPath = fileService.writeFileFromDb(file);
+			// Getting selected attributes and deleted rows
+			Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
+					.findSelectedAttributesByFormId(form.getId());
+			Collection<DeletedRow> deletedRows = deletedRowService
+					.findFormDeletedRows(form.getId());
+			// Numerical label
+			boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet()
+					.getExampleTable().getAttributes(), process.getLabel().getName());
+			// Roisin core is used to get RoisinResults
+			RoisinResults roisinResults = Runner.getRipperResults(ripperSettings, tmpPath, process
+					.getLabel().getName(), form.getFilterCondition(), RoisinUtils
+					.getAttributesFromSelectedAttributes(selectedAttributes), RoisinUtils
+					.getRowsFromDeletedRows(deletedRows), numericalLabel);
+			// Truncate results
+			roisinResults.truncateResults();
+			Results results = resultsService.saveResultRules(roisinResults, process);
+
+			return createResultsModelAndView(results);
+		}
 	}
 
 	@RequestMapping(value = "/subgroup", method = RequestMethod.POST)
-	public ModelAndView subgroup(@ModelAttribute SubgroupSettings subgroupSettings) {
+	public ModelAndView subgroup(@ModelAttribute SubgroupSettings subgroupSettings,
+			BindingResult result) {
 
-		// Process
-		Process process = subgroupSettings.getProcess();
-		process = processService.saveProcessAlgorithm(process, ProcessConstants.SUBGROUP_DISCOVERY);
-		// Se vuelve a salvar por si se ha creado un proceso nuevo
-		subgroupSettings.setProcess(process);
-		subgroupSettings = subgroupSettingsService.save(subgroupSettings);
-		// Data and form
-		PreprocessedData data = process.getPreprocessedData();
-		PreprocessingForm form = data.getPreprocessingForm();
-		// Extracción de file de BD
-		File file = form.getFile();
-		String tmpPath = fileService.writeFileFromDb(file);
-		// Getting selected attributes and deleted rows
-		Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
-				.findSelectedAttributesByFormId(form.getId());
-		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form.getId());
-		// Roisin core is used to get RoisinResults
-		RoisinResults roisinResults = Runner.getSubgroupResults(subgroupSettings, tmpPath, process
-				.getLabel().getName(), form.getFilterCondition(), RoisinUtils
-				.getAttributesFromSelectedAttributes(selectedAttributes), RoisinUtils
-				.getRowsFromDeletedRows(deletedRows));
-		// Truncate results
-		roisinResults.truncateResults();
-		Results results = resultsService.saveResultRules(roisinResults, process);
+		subgroupValidator.validate(subgroupSettings, result);
 
-		return createResultsModelAndView(results);
+		if (result.hasErrors()) {
+			RipperSettings ripperSettings = ripperSettingsService.create();
+			ripperSettings.setProcess(subgroupSettings.getProcess());
+			TreeToRulesSettings treeSettings = treeToRulesSettingsService.create();
+			treeSettings.setProcess(subgroupSettings.getProcess());
+
+			ModelAndView res = new ModelAndView("process/create");
+			res.addObject("ripperSettings", ripperSettings);
+			res.addObject("subgroupSettings", subgroupSettings);
+			res.addObject("treeSettings", treeSettings);
+			res.addObject("error", ProcessConstants.SUBGROUP_DISCOVERY);
+
+			return res;
+		} else {
+			// Process
+			Process process = subgroupSettings.getProcess();
+			process = processService.saveProcessAlgorithm(process,
+					ProcessConstants.SUBGROUP_DISCOVERY);
+			// Se vuelve a salvar por si se ha creado un proceso nuevo
+			subgroupSettings.setProcess(process);
+			subgroupSettings = subgroupSettingsService.save(subgroupSettings);
+			// Data and form
+			PreprocessedData data = process.getPreprocessedData();
+			PreprocessingForm form = data.getPreprocessingForm();
+			// Extracción de file de BD
+			File file = form.getFile();
+			String tmpPath = fileService.writeFileFromDb(file);
+			// Getting selected attributes and deleted rows
+			Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
+					.findSelectedAttributesByFormId(form.getId());
+			Collection<DeletedRow> deletedRows = deletedRowService
+					.findFormDeletedRows(form.getId());
+			// Roisin core is used to get RoisinResults
+			RoisinResults roisinResults = Runner.getSubgroupResults(subgroupSettings, tmpPath,
+					process.getLabel().getName(), form.getFilterCondition(),
+					RoisinUtils.getAttributesFromSelectedAttributes(selectedAttributes),
+					RoisinUtils.getRowsFromDeletedRows(deletedRows));
+			// Truncate results
+			roisinResults.truncateResults();
+			Results results = resultsService.saveResultRules(roisinResults, process);
+
+			return createResultsModelAndView(results);
+		}
 	}
 
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
-	public ModelAndView tree(@ModelAttribute TreeToRulesSettings treeSettings) {
-		// Process
-		Process process = treeSettings.getProcess();
-		process = processService.saveProcessAlgorithm(process, ProcessConstants.TREE_TO_RULES);
-		// Se vuelve a salvar por si se ha creado un proceso nuevo
-		treeSettings.setProcess(process);
-		treeSettings = treeToRulesSettingsService.save(treeSettings);
-		// Data and form
-		PreprocessedData data = process.getPreprocessedData();
-		PreprocessingForm form = data.getPreprocessingForm();
-		// Extracción de file de BD
-		File file = form.getFile();
-		String tmpPath = fileService.writeFileFromDb(file);
-		// Getting selected attributes and deleted rows
-		Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
-				.findSelectedAttributesByFormId(form.getId());
-		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form.getId());
-		// Numerical label
-		boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet().getExampleTable()
-				.getAttributes(), process.getLabel().getName());
-		// Roisin core is used to get RoisinResults
-		RoisinResults roisinResults = Runner.getTreeToRulesResults(treeSettings, tmpPath, process
-				.getLabel().getName(), form.getFilterCondition(), RoisinUtils
-				.getAttributesFromSelectedAttributes(selectedAttributes), RoisinUtils
-				.getRowsFromDeletedRows(deletedRows), numericalLabel);
-		// Truncate results
-		roisinResults.truncateResults();
-		Results results = resultsService.saveResultRules(roisinResults, process);
+	public ModelAndView tree(@ModelAttribute TreeToRulesSettings treeSettings, BindingResult result) {
 
-		return createResultsModelAndView(results);
+		treeValidator.validate(treeSettings, result);
+
+		if (result.hasErrors()) {
+			RipperSettings ripperSettings = ripperSettingsService.create();
+			ripperSettings.setProcess(treeSettings.getProcess());
+			SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+			subgroupSettings.setProcess(treeSettings.getProcess());
+
+			ModelAndView res = new ModelAndView("process/create");
+			res.addObject("ripperSettings", ripperSettings);
+			res.addObject("subgroupSettings", subgroupSettings);
+			res.addObject("treeSettings", treeSettings);
+			res.addObject("error", ProcessConstants.TREE_TO_RULES);
+
+			return res;
+		} else {
+
+			// Process
+			Process process = treeSettings.getProcess();
+			process = processService.saveProcessAlgorithm(process, ProcessConstants.TREE_TO_RULES);
+			// Se vuelve a salvar por si se ha creado un proceso nuevo
+			treeSettings.setProcess(process);
+			treeSettings = treeToRulesSettingsService.save(treeSettings);
+			// Data and form
+			PreprocessedData data = process.getPreprocessedData();
+			PreprocessingForm form = data.getPreprocessingForm();
+			// Extracción de file de BD
+			File file = form.getFile();
+			String tmpPath = fileService.writeFileFromDb(file);
+			// Getting selected attributes and deleted rows
+			Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
+					.findSelectedAttributesByFormId(form.getId());
+			Collection<DeletedRow> deletedRows = deletedRowService
+					.findFormDeletedRows(form.getId());
+			// Numerical label
+			boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet()
+					.getExampleTable().getAttributes(), process.getLabel().getName());
+			// Roisin core is used to get RoisinResults
+			RoisinResults roisinResults = Runner.getTreeToRulesResults(treeSettings, tmpPath,
+					process.getLabel().getName(), form.getFilterCondition(),
+					RoisinUtils.getAttributesFromSelectedAttributes(selectedAttributes),
+					RoisinUtils.getRowsFromDeletedRows(deletedRows), numericalLabel);
+			// Truncate results
+			roisinResults.truncateResults();
+			Results results = resultsService.saveResultRules(roisinResults, process);
+
+			return createResultsModelAndView(results);
+		}
 	}
 
 	public ModelAndView createResultsModelAndView(Results results) {

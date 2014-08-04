@@ -125,6 +125,12 @@
 	<beans:bean id="fileValidator" class="com.roisin.spring.validator.FileValidator" />
 	
 	<beans:bean id="preproSimpleFormValidator" class="com.roisin.spring.validator.PreproSimpleFormValidator" />
+	
+	<beans:bean id="ripperSettingsValidator" class="com.roisin.spring.validator.RipperSettingsValidator" />
+	
+	<beans:bean id="subgroupSettingsValidator" class="com.roisin.spring.validator.SubgroupSettingsValidator" />
+	
+	<beans:bean id="treeSettingsValidator" class="com.roisin.spring.validator.TreeSettingsValidator" />
 
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />

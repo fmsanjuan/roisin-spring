@@ -51,7 +51,7 @@
 								<form:option value="k best rules" selected="selected" />
 								<form:option value="above minimum utility" />
 							</form:select>
-							<form:errors path="mode" />
+							<font color="red"><form:errors path="mode" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -72,7 +72,7 @@
 								<form:option value="Odds" />
 								<form:option value="Odds Ratio" />
 							</form:select>
-							<form:errors path="utilityFunction" />
+							<font color="red"><form:errors path="utilityFunction" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -83,7 +83,7 @@
 							<form:input type="text" class="form-control"
 								id="subgroupMinUtility" placeholder="Min Utility"
 								path="minUtility" />
-							<form:errors path="minUtility" />
+							<font color="red"><form:errors path="minUtility" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -94,7 +94,7 @@
 							<form:input type="text" class="form-control"
 								id="subgroupKBestRules" placeholder="k best rules"
 								path="kBestRules" />
-							<form:errors path="kBestRules" />
+							<font color="red"><form:errors path="kBestRules" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -109,7 +109,7 @@
 								<form:option value="prediction" />
 								<form:option value="both" selected="selected" />
 							</form:select>
-							<form:errors path="ruleGeneration" />
+							<font color="red"><form:errors path="ruleGeneration" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -119,7 +119,7 @@
 							<form:input type="text" class="form-control"
 								id="subgroupMaxDepthRules" placeholder="Max Depth"
 								path="maxDepth" />
-							<form:errors path="maxDepth" />
+							<font color="red"><form:errors path="maxDepth" /></font>
 						</div>
 					</div>
 					<div class="form-group">
@@ -130,7 +130,7 @@
 							<form:input type="text" class="form-control"
 								id="subgroupMinCoverage" placeholder="Min Coverage"
 								path="minCoverage" />
-							<form:errors path="minCoverage" />
+							<font color="red"><form:errors path="minCoverage" /></font>
 						</div>
 					</div>
 				</div>
