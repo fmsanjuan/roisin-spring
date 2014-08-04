@@ -132,10 +132,13 @@ public class PreprocessedDataController {
 		ExampleSet exampleSet = data.getExampleSet();
 		List<Example> examples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
 		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+		PreproSimpleForm form = new PreproSimpleForm();
+		form.setDataId(String.valueOf(dataId));
 
 		ModelAndView res = new ModelAndView("data/details");
 		res.addObject("examples", examples);
 		res.addObject("attributes", attributes);
+		res.addObject("form", form);
 		res.addObject("requestURI", "details?dataId=" + dataId);
 
 		return res;

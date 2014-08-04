@@ -13,9 +13,56 @@
 </div>
 <div class="container">
 	<div class="row">
+		<div class="col-md-2 col-md-offset-10">
+			<a href="#aboutProcessModal" data-toggle="modal"
+				data-target="#processModal"><button type="button"
+					class="btn btn-success btn-lg">Process Data</button> </a>
+			<div class="modal fade" id="processModal" tabindex="-1" role="dialog"
+				aria-labelledby="ripperModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true"></button>
+							<h4 class="modal-title" id="ripperModalLabel">Select label
+								and attributes</h4>
+						</div>
+						<form:form method="post" action="../process/create"
+							modelAttribute="form" role="form" class="horizontal-form">
+							<form:hidden path="dataId" />
+							<div class="modal-body">
+								<div class="row">
+									<div class="form-group">
+										<label for="labelSelect"
+											class="col-sm-4 col-sm-offset-1 control-label">Label</label>
+										<div class="col-sm-4">
+											<form:select class="form-control" id="labelSelect"
+												path="label">
+												<c:forEach items="${attributes }" var="attribute">
+													<form:option value="${attribute.getName() }" />
+												</c:forEach>
+											</form:select>
+										</div>
+									</div>
+								</div>
+								<br />
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">Go Back</button>
+								<form:button type="submit" name="process"
+									class="btn btn-default">Process Data</form:button>
+							</div>
+						</form:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
 		<display:table uid="examplesTable" keepStatus="false" name="examples"
-			pagesize="10" class="table table-hover"
-			requestURI="${requestURI}" id="row">
+			pagesize="10" class="table table-hover" requestURI="${requestURI}"
+			id="row">
 			<display:column title="#">
 				<c:out value="${row_rowNum}" />
 			</display:column>

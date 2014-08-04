@@ -26,7 +26,7 @@ public class RipperSettingsValidator implements Validator {
 		}
 
 		if (form.getSampleRatio().doubleValue() < 0.0 || form.getSampleRatio() > 1.0) {
-			errors.rejectValue("sampleRatio", "form.sampleRatio", "Must be betweeen 0 and 1");
+			errors.rejectValue("sampleRatio", "form.sampleRatio", "Must be between 0 and 1");
 		}
 
 		if (form.getPureness().doubleValue() < 0.0 || form.getPureness() > 1.0) {

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.googlecode.charts4j.XYLineChart;
 import com.roisin.core.results.RoisinResults;
+import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.model.DeletedRow;
 import com.roisin.spring.model.File;
 import com.roisin.spring.model.PreprocessedData;
@@ -296,6 +297,37 @@ public class ProcessController {
 		ModelAndView res = new ModelAndView("details/tree");
 		res.addObject("processes", processes);
 		res.addObject("dataName", data.getName());
+
+		return res;
+	}
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public ModelAndView create(@ModelAttribute PreproSimpleForm form) {
+		int dataId = Integer.parseInt(form.getDataId());
+		PreprocessedData data = preprocessedDataService.findOne(dataId);
+		// Finalmente se manda al usuario al formulario de proceso
+		processService.cleanTempProcesses(dataId);
+		// Creación del proceso
+		Process process = processService.create();
+		process.setPreprocessedData(data);
+		process.setAlgorithm("roisinnull");
+		// Se establece la label (clase) para este proceso
+		SelectedAttribute label = selectedAttributeService
+				.findLabel(data.getPreprocessingForm().getId(), form.getLabel()).iterator().next();
+		process.setLabel(label);
+		process = processService.save(process);
+		// Creación de los formularios
+		RipperSettings ripperSettings = ripperSettingsService.create();
+		ripperSettings.setProcess(process);
+		SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+		subgroupSettings.setProcess(process);
+		TreeToRulesSettings treeToRulesSettings = treeToRulesSettingsService.create();
+		treeToRulesSettings.setProcess(process);
+
+		ModelAndView res = new ModelAndView("process/create");
+		res.addObject("ripperSettings", ripperSettings);
+		res.addObject("subgroupSettings", subgroupSettings);
+		res.addObject("treeSettings", treeToRulesSettings);
 
 		return res;
 	}
