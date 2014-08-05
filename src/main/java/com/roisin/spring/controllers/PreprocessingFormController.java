@@ -84,8 +84,8 @@ public class PreprocessingFormController {
 		preform = preprocessingFormService.save(preform);
 
 		PreprocessedData data = preprocessedDataService.create();
-		data.setName("roisinnull");
-		data.setDescription("roisinnull");
+		data.setName(Constants.ROISIN_NULL);
+		data.setDescription(Constants.ROISIN_NULL);
 		data.setExampleSet(exampleSet);
 		data.setPreprocessingForm(preform);
 		data = preprocessedDataService.save(data);

@@ -62,7 +62,7 @@
 			<br />
 			<div class="row">
 				<div class="col-md-12 text-center">
-					<button class="btn btn-primary" type="submit" value="Upload">Upload</button>
+					<button class="btn btn-primary btn-lg" type="submit" value="Upload">Upload</button>
 				</div>
 			</div>
 		</div>

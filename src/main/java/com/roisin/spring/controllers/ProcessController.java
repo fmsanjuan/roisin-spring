@@ -37,6 +37,7 @@ import com.roisin.spring.services.RuleService;
 import com.roisin.spring.services.SelectedAttributeService;
 import com.roisin.spring.services.SubgroupSettingsService;
 import com.roisin.spring.services.TreeToRulesSettingsService;
+import com.roisin.spring.utils.Constants;
 import com.roisin.spring.utils.ProcessConstants;
 import com.roisin.spring.utils.RoisinUtils;
 import com.roisin.spring.utils.Runner;
@@ -310,7 +311,7 @@ public class ProcessController {
 		// Creación del proceso
 		Process process = processService.create();
 		process.setPreprocessedData(data);
-		process.setAlgorithm("roisinnull");
+		process.setAlgorithm(Constants.ROISIN_NULL);
 		// Se establece la label (clase) para este proceso
 		SelectedAttribute label = selectedAttributeService
 				.findLabel(data.getPreprocessingForm().getId(), form.getLabel()).iterator().next();

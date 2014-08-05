@@ -64,4 +64,6 @@ public interface Constants {
 
 	final static String ERROR = "Error";
 
+	final static String ROISIN_NULL = "roisinnull";
+
 }

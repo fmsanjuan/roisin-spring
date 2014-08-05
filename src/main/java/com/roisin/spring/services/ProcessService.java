@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.roisin.spring.model.Process;
 import com.roisin.spring.model.SelectedAttribute;
 import com.roisin.spring.repositories.ProcessRepository;
+import com.roisin.spring.utils.Constants;
 
 @Service
 @Transactional
@@ -49,7 +50,7 @@ public class ProcessService {
 	// Extra methods
 
 	public Process saveProcessAlgorithm(Process process, String algorithm) {
-		if (process.getAlgorithm().equals("roisinnull")) {
+		if (process.getAlgorithm().equals(Constants.ROISIN_NULL)) {
 			process.setAlgorithm(algorithm);
 			return save(process);
 		} else {

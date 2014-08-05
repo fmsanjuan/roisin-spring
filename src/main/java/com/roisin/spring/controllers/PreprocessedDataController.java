@@ -202,7 +202,7 @@ public class PreprocessedDataController {
 			// Creación del proceso
 			Process process = processService.create();
 			process.setPreprocessedData(data);
-			process.setAlgorithm("roisinnull");
+			process.setAlgorithm(Constants.ROISIN_NULL);
 			// Se establece la label (clase) para este proceso
 			SelectedAttribute label = selectedAttributeService
 					.findLabel(storedForm.getId(), form.getLabel()).iterator().next();
