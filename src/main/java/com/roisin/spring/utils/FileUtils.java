@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.Files;
 import com.roisin.spring.model.File;
 
 public class FileUtils {
@@ -22,6 +23,17 @@ public class FileUtils {
 		} catch (IOException e) {
 			logger.error("No ha sido posible recuperar el fichero de base de datos para almacenarlo en el servidor");
 		}
+	}
+
+	public static byte[] getFileFromPath(String path) {
+		byte fileContent[] = null;
+		try {
+			java.io.File file = new java.io.File(path);
+			fileContent = Files.toByteArray(file);
+		} catch (IOException e) {
+			logger.error("No ha sido posible recuperar el fichero del servidor");
+		}
+		return fileContent;
 	}
 
 	public static String getFileFormat(File file) {

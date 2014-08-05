@@ -50,6 +50,8 @@ public interface Constants {
 
 	final static String DOWNLOAD_PATH = "/Users/felix/03.TFG/pruebafiles/downloads/";
 
+	final static String CONVERT_PATH = "/Users/felix/03.TFG/pruebafiles/convert/";
+
 	final static String FORMAT_XLSX = "xlsx";
 
 	final static String FORMAT_XLS = "xls";

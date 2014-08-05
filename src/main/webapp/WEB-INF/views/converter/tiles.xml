@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+	<definition name="converter/create" extends="base.definition">
+		<put-attribute name="title" value="Data Converter" />
+		<put-attribute name="body" value="/WEB-INF/views/converter/converter.jsp" />
+	</definition>
+</tiles-definitions>

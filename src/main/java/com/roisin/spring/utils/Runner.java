@@ -179,6 +179,9 @@ public class Runner {
 	}
 
 	public static ExampleSet getRequestedExamples(String inputPath, String filterCondition) {
+
+		checkStarted();
+
 		Process process = com.roisin.core.processes.Preprocessing.getConditionFilteredData(
 				inputPath, filterCondition);
 		IOContainer container;
@@ -191,6 +194,99 @@ public class Runner {
 			logger.error("No ha sido posible extraer información del fichero");
 		}
 		return res;
+	}
+
+	public static void convertFile(String inputFormat, String outputFormat, String inputPath,
+			String outputPath) {
+
+		checkStarted();
+
+		Process process = null;
+
+		if ((inputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX) || inputFormat
+				.equalsIgnoreCase(Constants.FORMAT_XLSX))
+				&& outputFormat.equals(Constants.FORMAT_CSV)) {
+			process = com.roisin.core.processes.DataTransformation.convertExcelToCsv(inputPath,
+					outputPath);
+		}
+
+		if ((inputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX) || inputFormat
+				.equalsIgnoreCase(Constants.FORMAT_XLSX))
+				&& outputFormat.equals(Constants.FORMAT_ARFF)) {
+			process = com.roisin.core.processes.DataTransformation.convertExcelToArff(inputPath,
+					outputPath);
+		}
+
+		if ((inputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX) || inputFormat
+				.equalsIgnoreCase(Constants.FORMAT_XLSX))
+				&& outputFormat.equals(Constants.FORMAT_XRFF)) {
+			process = com.roisin.core.processes.DataTransformation.convertExcelToXrff(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_XRFF)
+				&& (outputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX) || outputFormat
+						.equalsIgnoreCase(Constants.FORMAT_XLSX))) {
+			process = com.roisin.core.processes.DataTransformation.convertXrffToExcel(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_XRFF)
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_CSV)) {
+			process = com.roisin.core.processes.DataTransformation.convertXrffToCsv(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_XRFF)
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_ARFF)) {
+			process = com.roisin.core.processes.DataTransformation.convertXrffToArff(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_ARFF)
+				&& (outputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX) || outputFormat
+						.equalsIgnoreCase(Constants.FORMAT_XLSX))) {
+			process = com.roisin.core.processes.DataTransformation.convertArffToExcel(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_ARFF)
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_CSV)) {
+			process = com.roisin.core.processes.DataTransformation.convertArffToCsv(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_ARFF)
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_XRFF)) {
+			process = com.roisin.core.processes.DataTransformation.convertArffToXrff(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_CSV)
+				&& (outputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX) || outputFormat
+						.equalsIgnoreCase(Constants.FORMAT_XLSX))) {
+			process = com.roisin.core.processes.DataTransformation.convertCsvToExcel(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_CSV)
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_XRFF)) {
+			process = com.roisin.core.processes.DataTransformation.convertCsvToXrff(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_CSV)
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_ARFF)) {
+			process = com.roisin.core.processes.DataTransformation.convertCsvToArff(inputPath,
+					outputPath);
+		}
+
+		try {
+			process.run();
+		} catch (OperatorException e) {
+			logger.error("No ha sido posible convertir el fichero", e);
+		}
+
 	}
 
 	public static void startRapidminer() {

@@ -18,6 +18,7 @@
 		<value>/WEB-INF/views/preform/tiles.xml</value>
 		<value>/WEB-INF/views/process/tiles.xml</value>
 		<value>/WEB-INF/views/rule/tiles.xml</value>
+		<value>/WEB-INF/views/converter/tiles.xml</value>
 	</util:list>
 
 </beans>

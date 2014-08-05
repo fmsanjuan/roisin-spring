@@ -14,9 +14,8 @@
 		</div>
 		<ul class="nav navbar-nav">
 			<security:authorize access="hasRole('USER')">
-				<li><a href="/file/list">File</a></li>
-				<li><a href="/data/list">Data</a></li>
-				<li><a href="#">Results</a></li>
+				<li><a href="/file/list">My Files</a></li>
+				<li><a href="/converter/create">Format Converter</a></li>
 			</security:authorize>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">

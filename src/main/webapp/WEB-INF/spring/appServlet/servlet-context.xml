@@ -131,7 +131,9 @@
 	<beans:bean id="subgroupSettingsValidator" class="com.roisin.spring.validator.SubgroupSettingsValidator" />
 	
 	<beans:bean id="treeSettingsValidator" class="com.roisin.spring.validator.TreeSettingsValidator" />
-
+	
+	<beans:bean id="fileConverterValidator" class="com.roisin.spring.validator.FileConverterValidator" />
+	
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 

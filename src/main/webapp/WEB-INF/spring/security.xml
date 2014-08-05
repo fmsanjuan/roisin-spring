@@ -40,6 +40,8 @@
 			access="hasRole('USER')" />
 		<security:intercept-url pattern="/results/**"
 			access="hasRole('USER')" />
+		<security:intercept-url pattern="/converter/**"
+			access="hasRole('USER')" />
 
 		<security:form-login login-page="/security/login"
 			password-parameter="password" username-parameter="username"
