@@ -45,10 +45,17 @@
 							<form:errors class="error" path="username" />
 						</div>
 						<div class="row">
-
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<input type="submit" class="btn btn-lg btn-success btn-block"
 									value="Sign In" />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<a href="signup/"> <input
+									class="btn btn-lg btn-primary btn-block" type="button"
+									value="Sign Up" onclick="self.location.href = signup/" /></a>
 							</div>
 						</div>
 						<br />
@@ -58,10 +65,11 @@
 						</c:if>
 						<c:if test="${showError == false}">
 							<br />
-						<br />
-						<br />
-						<br />
-						<br /> <br />
+							<br />
+							<br />
+							<br />
+							<br />
+							<br />
 						</c:if>
 					</fieldset>
 				</form:form>
