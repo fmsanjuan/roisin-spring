@@ -11,6 +11,14 @@
 	</h1>
 </div>
 
+<style>
+.colorgraph {
+	height: 5px;
+	border-top: 0;
+	background: #993232;
+	border-radius: 5px;
+}
+</style>
 
 <div class="container">
 	<div class="row" style="margin-top: 20px">
@@ -24,14 +32,8 @@
 							<div class="alert alert-danger alert-dismissable">
 								<button type="button" class="close" data-dismiss="alert"
 									aria-hidden="true">&times;</button>
-								<strong>Error! </strong>
-								${errorMessage }
-								<form:errors path="name" />
-								<form:errors path="surname" />
-								<form:errors path="email" />
-								<form:errors path="password" />
-								<form:errors path="city" />
-								<form:errors path="nationality" />
+								<strong>Error! </strong><br /> ${errorMessage }
+								<form:errors path="*" />
 							</div>
 						</div>
 					</c:if>
@@ -39,45 +41,51 @@
 					<div class="form-group">
 						<form:input path="name" type="text" name="name" id="name"
 							class="form-control input-lg" placeholder="Name" />
-						<form:errors class="error" path="name" />
 					</div>
 					<div class="form-group">
 						<form:input path="surname" type="text" name="surname" id="surname"
 							class="form-control input-lg" placeholder="Surname" />
-						<form:errors class="error" path="surname" />
 					</div>
 					<div class="form-group">
 						<form:input path="email" type="email" name="email" id="email"
 							class="form-control input-lg" placeholder="Email" />
-						<form:errors class="error" path="email" />
 					</div>
-					<div class="form-group">
-						<form:input path="password" type="password" name="password"
-							id="password" class="form-control input-lg"
-							placeholder="Password" />
-						<form:errors class="error" path="password" />
+					<hr class="colorgraph">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<form:input path="password" type="password" name="password"
+									id="password" class="form-control input-lg"
+									placeholder="Password" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<form:input path="repeatPassword" type="password"
+									name="repeatPassword" id="repeatPassword"
+									class="form-control input-lg" placeholder="Repeat Password" />
+							</div>
+						</div>
 					</div>
-					<div class="form-group">
-						<form:input path="repeatPassword" type="password"
-							name="repeatPassword" id="repeatPassword"
-							class="form-control input-lg" placeholder="Repeat Password" />
-						<form:errors class="error" path="repeatPassword" />
-					</div>
-					<div class="form-group">
-						<form:input path="city" type="text" name="city" id="city"
-							class="form-control input-lg" placeholder="City" />
-						<form:errors class="error" path="city" />
-					</div>
-					<div class="form-group">
-						<form:input path="nationality" type="text" name="nationality"
-							id="nationality" class="form-control input-lg"
-							placeholder="Nationality" />
-						<form:errors class="error" path="nationality" />
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<form:input path="city" type="text" name="city" id="city"
+									class="form-control input-lg" placeholder="City" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<form:input path="nationality" type="text" name="nationality"
+									id="nationality" class="form-control input-lg"
+									placeholder="Nationality" />
+							</div>
+						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12">
 							<input type="submit" class="btn btn-lg btn-success btn-block"
-								value="Sign In" />
+								value="Sign Up" />
 						</div>
 					</div>
 				</fieldset>

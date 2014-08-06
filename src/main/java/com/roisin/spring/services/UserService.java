@@ -137,9 +137,6 @@ public class UserService {
 		user.getUserAccount().setUsername(form.getEmail());
 		user.getUserAccount().setPassword(form.getPassword());
 
-		Assert.isTrue(user.getUserAccount().getPassword().equals(form.getRepeatPassword()),
-				"Passwords are different");
-
 		return user;
 	}
 

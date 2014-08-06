@@ -13,6 +13,7 @@ import com.roisin.spring.forms.SignupForm;
 import com.roisin.spring.model.User;
 import com.roisin.spring.security.Credentials;
 import com.roisin.spring.services.UserService;
+import com.roisin.spring.validator.SignupFormValidator;
 
 @Controller
 @RequestMapping("/signup")
@@ -20,6 +21,9 @@ public class SignupController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private SignupFormValidator formValidator;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView newUser() {
@@ -31,7 +35,9 @@ public class SignupController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public ModelAndView save(@ModelAttribute SignupForm form, BindingResult result) {
+	public ModelAndView save(@ModelAttribute("form") SignupForm form, BindingResult result) {
+
+		formValidator.validate(form, result);
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("signup/new");
@@ -45,12 +51,12 @@ public class SignupController {
 
 				ModelAndView res = new ModelAndView("welcome/home");
 				res.addObject("credentials", new Credentials());
+				res.addObject("successMessage", "The user " + user.getEmail()
+						+ " has been registered");
 				return res;
 			} catch (Throwable oops) {
 				ModelAndView res;
-				if (oops.getMessage().equals("Passwords are different")) {
-					res = createEditModelAndViewCustomer(form, "Passwords are different");
-				} else if (oops instanceof DataIntegrityViolationException) {
+				if (oops instanceof DataIntegrityViolationException) {
 					res = createEditModelAndViewCustomer(form, "Duplicated email");
 				} else {
 					res = createEditModelAndViewCustomer(form, "Error");

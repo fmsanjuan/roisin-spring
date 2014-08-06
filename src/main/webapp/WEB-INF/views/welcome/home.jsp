@@ -24,6 +24,14 @@
 </style>
 
 	<div class="container">
+		<c:if test="${successMessage != null}">
+			<div
+				class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 alert alert-success alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-hidden="true">&times;</button>
+				${successMessage }
+			</div>
+		</c:if>
 		<div class="row" style="margin-top: 20px">
 			<div
 				class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
@@ -34,8 +42,7 @@
 						<hr class="colorgraph">
 						<div class="form-group">
 							<form:input path="username" type="text" name="username"
-								id="username" class="form-control input-lg"
-								placeholder="Username" />
+								id="username" class="form-control input-lg" placeholder="Email" />
 							<form:errors class="error" path="username" />
 						</div>
 						<div class="form-group">
@@ -53,9 +60,9 @@
 						<br />
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
-								<a href="signup/"> <input
+								<a href="/signup/"> <input
 									class="btn btn-lg btn-primary btn-block" type="button"
-									value="Sign Up" onclick="self.location.href = signup/" /></a>
+									value="Sign Up" onclick="self.location.href = /signup/" /></a>
 							</div>
 						</div>
 						<br />
