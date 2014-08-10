@@ -63,7 +63,7 @@ public class PreprocessedData extends DomainEntity {
 		this.exampleSet = exampleSet;
 	}
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	public PreprocessingForm getPreprocessingForm() {
 		return preprocessingForm;
 	}
