@@ -76,4 +76,12 @@ public class PreprocessingFormService {
 		return preprocessingFormRepository.findFormsByFileId(fileId);
 	}
 
+	public Collection<PreprocessingForm> findNullDataForms(int fileId) {
+		return preprocessingFormRepository.findNullDataForms(fileId);
+	}
+
+	public void deleteNullDataForms(Collection<PreprocessingForm> forms) {
+		preprocessingFormRepository.deleteInBatch(forms);
+	}
+
 }

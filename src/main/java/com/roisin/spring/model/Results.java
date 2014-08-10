@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -36,7 +37,7 @@ public class Results extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@OneToMany(mappedBy = "results")
+	@OneToMany(mappedBy = "results", cascade = CascadeType.ALL)
 	public Collection<Rule> getRules() {
 		return rules;
 	}

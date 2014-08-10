@@ -15,4 +15,7 @@ public interface PreprocessingFormRepository extends JpaRepository<Preprocessing
 	@Query("select f from PreprocessingForm f where f.file.id = ?1")
 	Collection<PreprocessingForm> findFormsByFileId(int fileId);
 
+	@Query("select pf from PreprocessingForm pf join pf.preprocessedData pd where pf.file.id = ?1 and pd.name = 'roisinnull' and pd.description = 'roisinnull'")
+	Collection<PreprocessingForm> findNullDataForms(int fileId);
+
 }

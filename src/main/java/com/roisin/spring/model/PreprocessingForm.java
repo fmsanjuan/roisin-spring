@@ -51,7 +51,7 @@ public class PreprocessingForm extends DomainEntity {
 	}
 
 	@Valid
-	@OneToMany(mappedBy = "preprocessingForm")
+	@OneToMany(mappedBy = "preprocessingForm", cascade = CascadeType.ALL)
 	public Collection<SelectedAttribute> getSelectedAttributes() {
 		return selectedAttributes;
 	}

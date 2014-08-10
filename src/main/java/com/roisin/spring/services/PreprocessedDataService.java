@@ -16,6 +16,9 @@ public class PreprocessedDataService {
 	@Autowired
 	private PreprocessedDataRepository preprocessedDataRepository;
 
+	@Autowired
+	private PreprocessingFormService preprocessingFormService;
+
 	public PreprocessedDataService() {
 		super();
 	}
@@ -46,16 +49,6 @@ public class PreprocessedDataService {
 
 	public Collection<PreprocessedData> findDataByFileId(int fileId) {
 		return preprocessedDataRepository.findDataByFileId(fileId);
-	}
-
-	public Collection<PreprocessedData> findNullData(int fileId) {
-		return preprocessedDataRepository.findNullDataByFileId(fileId);
-	}
-
-	public void deleteNullData(Collection<PreprocessedData> nullData) {
-		for (PreprocessedData preprocessedData : nullData) {
-			delete(preprocessedData);
-		}
 	}
 
 }

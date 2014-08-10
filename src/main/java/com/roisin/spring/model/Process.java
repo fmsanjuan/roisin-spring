@@ -41,7 +41,7 @@ public class Process extends DomainEntity {
 		this.algorithm = algorithm;
 	}
 
-	@OneToOne(mappedBy = "process", optional = true)
+	@OneToOne(mappedBy = "process", optional = true, cascade = CascadeType.ALL)
 	public RipperSettings getRipperSettings() {
 		return ripperSettings;
 	}
@@ -50,7 +50,7 @@ public class Process extends DomainEntity {
 		this.ripperSettings = ripperSettings;
 	}
 
-	@OneToOne(mappedBy = "process", optional = true)
+	@OneToOne(mappedBy = "process", optional = true, cascade = CascadeType.ALL)
 	public SubgroupSettings getSubgroupSettings() {
 		return subgroupSettings;
 	}
@@ -59,7 +59,7 @@ public class Process extends DomainEntity {
 		this.subgroupSettings = subgroupSettings;
 	}
 
-	@OneToOne(mappedBy = "process", optional = true)
+	@OneToOne(mappedBy = "process", optional = true, cascade = CascadeType.ALL)
 	public TreeToRulesSettings getTreeToRulesSettings() {
 		return treeToRulesSettings;
 	}
@@ -89,7 +89,7 @@ public class Process extends DomainEntity {
 	}
 
 	@Valid
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true, cascade = CascadeType.ALL)
 	public SelectedAttribute getLabel() {
 		return label;
 	}
