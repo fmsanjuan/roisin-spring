@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 
 import com.roisin.spring.controllers.HomeController;
 
@@ -48,5 +49,12 @@ public class HashUtils {
 			logger.error("No ha sido posible recuperar el número de bytes del DigestedInputStream.");
 		}
 		return checkSum;
+	}
+
+	public static String passwordEncoder(String password) {
+		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		String hash = encoder.encodePassword(password, null);
+
+		return hash;
 	}
 }

@@ -3,12 +3,14 @@ package com.roisin.spring.services;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.roisin.spring.forms.EditProfileForm;
 import com.roisin.spring.forms.SignupForm;
 import com.roisin.spring.model.User;
 import com.roisin.spring.repositories.UserRepository;
@@ -92,16 +94,14 @@ public class UserService {
 		return user;
 	}
 
-	public void save(User user) {
+	public void save(User user, boolean passwordEncode) {
 		Assert.notNull(user);
-
-		encoder = new Md5PasswordEncoder();
-
-		String oldPassword = user.getUserAccount().getPassword();
-		String newPassword = encoder.encodePassword(oldPassword, null);
-
-		user.getUserAccount().setPassword(newPassword);
-
+		if (passwordEncode) {
+			encoder = new Md5PasswordEncoder();
+			String oldPassword = user.getUserAccount().getPassword();
+			String newPassword = encoder.encodePassword(oldPassword, null);
+			user.getUserAccount().setPassword(newPassword);
+		}
 		userRepository.save(user);
 	}
 
@@ -122,6 +122,22 @@ public class UserService {
 		return form;
 	}
 
+	public EditProfileForm constructEditForm() {
+
+		EditProfileForm form = new EditProfileForm();
+		User user = findByPrincipal();
+
+		form.setCity(user.getCity());
+		form.setEmail(user.getUserAccount().getUsername());
+		form.setId(user.getId());
+		form.setName(user.getName());
+		form.setNationality(user.getNationality());
+		form.setSurname(user.getSurname());
+		form.setVersion(user.getVersion());
+
+		return form;
+	}
+
 	public User reconstruct(SignupForm form) {
 
 		User user = create();
@@ -136,6 +152,26 @@ public class UserService {
 
 		user.getUserAccount().setUsername(form.getEmail());
 		user.getUserAccount().setPassword(form.getPassword());
+
+		return user;
+	}
+
+	public User reconstruct(EditProfileForm form) {
+
+		User user = findByPrincipal();
+
+		user.setCity(form.getCity());
+		user.setEmail(form.getEmail());
+		user.setId(form.getId());
+		user.setName(form.getName());
+		user.setNationality(form.getNationality());
+		user.setSurname(form.getSurname());
+		user.setVersion(form.getVersion());
+
+		user.getUserAccount().setUsername(form.getEmail());
+		if (StringUtils.isNotBlank(form.getNewPassword())) {
+			user.getUserAccount().setPassword(form.getNewPassword());
+		}
 
 		return user;
 	}

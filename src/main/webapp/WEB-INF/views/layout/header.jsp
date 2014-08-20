@@ -19,17 +19,16 @@
 			</security:authorize>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-
-			<security:authorize access="hasRole('ADMIN')">
-				<li><a href="#"><security:authentication
-							property="principal.username" /></a></li>
-			</security:authorize>
-			<security:authorize access="hasRole('USER')">
-				<li><a href="#"><security:authentication
-							property="principal.username" /></a></li>
-			</security:authorize>
 			<security:authorize access="isAuthenticated()">
-				<li><a href="/j_spring_security_logout">Logout</a></li>
+				<li class="dropdown"><a class="fNiv dropdown-toggle"
+					data-toggle="dropdown"> <security:authentication
+							property="principal.username" />
+				</a>
+					<ul class="dropdown-menu">
+						<li class="arrow"></li>
+						<li><a href="/signup/edit">Edit Profile</a></li>
+						<li><a href="/j_spring_security_logout">Logout</a></li>
+					</ul></li>
 			</security:authorize>
 			<li><a href="#">Help</a></li>
 		</ul>
