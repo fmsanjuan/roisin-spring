@@ -180,19 +180,20 @@
 								<div class="row">
 									<div class="form-group">
 										<label for="attributeSelectionSelect"
-											class="col-md-4 col-md-offset-2 control-label">Name</label>
+											class="col-md-4 col-md-offset-1 control-label">Name</label>
 										<div class="col-md-5">
 											<form:input type="text" path="name" class="form-control" />
 											<form:errors path="name" />
 										</div>
 									</div>
 								</div>
+								<br />
 								<div class="row">
 									<div class="form-group">
 										<label for="attributeSelectionSelect"
-											class="col-md-4 col-md-offset-2 control-label">Description</label>
+											class="col-md-4 col-md-offset-1 control-label">Description</label>
 										<div class="col-md-5">
-											<form:input type="text" path="description"
+											<form:textarea type="text" path="description"
 												class="form-control" />
 											<form:errors path="description" />
 										</div>

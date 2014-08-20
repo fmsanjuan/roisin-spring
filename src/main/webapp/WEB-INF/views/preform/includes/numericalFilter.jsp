@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-4 col-md-offset-1">
 				<form:select path="filterAttribute" class="form-control"
 					id="nominalFilterSelect">
 					<c:forEach items="${attributes }" var="attribute">
@@ -30,14 +30,14 @@
 					<form:option value="st">smaller</form:option>
 				</form:select>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-2">
 				<form:input path="filterValue" type="text" class="form-control"
 					placeholder="value" />
 			</div>
 		</div>
 		<br />
 		<div class="row">
-			<div class="col-md-offset-9">
+			<div class="col-md-offset-8">
 				<form:button type="submit" name="filter" value="Filter"
 					class="btn btn-default btn-md">Delete Numerical</form:button>
 			</div>
