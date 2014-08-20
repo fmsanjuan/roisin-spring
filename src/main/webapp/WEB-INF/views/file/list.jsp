@@ -15,7 +15,8 @@
 <div class="container">
 	<c:if test="${successMessage != null}">
 		<div class="row">
-			<div class="alert alert-success alert-dismissable col-md-4 col-md-offset-4">
+			<div
+				class="alert alert-success alert-dismissable col-md-4 col-md-offset-4">
 				<button type="button" class="close" data-dismiss="alert"
 					aria-hidden="true">&times;</button>
 				<strong>Success! </strong><br /> ${successMessage }
@@ -71,7 +72,35 @@
 			<br />
 			<div class="row">
 				<div class="col-md-12 text-center">
-					<button class="btn btn-primary btn-lg" type="submit" value="Upload">Upload</button>
+					<a href="#uploadModal" data-toggle="modal"
+						data-target="#uploadModal"><button type="button"
+							class="btn btn-primary btn-lg">Upload</button> </a>
+					<div class="modal fade" id="uploadModal" tabindex="-1"
+						role="dialog" aria-labelledby="uploadModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"
+										aria-hidden="true"></button>
+									<h4 class="modal-title" id="uploadModalLabel">File format
+										confirmation</h4>
+								</div>
+								<div class="modal-body">
+									<div class="row"></div>
+									<p>Does your file have the attribute names in the first
+										row?</p>
+									<br />
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger"
+										data-dismiss="modal">No</button>
+									<button type="submit" class="btn btn-success"
+										value="Upload">Yes</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
