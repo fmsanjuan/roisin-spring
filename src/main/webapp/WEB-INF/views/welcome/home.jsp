@@ -88,11 +88,30 @@
 </security:authorize>
 
 <security:authorize access="hasRole('USER')">
-Hey there!
-<br />
-	<a href="file/list">My Files</a>
-	<br />
-	<a href="data/list">My Data</a>
+	<div class="container">
+		<h4 class="text-center">You've just logged into Roisin.</h4>
+		<div class="col-md-4 col-md-offset-4">
+			<br />
+			<h2 class="text-center">Association rules</h2>
+			<br />
+			<p class="text-center">
+				If you want to start processing your data to get association rules.
+				<b>First things first!</b> Upload or use a file you're already
+				uploaded
+			</p>
+			<a href="/file/list"> <input
+				class="btn btn-lg btn-primary btn-block" type="button"
+				value="My Files" onclick="self.location.href = /file/list" /></a> <br />
+			<h2 class="text-center">Data conversion</h2>
+			<br />
+			<p class="text-center">If you just want to convert your files.</p>
+
+			<a href="/converter/create"> <input
+				class="btn btn-lg btn-primary btn-block" type="button"
+				value="Data Converter"
+				onclick="self.location.href = /converter/create" /></a>
+		</div>
+	</div>
 </security:authorize>
 
 <br />
