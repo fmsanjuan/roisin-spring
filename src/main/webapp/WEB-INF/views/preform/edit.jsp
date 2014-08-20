@@ -193,7 +193,7 @@
 										<label for="attributeSelectionSelect"
 											class="col-md-4 col-md-offset-1 control-label">Description</label>
 										<div class="col-md-5">
-											<form:textarea type="text" path="description"
+											<form:textarea path="description"
 												class="form-control" />
 											<form:errors path="description" />
 										</div>
