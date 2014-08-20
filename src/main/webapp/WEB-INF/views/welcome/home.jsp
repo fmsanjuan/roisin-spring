@@ -89,7 +89,6 @@
 
 <security:authorize access="hasRole('USER')">
 	<div class="container">
-		<h4 class="text-center">You've just logged into Roisin.</h4>
 		<div class="col-md-4 col-md-offset-4">
 			<br />
 			<h2 class="text-center">Association rules</h2>

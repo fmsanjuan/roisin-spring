@@ -45,7 +45,6 @@
 								<button type="button" class="close" data-dismiss="alert"
 									aria-hidden="true">&times;</button>
 								<strong>Success! </strong><br /> ${successMessage }
-								<form:errors path="*" />
 							</div>
 						</div>
 					</c:if>

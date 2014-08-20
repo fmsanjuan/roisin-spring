@@ -43,7 +43,7 @@ public class FileController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 
-		return createListModelAndView(false);
+		return createListModelAndView(false, null);
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -54,7 +54,7 @@ public class FileController {
 		fileValidator.validate(uploadedFile, result);
 
 		if (result.hasErrors()) {
-			return createListModelAndView(true);
+			return createListModelAndView(true, null);
 		} else {
 			File roisinFile = fileService.create();
 			roisinFile.setName(file.getOriginalFilename());
@@ -68,8 +68,10 @@ public class FileController {
 			}
 			roisinFile.setUser(userService.findByPrincipal());
 			fileService.save(roisinFile);
+			String successMessage = "The file " + file.getOriginalFilename()
+					+ " has been successfully uploaded!";
 
-			return list();
+			return createListModelAndView(false, successMessage);
 		}
 	}
 
@@ -77,11 +79,12 @@ public class FileController {
 	public ModelAndView delete(@RequestParam int fileId) {
 		File file = fileService.findOne(fileId);
 		fileService.delete(file);
+		String successMessage = "The file " + file.getName() + " has been deleted.";
 
-		return list();
+		return createListModelAndView(false, successMessage);
 	}
 
-	public ModelAndView createListModelAndView(boolean error) {
+	public ModelAndView createListModelAndView(boolean error, String successMessage) {
 
 		User user = userService.findByPrincipal();
 		Collection<File> files = fileService.findFilesByUserId(user.getId());
@@ -91,6 +94,7 @@ public class FileController {
 		res.addObject("requestURI", "list");
 		res.addObject("form", new DataViewForm());
 		res.addObject("error", error);
+		res.addObject("successMessage", successMessage);
 
 		return res;
 	}

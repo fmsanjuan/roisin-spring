@@ -13,6 +13,15 @@
 </div>
 
 <div class="container">
+	<c:if test="${successMessage != null}">
+		<div class="row">
+			<div class="alert alert-success alert-dismissable col-md-4 col-md-offset-4">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-hidden="true">&times;</button>
+				<strong>Success! </strong><br /> ${successMessage }
+			</div>
+		</div>
+	</c:if>
 	<display:table uid="filesTable" keepStatus="false" name="files"
 		pagesize="5" class="table table-hover" requestURI="${requestURI}"
 		id="row">
@@ -20,7 +29,7 @@
 		<display:column>
 			<form:form method="post" action="../data/view" modelAttribute="form"
 				role="form" class="horizontal-form">
-				<form:hidden path="fileId" value="${row.getId() }"/>
+				<form:hidden path="fileId" value="${row.getId() }" />
 				<form:button type="submit" class="btn btn-default">View Data</form:button>
 			</form:form>
 		</display:column>
