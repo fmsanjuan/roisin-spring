@@ -8,7 +8,7 @@
 
 <div class="page-header text-center">
 	<h1>
-		My Files <small>Upload your data</small>
+		Format Converter <small>Change the format of your files</small>
 	</h1>
 </div>
 
@@ -47,7 +47,8 @@
 								<div class="col-md-3">
 									<form:select path="outputFormat" class="form-control"
 										id="outputFormatId">
-										<form:option value="xlsx">Excel</form:option>
+										<form:option value="xlsx">xlsx</form:option>
+										<form:option value="xlsx">xls</form:option>
 										<form:option value="csv">CSV</form:option>
 										<form:option value="arff">Arff</form:option>
 										<form:option value="xrff">Xrff</form:option>
@@ -59,7 +60,7 @@
 						<div class="row">
 							<div class="col-md-12 text-center">
 								<button class="btn btn-primary btn-lg" type="submit"
-									value="Upload">Upload</button>
+									value="Convert File">Convert File</button>
 							</div>
 						</div>
 					</div>

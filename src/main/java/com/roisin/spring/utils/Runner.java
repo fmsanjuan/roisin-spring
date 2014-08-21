@@ -225,9 +225,14 @@ public class Runner {
 		}
 
 		if (inputFormat.equals(Constants.FORMAT_XRFF)
-				&& (outputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX) || outputFormat
-						.equalsIgnoreCase(Constants.FORMAT_XLSX))) {
-			process = com.roisin.core.processes.DataTransformation.convertXrffToExcel(inputPath,
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX)) {
+			process = com.roisin.core.processes.DataTransformation.convertXrffToXlsx(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_XRFF)
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_XLS)) {
+			process = com.roisin.core.processes.DataTransformation.convertXrffToXls(inputPath,
 					outputPath);
 		}
 
@@ -244,9 +249,14 @@ public class Runner {
 		}
 
 		if (inputFormat.equals(Constants.FORMAT_ARFF)
-				&& (outputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX) || outputFormat
-						.equalsIgnoreCase(Constants.FORMAT_XLSX))) {
-			process = com.roisin.core.processes.DataTransformation.convertArffToExcel(inputPath,
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX)) {
+			process = com.roisin.core.processes.DataTransformation.convertArffToXlsx(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_ARFF)
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_XLS)) {
+			process = com.roisin.core.processes.DataTransformation.convertArffToXls(inputPath,
 					outputPath);
 		}
 
@@ -263,9 +273,14 @@ public class Runner {
 		}
 
 		if (inputFormat.equals(Constants.FORMAT_CSV)
-				&& (outputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX) || outputFormat
-						.equalsIgnoreCase(Constants.FORMAT_XLSX))) {
-			process = com.roisin.core.processes.DataTransformation.convertCsvToExcel(inputPath,
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_XLSX)) {
+			process = com.roisin.core.processes.DataTransformation.convertCsvToXlsx(inputPath,
+					outputPath);
+		}
+
+		if (inputFormat.equals(Constants.FORMAT_CSV)
+				&& outputFormat.equalsIgnoreCase(Constants.FORMAT_XLS)) {
+			process = com.roisin.core.processes.DataTransformation.convertCsvToXls(inputPath,
 					outputPath);
 		}
 
