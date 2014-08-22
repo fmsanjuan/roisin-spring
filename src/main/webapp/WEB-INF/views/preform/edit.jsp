@@ -103,7 +103,9 @@
 											<form:select class="form-control"
 												id="attributeSelectionSelect" multiple="true"
 												path="attributeSelection">
-												<form:options items="${attributes }" />
+												<c:forEach items="${attributes }" var="attribute">
+													<form:option value="${attribute.getName() }" />
+												</c:forEach>
 											</form:select>
 											<form:errors path="attributeSelection" />
 										</div>
