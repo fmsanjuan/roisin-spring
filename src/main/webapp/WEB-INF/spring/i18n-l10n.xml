@@ -10,8 +10,6 @@
 	<util:list id="messages">
 		<value>/WEB-INF/views/layout/messages</value>
 		<value>/WEB-INF/views/welcome/messages</value>
-		<value>/WEB-INF/views/preprocessing/messages</value>
-		<value>/WEB-INF/views/processing/messages</value>
 	</util:list>
 
 </beans>

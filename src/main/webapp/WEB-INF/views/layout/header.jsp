@@ -31,6 +31,12 @@
 					</ul></li>
 			</security:authorize>
 			<li><a href="#">Help</a></li>
+			<li class="dropdown"><a href="#" class="dropdown-toggle"
+				data-toggle="dropdown">Language <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="?language=en">EN</a></li>
+					<li><a href="?language=es">ES</a></li>
+				</ul></li>
 		</ul>
 	</div>
 </nav>

@@ -4,8 +4,12 @@
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 
 <tiles-definitions>
-	<definition name="results/create" extends="base.definition">
+	<definition name="results/view" extends="base.definition">
 		<put-attribute name="title" value="Resultados" />
 		<put-attribute name="body" value="/WEB-INF/views/results/results.jsp" />
+	</definition>
+	<definition name="results/optimization" extends="base.definition">
+		<put-attribute name="title" value="Optimización AUC" />
+		<put-attribute name="body" value="/WEB-INF/views/results/optimization.jsp" />
 	</definition>
 </tiles-definitions>

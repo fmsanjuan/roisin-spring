@@ -4,8 +4,20 @@
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 
 <tiles-definitions>
-	<definition name="processing/processing" extends="base.definition">
-		<put-attribute name="title" value="Procesamiento" />
-		<put-attribute name="body" value="/WEB-INF/views/processing/processing.jsp" />
+	<definition name="process/create" extends="base.definition">
+		<put-attribute name="title" value="Crear proceso" />
+		<put-attribute name="body" value="/WEB-INF/views/process/process.jsp" />
+	</definition>
+	<definition name="details/ripper" extends="base.definition">
+		<put-attribute name="title" value="Detalles de procesos Ripper" />
+		<put-attribute name="body" value="/WEB-INF/views/process/details/ripper.jsp" />
+	</definition>
+	<definition name="details/subgroup" extends="base.definition">
+		<put-attribute name="title" value="Detalles de procesos Subgroup Discovery" />
+		<put-attribute name="body" value="/WEB-INF/views/process/details/subgroup.jsp" />
+	</definition>
+	<definition name="details/tree" extends="base.definition">
+		<put-attribute name="title" value="Detalles de procesos Tree To Rules" />
+		<put-attribute name="body" value="/WEB-INF/views/process/details/tree.jsp" />
 	</definition>
 </tiles-definitions>

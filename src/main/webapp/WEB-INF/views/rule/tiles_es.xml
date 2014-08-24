@@ -4,8 +4,8 @@
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 
 <tiles-definitions>
-	<definition name="results/create" extends="base.definition">
-		<put-attribute name="title" value="Resultados" />
-		<put-attribute name="body" value="/WEB-INF/views/results/results.jsp" />
+	<definition name="rule/view" extends="base.definition">
+		<put-attribute name="title" value="Detalles de la regla" />
+		<put-attribute name="body" value="/WEB-INF/views/rule/view.jsp" />
 	</definition>
 </tiles-definitions>
