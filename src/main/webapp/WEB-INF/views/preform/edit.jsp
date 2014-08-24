@@ -1,3 +1,5 @@
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -7,7 +9,8 @@
 
 <div class="page-header text-center">
 	<h1>
-		Preprocess <small>Filter your data</small>
+		<spring:message code="preform.h1.preprocess" />
+		<small><spring:message code="preform.small.filter.data" /></small>
 	</h1>
 </div>
 
@@ -43,7 +46,9 @@
 		<div class="col-md-2">
 			<a href="#aboutFilterModal" data-toggle="modal"
 				data-target="#filterModal"><button type="button"
-					class="btn btn-primary btn-lg">Filter Examples</button> </a>
+					class="btn btn-primary btn-lg">
+					<spring:message code="preform.filter.examples" />
+				</button> </a>
 			<div class="modal fade" id="filterModal" tabindex="-1" role="dialog"
 				aria-labelledby="ripperModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
@@ -51,8 +56,9 @@
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal"
 								aria-hidden="true"></button>
-							<h4 class="modal-title" id="ripperModalLabel">Filter
-								Attributes</h4>
+							<h4 class="modal-title" id="ripperModalLabel">
+								<spring:message code="preform.filter.attributes" />
+							</h4>
 						</div>
 						<div class="modal-body">
 							<c:choose>
@@ -70,7 +76,9 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default"
-								data-dismiss="modal">Go Back</button>
+								data-dismiss="modal">
+								<spring:message code="preform.go.back" />
+							</button>
 						</div>
 					</div>
 				</div>
@@ -79,10 +87,12 @@
 		<form:form method="post" action="../data/save" modelAttribute="form"
 			role="form" class="horizontal-form">
 			<form:input path="dataId" value="${dataId}" hidden="true" />
-			<div class="col-md-2 col-md-offset-6">
+			<div class="col-md-4 col-md-offset-3">
 				<a href="#aboutExportModal" data-toggle="modal"
 					data-target="#exportModal"><button type="button"
-						class="btn btn-primary btn-lg">Export Data</button> </a>
+						class="btn btn-primary btn-lg">
+						<spring:message code="preform.export.data" />
+					</button> </a>
 				<div class="modal fade" id="exportModal" tabindex="-1" role="dialog"
 					aria-labelledby="ripperModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
@@ -90,31 +100,33 @@
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal"
 									aria-hidden="true"></button>
-								<h4 class="modal-title" id="ripperModalLabel">Select label
-									and attributes</h4>
+								<h4 class="modal-title" id="ripperModalLabel">
+									<spring:message code="preform.select.label.attributes" />
+								</h4>
 							</div>
 							<div class="modal-body">
 								<div class="form-group">
 									<div class="row">
 										<label for="attributeSelectionSelect"
-											class="col-md-4 col-md-offset-2 control-label">Attribute
-											Selection</label>
+											class="col-md-4 col-md-offset-2 control-label"><spring:message
+												code="preform.attribute.selection" /></label>
 										<div class="col-md-5">
 											<form:select class="form-control"
 												id="attributeSelectionSelect" multiple="true"
-												path="attributeSelection">
+												path="exportAttributeSelection">
 												<c:forEach items="${attributes }" var="attribute">
 													<form:option value="${attribute.getName() }" />
 												</c:forEach>
 											</form:select>
-											<form:errors path="attributeSelection" />
+											<form:errors path="exportAttributeSelection" />
 										</div>
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="row">
 										<label for="exportFormatSelect"
-											class="col-md-4 col-md-offset-2 control-label">Format</label>
+											class="col-md-4 col-md-offset-2 control-label"><spring:message
+												code="preform.format" /></label>
 										<div class="col-md-5">
 											<form:select class="form-control" id="exportFormatSelect"
 												multiple="true" path="exportFormat">
@@ -131,17 +143,23 @@
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"
-									data-dismiss="modal">Go Back</button>
-								<form:button type="submit" name="export" class="btn btn-default">Export Data</form:button>
+									data-dismiss="modal">
+									<spring:message code="preform.go.back" />
+								</button>
+								<form:button type="submit" name="export" class="btn btn-default">
+									<spring:message code="preform.export.data" />
+								</form:button>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<a href="#aboutProcessModal" data-toggle="modal"
 					data-target="#processModal"><button type="button"
-						class="btn btn-success btn-lg">Process Data</button> </a>
+						class="btn btn-success btn-lg">
+						<spring:message code="preform.process.data" />
+					</button> </a>
 				<div class="modal fade" id="processModal" tabindex="-1"
 					role="dialog" aria-labelledby="ripperModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
@@ -149,8 +167,9 @@
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal"
 									aria-hidden="true"></button>
-								<h4 class="modal-title" id="ripperModalLabel">Select label
-									and attributes</h4>
+								<h4 class="modal-title" id="ripperModalLabel">
+									<spring:message code="preform.select.label.attributes" />
+								</h4>
 							</div>
 							<div class="modal-body">
 								<c:if test="${error == true}">
@@ -182,7 +201,8 @@
 								<div class="row">
 									<div class="form-group">
 										<label for="attributeSelectionSelect"
-											class="col-md-4 col-md-offset-1 control-label">Name</label>
+											class="col-md-4 col-md-offset-1 control-label"><spring:message
+												code="preform.name" /></label>
 										<div class="col-md-5">
 											<form:input type="text" path="name" class="form-control" />
 											<form:errors path="name" />
@@ -193,10 +213,10 @@
 								<div class="row">
 									<div class="form-group">
 										<label for="attributeSelectionSelect"
-											class="col-md-4 col-md-offset-1 control-label">Description</label>
+											class="col-md-4 col-md-offset-1 control-label"><spring:message
+												code="preform.description" /></label>
 										<div class="col-md-5">
-											<form:textarea path="description"
-												class="form-control" />
+											<form:textarea path="description" class="form-control" />
 											<form:errors path="description" />
 										</div>
 									</div>
@@ -205,7 +225,8 @@
 								<div class="row">
 									<div class="form-group">
 										<label for="labelSelect"
-											class="col-sm-4 col-sm-offset-1 control-label">Label</label>
+											class="col-sm-4 col-sm-offset-1 control-label"><spring:message
+												code="preform.label" /></label>
 										<div class="col-sm-4">
 											<form:select class="form-control" id="labelSelect"
 												path="label">
@@ -221,12 +242,12 @@
 								<div class="row">
 									<div class="form-group">
 										<label for="attributeSelectionSelect"
-											class="col-sm-4 col-sm-offset-1 control-label">Attribute
-											Selection</label>
+											class="col-sm-4 col-sm-offset-1 control-label"><spring:message
+												code="preform.attribute.selection" /></label>
 										<div class="col-sm-4">
 											<form:select class="form-control"
 												id="attributeSelectionSelect" multiple="true"
-												path="attributeSelection">
+												path="processAttributeSelection">
 												<c:forEach items="${attributes }" var="attribute">
 													<form:option value="${attribute.getName() }" />
 												</c:forEach>
@@ -238,9 +259,13 @@
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"
-									data-dismiss="modal">Go Back</button>
+									data-dismiss="modal">
+									<spring:message code="preform.go.back" />
+								</button>
 								<form:button type="submit" name="process"
-									class="btn btn-default">Process Data</form:button>
+									class="btn btn-default">
+									<spring:message code="preform.process.data" />
+								</form:button>
 							</div>
 						</div>
 					</div>
@@ -262,9 +287,10 @@
 				${row.getValueAsString(attribute) } 
 					</display:column>
 			</c:forEach>
-			<display:column title="Delete">
+			<spring:message code="preform.delete" var="delete" />
+			<display:column title="${delete }">
 				<a href="deleterow?dataId=${dataId }&rowId=${row_rowNum-1 }"> <input
-					class="btn btn-default" type="button" value="Delete"
+					class="btn btn-default" type="button" value="${delete }"
 					onclick="self.location.href = deleterow?dataId=${dataId }&rowId=${row_rowNum-1 }" />
 				</a>
 			</display:column>

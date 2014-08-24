@@ -190,7 +190,7 @@ public class PreprocessedDataController {
 			// Obtención del example set resultante
 			ExampleSet exampleSet = Runner.getPreprocessedExampleSetFromFile(tmpPath,
 					RoisinUtils.getRowsFromDeletedRows(deletedRows),
-					storedForm.getFilterCondition(), form.getAttributeSelection());
+					storedForm.getFilterCondition(), form.getProcessAttributeSelection());
 			// Se almacen el example set
 			data = preprocessedDataService.findOne(data.getId());
 			data.setExampleSet(exampleSet);
@@ -230,7 +230,7 @@ public class PreprocessedDataController {
 
 		PreprocessedData data = preprocessedDataService.findOne(Integer.parseInt(form.getDataId()));
 		// Formulario
-		PreprocessingForm storedForm = preprocessingFormService.saveSubmitedSimpleForm(
+		PreprocessingForm storedForm = preprocessingFormService.saveSubmitedSimpleFormExport(
 				data.getPreprocessingForm(), form);
 		// Extracción de file de BD
 		File file = storedForm.getFile();
@@ -245,7 +245,8 @@ public class PreprocessedDataController {
 		// Obtención del example set resultante
 		ByteArrayOutputStream document = Runner.exportData(tmpPath,
 				RoisinUtils.getRowsFromDeletedRows(deletedRows), storedForm.getFilterCondition(),
-				form.getAttributeSelection(), FileUtils.getFileDownloadPath(file, exportFormat));
+				form.getExportAttributeSelection(),
+				FileUtils.getFileDownloadPath(file, exportFormat));
 		// Create and configure headers to return the file
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/" + exportFormat));

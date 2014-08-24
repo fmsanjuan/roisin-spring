@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.roisin.spring.forms.PreproSimpleForm;
 import com.roisin.spring.model.PreprocessingForm;
+import com.roisin.spring.model.Process;
 import com.roisin.spring.model.SelectedAttribute;
 import com.roisin.spring.repositories.PreprocessingFormRepository;
 
@@ -19,7 +20,10 @@ public class PreprocessingFormService {
 	private PreprocessingFormRepository preprocessingFormRepository;
 
 	@Autowired
-	SelectedAttributeService selectedAttributeService;
+	private SelectedAttributeService selectedAttributeService;
+
+	@Autowired
+	private ProcessService processService;
 
 	public PreprocessingFormService() {
 		super();
@@ -56,13 +60,9 @@ public class PreprocessingFormService {
 	public PreprocessingForm saveSubmitedSimpleForm(PreprocessingForm storedForm,
 			PreproSimpleForm form) {
 		// Borrado de attributos seleccionados en caso de que ya existan
-		Collection<SelectedAttribute> selectedList = selectedAttributeService
-				.findSelectedAttributesByFormId(storedForm.getId());
-		for (SelectedAttribute selectedAttribute : selectedList) {
-			selectedAttributeService.delete(selectedAttribute);
-		}
+		deleteExistingSelectedAttributes(storedForm);
 		// Attributos seleccionados
-		for (String attributeName : form.getAttributeSelection()) {
+		for (String attributeName : form.getProcessAttributeSelection()) {
 			SelectedAttribute sa = selectedAttributeService.create();
 			sa.setPreprocessingForm(storedForm);
 			sa.setName(attributeName);
@@ -70,6 +70,34 @@ public class PreprocessingFormService {
 		}
 
 		return storedForm;
+	}
+
+	public PreprocessingForm saveSubmitedSimpleFormExport(PreprocessingForm storedForm,
+			PreproSimpleForm form) {
+		// Borrado de attributos seleccionados en caso de que ya existan
+		deleteExistingSelectedAttributes(storedForm);
+		// Attributos seleccionados
+		for (String attributeName : form.getExportAttributeSelection()) {
+			SelectedAttribute sa = selectedAttributeService.create();
+			sa.setPreprocessingForm(storedForm);
+			sa.setName(attributeName);
+			selectedAttributeService.save(sa);
+		}
+
+		return storedForm;
+	}
+
+	public void deleteExistingSelectedAttributes(PreprocessingForm storedForm) {
+		Collection<SelectedAttribute> selectedList = selectedAttributeService
+				.findSelectedAttributesByFormId(storedForm.getId());
+		for (SelectedAttribute selectedAttribute : selectedList) {
+			Collection<Process> ps = processService.findProcessByLabelId(selectedAttribute.getId());
+			if (processService.findProcessByLabelId(selectedAttribute.getId()).isEmpty()) {
+				selectedAttributeService.delete(selectedAttribute);
+			} else {
+				processService.delete(ps.iterator().next());
+			}
+		}
 	}
 
 	public Collection<PreprocessingForm> findFormsByFileId(int fileId) {

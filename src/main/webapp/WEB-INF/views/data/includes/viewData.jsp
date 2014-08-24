@@ -23,7 +23,7 @@
 	</c:if>
 	<div class="row">
 		<div class="col-md-3">
-			<h3>Label selection</h3>
+			<h3><spring:message code="data.label.selection" /></h3>
 			<br />
 			<form:select path="label" class="form-control">
 				<c:forEach items="${attributes }" var="attribute">
@@ -32,7 +32,7 @@
 			</form:select>
 		</div>
 		<div class="col-md-7">
-			<h3>Filter condition</h3>
+			<h3><spring:message code="data.filter.condition" /></h3>
 			<br />
 			<div class="col-md-3">
 				<form:select path="filterAttribute" class="form-control">
@@ -43,12 +43,12 @@
 			</div>
 			<div class="col-md-3">
 				<form:select path="filterOperator" class="form-control">
-					<form:option value="eq">equals</form:option>
-					<form:option value="neq">non equals</form:option>
-					<form:option value="goe">greater or equals</form:option>
-					<form:option value="gt">greater</form:option>
-					<form:option value="soe">smaller or equals</form:option>
-					<form:option value="st">smaller</form:option>
+					<form:option value="eq"><spring:message code="data.equals" /></form:option>
+					<form:option value="neq"><spring:message code="data.non.equals" /></form:option>
+					<form:option value="goe"><spring:message code="data.greater.equals" /></form:option>
+					<form:option value="gt"><spring:message code="data.greater" /></form:option>
+					<form:option value="soe"><spring:message code="data.smaller.equals" /></form:option>
+					<form:option value="st"><spring:message code="data.smaller" /></form:option>
 				</form:select>
 			</div>
 			<div class="col-md-6">
@@ -59,11 +59,11 @@
 		<div class="col-md-2">
 			<div class="row">
 				<form:button type="submit" name="export" value="Export"
-					class="btn btn-primary btn-lg">Export Data</form:button>
+					class="btn btn-primary btn-lg"><spring:message code="data.export.data" /></form:button>
 			</div>
 			<div class="row">
 				<form:button type="submit" name="process" value="Process"
-					class="btn btn-success btn-lg">Process Data</form:button>
+					class="btn btn-success btn-lg"><spring:message code="data.process.data" /></form:button>
 			</div>
 		</div>
 	</div>
@@ -78,7 +78,7 @@
 							<th>${attribute.getName() }<form:checkbox
 									path="attributeSelection" value="${attribute.getName() }" /></th>
 						</c:forEach>
-						<th>Delete</th>
+						<th><spring:message code="data.delete" /></th>
 					</tr>
 				</thead>
 				<tbody id="myTable">

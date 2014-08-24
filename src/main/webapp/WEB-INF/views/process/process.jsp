@@ -1,3 +1,5 @@
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -5,8 +7,8 @@
 
 <div class="page-header text-center">
 	<h1>
-		<spring:message code="processing.header" />
-		<small>Analize your data</small>
+		<spring:message code="process.h1.processing" />
+		<small><spring:message code="process.small.analize" /></small>
 	</h1>
 </div>
 
@@ -90,8 +92,7 @@ div.product-chooser div.product-chooser-item input.non-visible {
 				<div class="alert alert-danger alert-dismissable">
 					<button type="button" class="close" data-dismiss="alert"
 						aria-hidden="true">&times;</button>
-					<strong>Error! </strong> Please, check the configuration for the
-					algorithm ${error }.
+					<strong>Error! </strong> <spring:message code="process.error.algorithm" /> ${error }.
 					<spring:hasBindErrors htmlEscape="true" name="result">
 						<c:forEach items="${result.allErrors}" var="error">
 							<spring:message code="${error.code}"
@@ -99,26 +100,6 @@ div.product-chooser div.product-chooser-item input.non-visible {
 							<br />
 						</c:forEach>
 					</spring:hasBindErrors>
-					<%-- 					<form:errors path="ripperCriterion" /> --%>
-					<%-- 					<form:errors path="sampleRatio" /> --%>
-					<%-- 					<form:errors path="pureness" /> --%>
-					<%-- 					<form:errors path="minimalPruneBenefit" /> --%>
-					<%-- 					<form:errors path="mode" /> --%>
-					<%-- 					<form:errors path="utilityFunction" /> --%>
-					<%-- 					<form:errors path="minUtility" /> --%>
-					<%-- 					<form:errors path="kBestRules" /> --%>
-					<%-- 					<form:errors path="ruleGeneration" /> --%>
-					<%-- 					<form:errors path="maxDepth" /> --%>
-					<%-- 					<form:errors path="minCoverage" /> --%>
-					<%-- 					<form:errors path="tree2RulesCriterion" /> --%>
-					<%-- 					<form:errors path="minimalSizeForSplit" /> --%>
-					<%-- 					<form:errors path="minimalLeafSize" /> --%>
-					<%-- 					<form:errors path="minimalGain" /> --%>
-					<%-- 					<form:errors path="maximalDepth" /> --%>
-					<%-- 					<form:errors path="confidence" /> --%>
-					<%-- 					<form:errors path="numberOfPrepruningAlternatives" /> --%>
-					<%-- 					<form:errors path="noPrepruning" /> --%>
-					<%-- 					<form:errors path="noPruning" /> --%>
 				</div>
 			</div>
 		</div>

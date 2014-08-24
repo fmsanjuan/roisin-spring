@@ -91,7 +91,9 @@ public class PreprocessingFormController {
 		data = preprocessedDataService.save(data);
 
 		PreproSimpleForm form = new PreproSimpleForm();
-		form.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
+		form.setProcessAttributeSelection(RoisinUtils
+				.getAttributeNameListFromExampleSet(attributes));
+		form.setExportAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
 
 		FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(data.getId());
@@ -127,7 +129,9 @@ public class PreprocessingFormController {
 		}
 
 		PreproSimpleForm form = new PreproSimpleForm();
-		form.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
+		form.setProcessAttributeSelection(RoisinUtils
+				.getAttributeNameListFromExampleSet(attributes));
+		form.setExportAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
 
 		FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(dataId);
@@ -184,8 +188,10 @@ public class PreprocessingFormController {
 		deletedRowService.save(deletedRow);
 
 		PreproSimpleForm preproForm = new PreproSimpleForm();
-		preproForm
-				.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
+		preproForm.setExportAttributeSelection(RoisinUtils
+				.getAttributeNameListFromExampleSet(attributes));
+		preproForm.setProcessAttributeSelection(RoisinUtils
+				.getAttributeNameListFromExampleSet(attributes));
 
 		FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(dataId);
@@ -297,8 +303,10 @@ public class PreprocessingFormController {
 		}
 
 		PreproSimpleForm preproForm = new PreproSimpleForm();
-		preproForm
-				.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
+		preproForm.setExportAttributeSelection(RoisinUtils
+				.getAttributeNameListFromExampleSet(attributes));
+		preproForm.setProcessAttributeSelection(RoisinUtils
+				.getAttributeNameListFromExampleSet(attributes));
 
 		FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(storedForm.getId());
@@ -366,8 +374,10 @@ public class PreprocessingFormController {
 		}
 
 		PreproSimpleForm preproForm = new PreproSimpleForm();
-		preproForm
-				.setAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
+		preproForm.setExportAttributeSelection(RoisinUtils
+				.getAttributeNameListFromExampleSet(attributes));
+		preproForm.setProcessAttributeSelection(RoisinUtils
+				.getAttributeNameListFromExampleSet(attributes));
 
 		FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(storedForm.getId());

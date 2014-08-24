@@ -5,7 +5,7 @@
 	modelAttribute="subgroupSettings">
 
 	<form:hidden path="process" />
-	
+
 	<div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
 		<h3 class="text-center">Subgroup Discovery</h3>
 		<br /> <span class="description">Lorem ipsum dolor sit amet,
@@ -17,20 +17,30 @@
 	</div>
 	<div class="clear"></div>
 	<br />
-	<c:choose>
-		<c:when test="${error !=null && error=='Subgroup Discovery' }">
-			<a href="#aboutsubgroupModal" data-toggle="modal"
-				data-target="#subgroupModal"><button type="button"
-					class="btn btn-danger">Advanced Settings</button></a>
-		</c:when>
-		<c:otherwise>
-			<a href="#aboutsubgroupModal" data-toggle="modal"
-				data-target="#subgroupModal"><button type="button"
-					class="btn btn-default">Advanced Settings</button></a>
-		</c:otherwise>
-	</c:choose>
-	<form:button type="submit" name="subgroup" class="btn btn-default">Run Subgroup</form:button>
-
+	<div class="row text-center">
+		<c:choose>
+			<c:when test="${error !=null && error=='Subgroup Discovery' }">
+				<a href="#aboutsubgroupModal" data-toggle="modal"
+					data-target="#subgroupModal"><button type="button"
+						class="btn btn-danger">
+						<spring:message code="process.advanced.settings" />
+					</button></a>
+			</c:when>
+			<c:otherwise>
+				<a href="#aboutsubgroupModal" data-toggle="modal"
+					data-target="#subgroupModal"><button type="button"
+						class="btn btn-default">
+						<spring:message code="process.advanced.settings" />
+					</button></a>
+			</c:otherwise>
+		</c:choose>
+	</div>
+	<br />
+	<div class="row text-center">
+		<form:button type="submit" name="subgroup" class="btn btn-default">
+			<spring:message code="process.subgroup.run" />
+		</form:button>
+	</div>
 	<div class="modal fade" id="subgroupModal" tabindex="-1" role="dialog"
 		aria-labelledby="subgroupModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -38,13 +48,15 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true"></button>
-					<h4 class="modal-title" id="subgroupModalLabel">Subgroup
-						Discovery Advanced Settings</h4>
+					<h4 class="modal-title" id="subgroupModalLabel">
+						<spring:message code="process.subgroup.advanced.settings" />
+					</h4>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="subgroupModeSelect"
-							class="col-sm-4 col-sm-offset-1 control-label">Mode</label>
+							class="col-sm-4 col-sm-offset-1 control-label"><spring:message
+								code="process.subgroup.mode" /></label>
 						<div class="col-sm-4">
 							<form:select class="form-control" id="subgroupModeSelect"
 								path="mode">
@@ -56,8 +68,8 @@
 					</div>
 					<div class="form-group">
 						<label for="subgroupUtilityFunctionSelect"
-							class="col-sm-4 col-sm-offset-1 control-label">Utility
-							Function</label>
+							class="col-sm-4 col-sm-offset-1 control-label"><spring:message
+								code="process.subgroup.utility.function" /></label>
 						<div class="col-sm-4">
 							<form:select class="form-control"
 								id="subgroupUtilityFunctionSelect" path="utilityFunction">
@@ -76,31 +88,34 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<spring:message code="process.subgroup.min.utility"
+							var="minUtility" />
 						<label for="subgroupMinUtility"
-							class="col-sm-4 col-sm-offset-1 control-label">Min
-							Utility</label>
+							class="col-sm-4 col-sm-offset-1 control-label">${minUtility }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="subgroupMinUtility" placeholder="Min Utility"
+								id="subgroupMinUtility" placeholder="${minUtility }Min Utility"
 								path="minUtility" />
 							<font color="red"><form:errors path="minUtility" /></font>
 						</div>
 					</div>
 					<div class="form-group">
+						<spring:message code="process.subgroup.k.best.rules"
+							var="kBestRules" />
 						<label for="subgroupKBestRules"
-							class="col-sm-4 col-sm-offset-1 control-label">k best
-							rules</label>
+							class="col-sm-4 col-sm-offset-1 control-label">${kBestRules }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="subgroupKBestRules" placeholder="k best rules"
+								id="subgroupKBestRules" placeholder="${kBestRules }"
 								path="kBestRules" />
 							<font color="red"><form:errors path="kBestRules" /></font>
 						</div>
 					</div>
 					<div class="form-group">
+						<spring:message code="process.subgroup.rule.generation"
+							var="ruleGeneration" />
 						<label for="subgroupUtilityFunctionSelect"
-							class="col-sm-4 col-sm-offset-1 control-label">Utility
-							Function</label>
+							class="col-sm-4 col-sm-offset-1 control-label">${ruleGeneration }</label>
 						<div class="col-sm-4">
 							<form:select class="form-control"
 								id="subgroupUtilityFunctionSelect" path="ruleGeneration">
@@ -113,31 +128,36 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<spring:message code="process.subgroup.max.depth" var="maxDepth" />
 						<label for="subgroupMaxDepthRules"
-							class="col-sm-4 col-sm-offset-1 control-label">Max Depth</label>
+							class="col-sm-4 col-sm-offset-1 control-label">${maxDepth }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="subgroupMaxDepthRules" placeholder="Max Depth"
+								id="subgroupMaxDepthRules" placeholder="${maxDepth }"
 								path="maxDepth" />
 							<font color="red"><form:errors path="maxDepth" /></font>
 						</div>
 					</div>
 					<div class="form-group">
+						<spring:message code="process.subgroup.min.coverage"
+							var="minCoverage" />
 						<label for="subgroupMinCoverage"
-							class="col-sm-4 col-sm-offset-1 control-label">Min
-							Coverage</label>
+							class="col-sm-4 col-sm-offset-1 control-label">${minCoverage }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="subgroupMinCoverage" placeholder="Min Coverage"
+								id="subgroupMinCoverage" placeholder="${minCoverage }"
 								path="minCoverage" />
 							<font color="red"><form:errors path="minCoverage" /></font>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Go
-						Back</button>
-					<form:button type="submit" name="subgroup" class="btn btn-default">Run Subgroup</form:button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						<spring:message code="process.go.back" />
+					</button>
+					<form:button type="submit" name="subgroup" class="btn btn-default">
+						<spring:message code="process.subgroup.run" />
+					</form:button>
 				</div>
 			</div>
 		</div>

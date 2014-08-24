@@ -1,3 +1,5 @@
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 	<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -36,8 +38,8 @@
 			<li class="dropdown"><a href="#" class="dropdown-toggle"
 				data-toggle="dropdown"><spring:message code="language" /> <b class="caret"></b></a>
 				<ul class="dropdown-menu">
-					<li><a href="?language=en">EN</a></li>
-					<li><a href="?language=es">ES</a></li>
+					<li><a href="/?language=en">EN</a></li>
+					<li><a href="/?language=es">ES</a></li>
 				</ul></li>
 		</ul>
 	</div>

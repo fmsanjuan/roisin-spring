@@ -21,22 +21,24 @@ public class RipperSettingsValidator implements Validator {
 		if (StringUtils.isBlank(form.getRipperCriterion())
 				|| (!form.getRipperCriterion().equals(ProcessConstants.INFORMATION_GAIN) && !form
 						.getRipperCriterion().equals(ProcessConstants.ACCURACY_RIPPER_TREE))) {
-			errors.rejectValue("ripperCriterion", "form.ripperCriterion",
-					"Please, select a criterion");
+			errors.rejectValue("ripperCriterion", "process.ripper.error.criterion",
+					"process.ripper.error.criterion");
 		}
 
 		if (form.getSampleRatio().doubleValue() < 0.0 || form.getSampleRatio() > 1.0) {
-			errors.rejectValue("sampleRatio", "form.sampleRatio", "Must be between 0 and 1");
+			errors.rejectValue("sampleRatio", "process.ripper.error.sample.ratio",
+					"process.ripper.error.sample.ratio");
 		}
 
 		if (form.getPureness().doubleValue() < 0.0 || form.getPureness() > 1.0) {
-			errors.rejectValue("pureness", "form.pureness", "Must be between 0 and 1");
+			errors.rejectValue("pureness", "process.ripper.error.pureness",
+					"process.ripper.error.pureness");
 		}
 
 		if (form.getMinimalPruneBenefit().doubleValue() < 0.0
 				|| form.getMinimalPruneBenefit() > 1.0) {
-			errors.rejectValue("minimalPruneBenefit", "form.minimalPruneBenefit",
-					"Must be between 0 and 1");
+			errors.rejectValue("minimalPruneBenefit", "process.ripper.error.minimal.prune.benefit",
+					"process.ripper.error.minimal.prune.benefit");
 		}
 	}
 

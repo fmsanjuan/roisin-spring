@@ -21,7 +21,7 @@ public class FileConverterValidator implements Validator {
 		ConvertUploadFile file = (ConvertUploadFile) uploadedFile;
 
 		if (file.getFile().getSize() == 0) {
-			errors.rejectValue("file", "convertUploadForm.selectFile", "Please select a file!");
+			errors.rejectValue("file", "converter.error.select.file", "converter.error.select.file");
 		}
 
 		if (StringUtils.isBlank(file.getOutputFormat())
@@ -30,8 +30,8 @@ public class FileConverterValidator implements Validator {
 						&& !file.getOutputFormat().equalsIgnoreCase(Constants.FORMAT_ARFF)
 						&& !file.getOutputFormat().equalsIgnoreCase(Constants.FORMAT_CSV) && !file
 						.getOutputFormat().equalsIgnoreCase(Constants.FORMAT_XRFF))) {
-			errors.rejectValue("file", "convertUploadForm.outputFormat",
-					"Output format is not correct");
+			errors.rejectValue("file", "converter.error.output.format",
+					"converter.error.output.format");
 		}
 
 		if (file.getFile().getSize() > 0) {
@@ -44,13 +44,12 @@ public class FileConverterValidator implements Validator {
 							&& !fileFormat.equalsIgnoreCase(Constants.FORMAT_ARFF)
 							&& !fileFormat.equalsIgnoreCase(Constants.FORMAT_CSV) && !fileFormat
 								.equalsIgnoreCase(Constants.FORMAT_XRFF))) {
-				errors.rejectValue("file", "convertUploadForm.fileFormat",
-						"The file format must be xlsx, xls, arff, xrff or csv");
+				errors.rejectValue("file", "converter.error.format", "converter.error.format");
 			}
 
 			if (file.getOutputFormat().equalsIgnoreCase(fileFormat)) {
-				errors.rejectValue("file", "convertUploadForm.fileFormat",
-						"Input format must be different to output format");
+				errors.rejectValue("file", "converter.error.input.format",
+						"converter.error.input.format");
 			}
 		}
 

@@ -1,3 +1,5 @@
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -6,7 +8,7 @@
 
 <div class="page-header text-center">
 	<h1>
-		Results <small>Validate the rules</small>
+		<spring:message code="results.h1.results" /> <small><spring:message code="results.small.validate" /></small>
 	</h1>
 </div>
 
@@ -18,10 +20,14 @@
 			<display:column title="#">
 				<c:out value="${row_rowNum}" />
 			</display:column>
-			<display:column property="premise" title="Premise" />
-			<display:column property="conclusion" title="Conclusion" />
-			<display:column property="rulePrecision" title="Precision" />
-			<display:column property="support" title="Support" />
+			<spring:message code="results.premise" var="premise" />
+			<display:column property="premise" title="${premise }" />
+			<spring:message code="results.conclusion" var="conclusion" />
+			<display:column property="conclusion" title="${conclusion }" />
+			<spring:message code="results.precision" var="precision" />
+			<display:column property="rulePrecision" title="${precision }" />
+			<spring:message code="results.support" var="support" />
+			<display:column property="support" title="${support }" />
 			<display:column property="tpr" title="TPR" />
 			<display:column property="fpr" title="FPR" />
 			<display:column property="tp" title="TP" />
@@ -46,13 +52,8 @@
 				<form:hidden path="version"/>
 				<form:hidden path="auc" />
 				<form:hidden path="process" />
-<%-- 				<form:hidden path="rules" /> --%>
-				<form:button class="btn btn-primary btn-lg" type="submit">Download Results</form:button>
+				<form:button class="btn btn-primary btn-lg" type="submit"><spring:message code="results.download.results" /></form:button>
 			</form:form><br />
-			<%-- 			<a href="../results/export?resultsId=${resultsId }"> <input --%>
-			<!-- 				class="btn btn-primary btn-lg" type="button" -->
-			<!-- 				value="Download Results" -->
-			<%-- 				onclick="self.location.href = ../results/export?resultsId=${resultsId }" /></a> --%>
 			<br />
 			<form:form method="post" class="form-horizontal"
 				action="../results/optimization" role="form" modelAttribute="results">
@@ -60,14 +61,10 @@
 				<form:hidden path="version"/>
 				<form:hidden path="auc" />
 				<form:hidden path="process" />
-				<form:button class="btn btn-primary btn-lg" type="submit">AUC Optimization</form:button>
+				<form:button class="btn btn-primary btn-lg" type="submit"><spring:message code="results.auc.optimization" /></form:button>
 			</form:form>
-			<%-- 			 <a href="../results/export?resultsId=${resultsId }"> <input --%>
-			<!-- 				class="btn btn-primary btn-lg" type="button" -->
-			<!-- 				value="Download Results" -->
-			<%-- 				onclick="self.location.href = ../results/export?resultsId=${resultsId }" /> </a> --%>
 			<br /> <br /> <a href="${chart }"><button
-					class="btn btn-primary btn-lg">Download Chart</button></a>
+					class="btn btn-primary btn-lg"><spring:message code="results.download.chart" /></button></a>
 		</div>
 	</div>
 </div>

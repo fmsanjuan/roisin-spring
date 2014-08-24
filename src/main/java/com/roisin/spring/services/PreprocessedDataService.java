@@ -56,7 +56,7 @@ public class PreprocessedDataService {
 	}
 
 	public void deleteNullData(Collection<PreprocessedData> data) {
-		preprocessedDataRepository.deleteInBatch(data);
+		preprocessedDataRepository.delete(data);
 	}
 
 }

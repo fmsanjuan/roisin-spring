@@ -6,7 +6,9 @@ import com.google.common.collect.Lists;
 
 public class PreproSimpleForm {
 
-	private List<String> attributeSelection;
+	private List<String> exportAttributeSelection;
+
+	private List<String> processAttributeSelection;
 
 	private String label;
 
@@ -19,15 +21,24 @@ public class PreproSimpleForm {
 	private String description;
 
 	public PreproSimpleForm() {
-		attributeSelection = Lists.newArrayList();
+		exportAttributeSelection = Lists.newArrayList();
+		processAttributeSelection = Lists.newArrayList();
 	}
 
-	public List<String> getAttributeSelection() {
-		return attributeSelection;
+	public List<String> getExportAttributeSelection() {
+		return exportAttributeSelection;
 	}
 
-	public void setAttributeSelection(List<String> attributeSelection) {
-		this.attributeSelection = attributeSelection;
+	public void setExportAttributeSelection(List<String> exportAttributeSelection) {
+		this.exportAttributeSelection = exportAttributeSelection;
+	}
+
+	public List<String> getProcessAttributeSelection() {
+		return processAttributeSelection;
+	}
+
+	public void setProcessAttributeSelection(List<String> processAttributeSelection) {
+		this.processAttributeSelection = processAttributeSelection;
 	}
 
 	public String getLabel() {

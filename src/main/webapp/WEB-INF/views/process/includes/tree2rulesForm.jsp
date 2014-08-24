@@ -1,8 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <form:form method="post" class="form-horizontal"
-	action="../process/tree" role="form"
-	modelAttribute="treeSettings">
+	action="../process/tree" role="form" modelAttribute="treeSettings">
 
 	<form:hidden path="process" />
 
@@ -17,19 +16,30 @@
 	</div>
 	<div class="clear"></div>
 	<br />
-	<c:choose>
-		<c:when test="${error !=null && error=='Tree to Rules' }">
-			<a href="#aboutTree2rulesModal" data-toggle="modal"
-				data-target="#tree2rulesModal"><button type="button"
-					class="btn btn-danger">Advanced Settings</button></a>
-		</c:when>
-		<c:otherwise>
-			<a href="#aboutTree2rulesModal" data-toggle="modal"
-				data-target="#tree2rulesModal"><button type="button"
-					class="btn btn-default">Advanced Settings</button></a>
-		</c:otherwise>
-	</c:choose>
-	<form:button type="submit" name="tree" class="btn btn-default">Run Tree to Rules</form:button>
+	<div class="row text-center">
+		<c:choose>
+			<c:when test="${error !=null && error=='Tree to Rules' }">
+				<a href="#aboutTree2rulesModal" data-toggle="modal"
+					data-target="#tree2rulesModal"><button type="button"
+						class="btn btn-danger">
+						<spring:message code="process.advanced.settings" />
+					</button></a>
+			</c:when>
+			<c:otherwise>
+				<a href="#aboutTree2rulesModal" data-toggle="modal"
+					data-target="#tree2rulesModal"><button type="button"
+						class="btn btn-default">
+						<spring:message code="process.advanced.settings" />
+					</button></a>
+			</c:otherwise>
+		</c:choose>
+	</div>
+	<br />
+	<div class="row text-center">
+		<form:button type="submit" name="tree" class="btn btn-default">
+			<spring:message code="process.tree.run" />
+		</form:button>
+	</div>
 	<div class="modal fade" id="tree2rulesModal" tabindex="-1"
 		role="dialog" aria-labelledby="tree2rulesModalLabel"
 		aria-hidden="true">
@@ -38,12 +48,14 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true"></button>
-					<h4 class="modal-title" id="tree2rulesModalLabel">Tree to
-						Rules Advanced Settings</h4>
+					<h4 class="modal-title" id="tree2rulesModalLabel">
+						<spring:message code="process.tree.advanced.settings" />
+					</h4>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="subgroupModeSelect" class="col-sm-6 control-label">Criterion</label>
+						<label for="subgroupModeSelect" class="col-sm-6 control-label"><spring:message
+								code="process.tree.criterion" /></label>
 						<div class="col-sm-4">
 							<form:select class="form-control" id="subgroupModeSelect"
 								path="tree2RulesCriterion">
@@ -56,69 +68,76 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="subgroupMinSizeSplit" class="col-sm-6 control-label">Minimal
-							Size for Split</label>
+						<spring:message code="process.tree.minimal.size.split"
+							var="mSizeSplit" />
+						<label for="subgroupMinSizeSplit" class="col-sm-6 control-label">${mSizeSplit }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="subgroupMinSizeSplit" placeholder="Minimal Size for Split"
+								id="subgroupMinSizeSplit" placeholder="${mSizeSplit }"
 								path="minimalSizeForSplit" />
 							<font color="red"><form:errors path="minimalSizeForSplit" /></font>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="subgroupMinLeafSize" class="col-sm-6 control-label">Minimal
-							Leaf Size</label>
+						<spring:message code="process.tree.minimal.leaf.size"
+							var="mLeafSize" />
+						<label for="subgroupMinLeafSize" class="col-sm-6 control-label">${mLeafSize }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="subgroupMinLeafSize" placeholder="Minimal Leaf Size"
+								id="subgroupMinLeafSize" placeholder="${mLeafSize }"
 								path="minimalLeafSize" />
 							<font color="red"><form:errors path="minimalLeafSize" /></font>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="subgroupMinimalGain" class="col-sm-6 control-label">Minimal
-							Gain</label>
+						<spring:message code="process.tree.minimal.gain" var="minimalGain" />
+						<label for="subgroupMinimalGain" class="col-sm-6 control-label">${minimalGain }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="subgroupMinimalGain" placeholder="Minimal Gain"
+								id="subgroupMinimalGain" placeholder="${minimalGain }"
 								path="minimalGain" />
 							<font color="red"><form:errors path="minimalGain" /></font>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="subgroupMaxDepth" class="col-sm-6 control-label">Maximal
-							Depth</label>
+						<spring:message code="process.tree.maximal.depth" var="maxDepth" />
+						<label for="subgroupMaxDepth" class="col-sm-6 control-label">${maxDepth }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="subgroupMaxDepth" placeholder="Maximal Depth"
+								id="subgroupMaxDepth" placeholder="${maxDepth }"
 								path="maximalDepth" />
 							<font color="red"><form:errors path="maximalDepth" /></font>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="subgroupConfidence" class="col-sm-6 control-label">Confidence</label>
+						<spring:message code="process.tree.confidence" var="confidence" />
+						<label for="subgroupConfidence" class="col-sm-6 control-label">${confidence }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="subgroupConfidence" placeholder="Confidence"
+								id="subgroupConfidence" placeholder="${confidence }"
 								path="confidence" />
 							<font color="red"><form:errors path="confidence" /></font>
 						</div>
 					</div>
 					<div class="form-group">
+						<spring:message code="process.tree.prepruning.alternatives"
+							var="prepruningAlternatives" />
 						<label for="subgroupNumberOfPrepruning"
-							class="col-sm-6 control-label">Number of prepruning
-							Alternatives</label>
+							class="col-sm-6 control-label">${prepruningAlternatives }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
 								id="subgroupNumberOfPrepruning"
-								placeholder="Number of prepruning"
+								placeholder="${prepruningAlternatives }"
 								path="numberOfPrepruningAlternatives" />
-							<font color="red"><form:errors path="numberOfPrepruningAlternatives" /></font>
+							<font color="red"><form:errors
+									path="numberOfPrepruningAlternatives" /></font>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="subgroupNoPrepruning" class="col-sm-6 control-label">No
-							prepruning</label>
+						<spring:message code="process.tree.no.prepruning"
+							var="noPrepruning" />
+						<label for="subgroupNoPrepruning" class="col-sm-6 control-label"><spring:message
+								code="process.tree.no.prepruning" /></label>
 						<div class="col-sm-4">
 							<form:checkbox class="form-control" id="subgroupNoPrepruning"
 								path="noPrepruning" />
@@ -126,8 +145,8 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="subgroupNoPruning" class="col-sm-6 control-label">No
-							pruning</label>
+						<label for="subgroupNoPruning" class="col-sm-6 control-label"><spring:message
+								code="process.tree.no.pruning" /></label>
 						<div class="col-sm-4">
 							<form:checkbox class="form-control" id="subgroupNoPruning"
 								path="noPruning" />
@@ -136,9 +155,12 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Go
-						Back</button>
-					<form:button type="submit" name="tree" class="btn btn-default">Run Tree to Rules</form:button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						<spring:message code="process.go.back" />
+					</button>
+					<form:button type="submit" name="tree" class="btn btn-default">
+						<spring:message code="process.tree.run" />
+					</form:button>
 				</div>
 			</div>
 		</div>

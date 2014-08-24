@@ -53,15 +53,14 @@ public class SignupController {
 
 				ModelAndView res = new ModelAndView("welcome/home");
 				res.addObject("credentials", new Credentials());
-				res.addObject("successMessage", "The user " + user.getEmail()
-						+ " has been registered");
+				res.addObject("successMessage", user.getEmail());
 				return res;
 			} catch (Throwable oops) {
 				ModelAndView res;
 				if (oops instanceof DataIntegrityViolationException) {
-					res = createEditModelAndViewCustomer(form, "Duplicated email");
+					res = createEditModelAndViewCustomer(form, "sign.error.duplicated.email");
 				} else {
-					res = createEditModelAndViewCustomer(form, "Error");
+					res = createEditModelAndViewCustomer(form, "sign.error");
 				}
 				return res;
 			}
@@ -93,15 +92,14 @@ public class SignupController {
 				userService.save(user, StringUtils.isNotBlank(form.getNewPassword()));
 
 				ModelAndView res = new ModelAndView("profile/edit");
-				res.addObject("successMessage", "The user profile " + user.getEmail()
-						+ " has been successfully edited");
+				res.addObject("successMessage", user.getEmail());
 				return res;
 			} catch (Throwable oops) {
 				ModelAndView res;
 				if (oops instanceof DataIntegrityViolationException) {
-					res = createEditProfileModelAndViewCustomer(form, "Duplicated email");
+					res = createEditProfileModelAndViewCustomer(form, "sign.error.duplicated.email");
 				} else {
-					res = createEditProfileModelAndViewCustomer(form, "Error");
+					res = createEditProfileModelAndViewCustomer(form, "sign.error");
 				}
 				return res;
 			}

@@ -21,7 +21,7 @@ public class FileValidator implements Validator {
 		UploadedFile file = (UploadedFile) uploadedFile;
 
 		if (file.getFile().getSize() == 0) {
-			errors.rejectValue("file", "uploadForm.selectFile", "Please select a file!");
+			errors.rejectValue("file", "file.error.select.file", "file.error.select.file");
 		}
 
 		if (file.getFile().getSize() > 0) {
@@ -34,8 +34,7 @@ public class FileValidator implements Validator {
 							&& !fileFormat.equalsIgnoreCase(Constants.FORMAT_ARFF)
 							&& !fileFormat.equalsIgnoreCase(Constants.FORMAT_CSV) && !fileFormat
 								.equalsIgnoreCase(Constants.FORMAT_XRFF))) {
-				errors.rejectValue("file", "uploadForm.fileFormat",
-						"The file format must be xlsx, xls, arff, xrff or csv");
+				errors.rejectValue("file", "file.error.format", "file.error.format");
 			}
 		}
 

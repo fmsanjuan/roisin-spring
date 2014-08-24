@@ -1,3 +1,5 @@
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -8,7 +10,7 @@
 
 <div class="page-header text-center">
 	<h1>
-		Format Converter <small>Change the format of your files</small>
+		<spring:message code="converter.h1" /> <small><spring:message code="converter.small" /></small>
 	</h1>
 </div>
 
@@ -25,15 +27,15 @@
 								<div class="alert alert-danger alert-dismissable">
 									<button type="button" class="close" data-dismiss="alert"
 										aria-hidden="true">&times;</button>
-									<strong>Error! </strong>
+									<strong><spring:message code="converter.error" /> </strong>
 									<form:errors path="file" />
 									<form:errors path="outputFormat" />
 								</div>
 							</div>
 						</c:if>
 						<div class="row">
-							<h3>Format Converter</h3>
-							<p>Choose a file (xlsx, xls, arff, xrff or csv)</p>
+							<h3><spring:message code="converter.h1" /></h3>
+							<p><spring:message code="converter.choose.file" /></p>
 						</div>
 						<div class="row">
 							<input type="file" name="file" class="filestyle">
@@ -42,8 +44,7 @@
 						<div class="row">
 							<div class="form-group">
 								<label for="outputFormatId"
-									class="col-md-3 col-md-offset-3 control-label">Output
-									Format</label>
+									class="col-md-3 col-md-offset-3 control-label"><spring:message code="converter.output.format" /></label>
 								<div class="col-md-3">
 									<form:select path="outputFormat" class="form-control"
 										id="outputFormatId">
@@ -60,7 +61,7 @@
 						<div class="row">
 							<div class="col-md-12 text-center">
 								<button class="btn btn-primary btn-lg" type="submit"
-									value="Convert File">Convert File</button>
+									value="Convert File"><spring:message code="converter.convert.file" /></button>
 							</div>
 						</div>
 					</div>
@@ -69,7 +70,7 @@
 		</c:when>
 		<c:when test="${form!=null }">
 			<div class="col-md-6 col-md-offset-3">
-				<h3 class="text-center">File Conversion Finished!</h3>
+				<h3 class="text-center"><spring:message code="converter.conversion.finished" /></h3>
 				<br />
 				<div class="row">
 					<div class="text-center">
@@ -79,7 +80,7 @@
 							<form:hidden path="outputFormat" />
 							<form:hidden path="fileName" />
 							<button class="btn btn-success btn-lg" type="submit"
-								value="Download">Download File</button>
+								value="Download"><spring:message code="converter.download.file" /></button>
 						</form:form>
 					</div>
 				</div>

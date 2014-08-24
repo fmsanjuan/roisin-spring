@@ -1,3 +1,5 @@
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -29,7 +31,7 @@
 				class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 alert alert-success alert-dismissable">
 				<button type="button" class="close" data-dismiss="alert"
 					aria-hidden="true">&times;</button>
-				${successMessage }
+				<spring:message code="welcome.success.the.user" /> ${successMessage } <spring:message code="welcome.success.has.been" />
 			</div>
 		</c:if>
 		<div class="row" style="margin-top: 20px">
@@ -99,16 +101,18 @@
 			<p class="text-center">
 				<spring:message code="welcome.association.rules.description" />
 			</p>
+			<spring:message code="welcome.my.files" var="myFiles" />
 			<a href="/file/list"> <input
 				class="btn btn-lg btn-primary btn-block" type="button"
-				value="My Files" onclick="self.location.href = /file/list" /></a> <br />
+				value="${myFiles }" onclick="self.location.href = /file/list" /></a> <br />
 			<h2 class="text-center"><spring:message code="welcome.data.conversion" /></h2>
 			<br />
 			<p class="text-center"><spring:message code="welcome.data.conversion.description" /></p>
-
+			
+			<spring:message code="welcome.data.converter" var="dataConverter" />
 			<a href="/converter/create"> <input
 				class="btn btn-lg btn-primary btn-block" type="button"
-				value="Data Converter"
+				value="${dataConverter }"
 				onclick="self.location.href = /converter/create" /></a>
 		</div>
 	</div>

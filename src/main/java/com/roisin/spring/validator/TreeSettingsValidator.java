@@ -24,45 +24,48 @@ public class TreeSettingsValidator implements Validator {
 						&& !form.getTree2RulesCriterion().equals(ProcessConstants.INFORMATION_GAIN)
 						&& !form.getTree2RulesCriterion().equals(ProcessConstants.GINI_INDEX) && !form
 						.getTree2RulesCriterion().equals(ProcessConstants.ACCURACY_RIPPER_TREE))) {
-			errors.rejectValue("tree2RulesCriterion", "form.tree2RulesCriterion",
-					"Please, select a criterion");
+			errors.rejectValue("tree2RulesCriterion", "process.tree.error.criterion",
+					"process.tree.error.criterion");
 		}
 
 		if (form.getMinimalSizeForSplit() < 1) {
-			errors.rejectValue("minimalSizeForSplit", "form.minimalSizeForSplit",
-					"Must be greater than or equal to 1");
+			errors.rejectValue("minimalSizeForSplit", "process.tree.error.criterion",
+					"process.tree.error.criterion");
 		}
 
 		if (form.getMinimalLeafSize() < 1) {
-			errors.rejectValue("minimalLeafSize", "form.minimalLeafSize",
-					"Must be greater than or equal to 1");
+			errors.rejectValue("minimalLeafSize", "process.tree.error.min.size.split",
+					"process.tree.error.min.size.split");
 		}
 
 		if (form.getMinimalGain().doubleValue() < 0.0) {
-			errors.rejectValue("minimalGain", "form.minimalGain",
-					"Must be greater than or equal to 0");
+			errors.rejectValue("minimalGain", "process.tree.error.minimal.gain",
+					"process.tree.error.minimal.gain");
 		}
 
 		if (form.getMaximalDepth() < -1) {
-			errors.rejectValue("maximalDepth", "form.maximalDepth",
-					"Must be greater than or equal to -1");
+			errors.rejectValue("maximalDepth", "process.tree.error.maximal.depth",
+					"process.tree.error.maximal.depth");
 		}
 
 		if (form.getConfidence() > 0.5 || form.getConfidence() < Math.pow(Math.E, -7)) {
-			errors.rejectValue("confidence", "form.confidence", "Must be between 0 and 0.5");
+			errors.rejectValue("confidence", "process.tree.error.confidence",
+					"process.tree.error.confidence");
 		}
 
 		if (form.getNumberOfPrepruningAlternatives() < 0) {
-			errors.rejectValue("maximalDepth", "form.maximalDepth",
-					"Must be greater than or equal to 0");
+			errors.rejectValue("maximalDepth", "process.tree.error.prepruning.alternatives",
+					"process.tree.error.prepruning.alternatives");
 		}
 
 		if (form.getNoPrepruning() == null) {
-			errors.rejectValue("maximalDepth", "form.maximalDepth", "Cannot be null");
+			errors.rejectValue("maximalDepth", "process.tree.error.no.prepruning",
+					"process.tree.error.no.prepruning");
 		}
 
 		if (form.getNoPruning() == null) {
-			errors.rejectValue("maximalDepth", "form.maximalDepth", "Cannot be null");
+			errors.rejectValue("maximalDepth", "process.tree.error.no.pruning",
+					"process.tree.error.no.pruning");
 		}
 	}
 

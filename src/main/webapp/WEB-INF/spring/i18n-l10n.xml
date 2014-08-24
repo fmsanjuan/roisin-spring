@@ -10,6 +10,14 @@
 	<util:list id="messages">
 		<value>/WEB-INF/views/layout/messages</value>
 		<value>/WEB-INF/views/welcome/messages</value>
+		<value>/WEB-INF/views/converter/messages</value>
+		<value>/WEB-INF/views/data/messages</value>
+		<value>/WEB-INF/views/file/messages</value>
+		<value>/WEB-INF/views/preform/messages</value>
+		<value>/WEB-INF/views/process/messages</value>
+		<value>/WEB-INF/views/results/messages</value>
+		<value>/WEB-INF/views/rule/messages</value>
+		<value>/WEB-INF/views/signup/messages</value>
 	</util:list>
 
 </beans>

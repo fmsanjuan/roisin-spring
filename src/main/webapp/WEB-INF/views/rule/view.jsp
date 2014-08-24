@@ -1,3 +1,5 @@
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -6,7 +8,7 @@
 
 <div class="page-header text-center">
 	<h1>
-		Rule <small>Details</small>
+		<spring:message code="rule.h1.rule" /> <small><spring:message code="rule.small.details" /></small>
 	</h1>
 </div>
 
@@ -16,10 +18,10 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>Premise</th>
-						<th>Conclusion</th>
-						<th>Precision</th>
-						<th>Support</th>
+						<th><spring:message code="rule.premise" /></th>
+						<th><spring:message code="rule.conclusion" /></th>
+						<th><spring:message code="rule.precision" /></th>
+						<th><spring:message code="rule.support" /></th>
 						<th>TPR</th>
 						<th>FPR</th>
 						<th>TP</th>
@@ -53,7 +55,7 @@
 		</div>
 		<div class="col-md-3">
 			<br /> <br /> <br /> <br /> <br /> <br /> <br /> <a href="${chart }"><button
-					class="btn btn-primary btn-lg">Download Chart</button></a>
+					class="btn btn-primary btn-lg"><spring:message code="rule.download.chart" /></button></a>
 		</div>
 	</div>
 </div>

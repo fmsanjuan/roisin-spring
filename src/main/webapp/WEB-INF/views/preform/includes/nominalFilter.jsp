@@ -4,7 +4,7 @@
 		<form:hidden path="dataId" value="${dataId }" />
 		<div class="row">
 			<div class="col-md-offset-1">
-				<h4>Nominal Filter</h4>
+				<h4><spring:message code="preform.nominal.filter" /></h4>
 			</div>
 		</div>
 		<br />
@@ -21,8 +21,8 @@
 			</div>
 			<div class="col-md-3">
 				<form:select path="filterOperator" class="form-control">
-					<form:option value="eq">equals</form:option>
-					<form:option value="neq">non equals</form:option>
+					<form:option value="eq"><spring:message code="preform.equals" /></form:option>
+					<form:option value="neq"><spring:message code="preform.non.equals" /></form:option>
 				</form:select>
 			</div>
 			<div class="col-md-2">
@@ -34,7 +34,7 @@
 		<div class="row">
 			<div class="col-md-offset-8">
 				<form:button type="submit" name="filter" value="Filter"
-					class="btn btn-default btn-md">Delete Nominal</form:button>
+					class="btn btn-default btn-md"><spring:message code="preform.delete.nominal" /></form:button>
 			</div>
 		</div>
 	</form:form>

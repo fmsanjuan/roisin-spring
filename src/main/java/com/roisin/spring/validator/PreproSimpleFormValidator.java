@@ -24,9 +24,9 @@ public class PreproSimpleFormValidator implements Validator {
 	public void validateExport(Object target, Errors errors) {
 		PreproSimpleForm form = (PreproSimpleForm) target;
 
-		if (form.getAttributeSelection().size() < 1) {
-			errors.rejectValue("attributeSelection", "form.attributeSelection",
-					"Select at least 1 attribute");
+		if (form.getExportAttributeSelection().size() < 1) {
+			errors.rejectValue("attributeSelection", "preform.error.attribute",
+					"preform.error.attribute");
 		}
 
 		if (!form.getExportFormat().equals(Constants.FORMAT_XLSX)
@@ -34,7 +34,7 @@ public class PreproSimpleFormValidator implements Validator {
 				&& !form.getExportFormat().equals(Constants.FORMAT_ARFF)
 				&& !form.getExportFormat().equals(Constants.FORMAT_XRFF)
 				&& !form.getExportFormat().equals(Constants.FORMAT_CSV)) {
-			errors.rejectValue("exportFormat", "form.exportFormat", "Invalid format");
+			errors.rejectValue("exportFormat", "preform.error.format", "preform.error.format");
 		}
 
 	}
@@ -43,20 +43,21 @@ public class PreproSimpleFormValidator implements Validator {
 		PreproSimpleForm form = (PreproSimpleForm) target;
 
 		if (StringUtils.isBlank(form.getName())) {
-			errors.rejectValue("name", "form.name", "Name cannot be blank");
+			errors.rejectValue("name", "preform.error.name", "preform.error.name");
 		}
 
 		if (StringUtils.isBlank(form.getDescription())) {
-			errors.rejectValue("description", "form.description", "Description cannot be blank");
+			errors.rejectValue("description", "preform.error.description",
+					"preform.error.description");
 		}
 
-		if (!form.getAttributeSelection().contains(form.getLabel())) {
-			errors.rejectValue("label", "form.label", "Label must be in attribute selection");
+		if (!form.getProcessAttributeSelection().contains(form.getLabel())) {
+			errors.rejectValue("label", "preform.error.label", "preform.error.label");
 		}
 
-		if (form.getAttributeSelection().size() < 3) {
-			errors.rejectValue("attributeSelection", "form.attributeSelection",
-					"You must select at least 3 attributes");
+		if (form.getProcessAttributeSelection().size() < 3) {
+			errors.rejectValue("attributeSelection", "preform.error.attribute.selection",
+					"preform.error.attribute.selection");
 		}
 
 		validate(target, errors);

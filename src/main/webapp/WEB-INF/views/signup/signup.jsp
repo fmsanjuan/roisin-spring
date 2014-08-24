@@ -1,3 +1,5 @@
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -6,8 +8,9 @@
 <%@ page session="false"%>
 
 <div class="page-header text-center">
+	<spring:message code="sign.h1.sign" var="signUp" />
 	<h1>
-		Sign Up <small>Start using Roisin</small>
+		${signUp } <small><spring:message code="sign.small.start" /></small>
 	</h1>
 </div>
 
@@ -32,19 +35,21 @@
 							<div class="alert alert-danger alert-dismissable">
 								<button type="button" class="close" data-dismiss="alert"
 									aria-hidden="true">&times;</button>
-								<strong>Error! </strong><br /> ${errorMessage }
+								<strong>Error! </strong><br /> <c:if test="${errorMessage !=null }"><spring:message code="${errorMessage }" /></c:if>
 								<form:errors path="*" />
 							</div>
 						</div>
 					</c:if>
 					<hr class="colorgraph">
 					<div class="form-group">
+						<spring:message code="sign.name" var="name" />
 						<form:input path="name" type="text" name="name" id="name"
-							class="form-control input-lg" placeholder="Name" />
+							class="form-control input-lg" placeholder="${name }" />
 					</div>
 					<div class="form-group">
+						<spring:message code="sign.surname" var="surname" />
 						<form:input path="surname" type="text" name="surname" id="surname"
-							class="form-control input-lg" placeholder="Surname" />
+							class="form-control input-lg" placeholder="${surname }" />
 					</div>
 					<div class="form-group">
 						<form:input path="email" type="email" name="email" id="email"
@@ -54,38 +59,42 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
+								<spring:message code="sign.password" var="password" />
 								<form:input path="password" type="password" name="password"
 									id="password" class="form-control input-lg"
-									placeholder="Password" />
+									placeholder="${password }" />
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
+								<spring:message code="sign.repeat.password" var="repeatPassword" />
 								<form:input path="repeatPassword" type="password"
 									name="repeatPassword" id="repeatPassword"
-									class="form-control input-lg" placeholder="Repeat Password" />
+									class="form-control input-lg" placeholder="${repeatPassword }" />
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-6">
+							<spring:message code="sign.city" var="city" />
 							<div class="form-group">
 								<form:input path="city" type="text" name="city" id="city"
-									class="form-control input-lg" placeholder="City" />
+									class="form-control input-lg" placeholder="${city }" />
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
+								<spring:message code="sign.nationality" var="nationality" />
 								<form:input path="nationality" type="text" name="nationality"
 									id="nationality" class="form-control input-lg"
-									placeholder="Nationality" />
+									placeholder="${nationality }" />
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12">
 							<input type="submit" class="btn btn-lg btn-success btn-block"
-								value="Sign Up" />
+								value="${signUp }" />
 						</div>
 					</div>
 				</fieldset>
@@ -93,7 +102,4 @@
 		</div>
 	</div>
 </div>
-
-
-
 <br />

@@ -1,3 +1,5 @@
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -8,7 +10,7 @@
 
 <div class="page-header text-center">
 	<h1>
-		Subgroup Discovery Processes <small>${dataName }</small>
+		<spring:message code="process.h1.subgroup" /> <small>${dataName }</small>
 	</h1>
 </div>
 
@@ -16,32 +18,41 @@
 	<display:table uid="filesTable" keepStatus="false" name="processes"
 		pagesize="5" class="table table-hover" requestURI="${requestURI}"
 		id="process">
-		<display:column title="Label">${process.getLabel().getName() }</display:column>
-		<display:column title="Mode">
+		<spring:message code="process.h1.subgroup" var="label" />
+		<display:column title="${label }">${process.getLabel().getName() }</display:column>
+		<spring:message code="process.subgroup.mode" var="mode" />
+		<display:column title="${mode }">
 		${process.getSubgroupSettings().getMode() }
 		</display:column>
-		<display:column title="Utility Function">
+		<spring:message code="process.subgroup.utility.function" var="utilityFunction" />
+		<display:column title="${utilityFunction }">
 		${process.getSubgroupSettings().getUtilityFunction() }
 		</display:column>
-		<display:column title="Min Utility">
+		<spring:message code="process.subgroup.min.utility" var="minUtility" />
+		<display:column title="${minUtility }">
 		${process.getSubgroupSettings().getMinUtility() }
 		</display:column>
-		<display:column title="K Best Rules">
+		<spring:message code="process.subgroup.k.best.rules" var="kBestRules" />
+		<display:column title="${kBestRules }">
 		${process.getSubgroupSettings().getkBestRules() }
 		</display:column>
-		<display:column title="Rule Generation">
+		<spring:message code="process.subgroup.rule.generation" var="ruleGeneration" />
+		<display:column title="${ruleGeneration }">
 		${process.getSubgroupSettings().getRuleGeneration() }
 		</display:column>
-		<display:column title="Max Depth">
+		<spring:message code="process.subgroup.max.depth" var="maxDepth" />
+		<display:column title="${maxDepth }">
 		${process.getSubgroupSettings().getMaxDepth() }
 		</display:column>
-		<display:column title="Min Coverage">
+		<spring:message code="process.subgroup.min.coverage" var="minCoverage" />
+		<display:column title="${minCoverage }">
 		${process.getSubgroupSettings().getMinCoverage() }
 		</display:column>
 		<display:column>
+			<spring:message code="process.show.results" var="showResults" />
 			<a
 				href="../results/view?resultsId=${process.getResults().getId()}">
-				<input class="btn btn-default" type="button" value="Show Results"
+				<input class="btn btn-default" type="button" value="${showResults }"
 				onclick="self.location.href = ../results/view?resultsId=${process.getResults().getId()}" />
 			</a>
 		</display:column>

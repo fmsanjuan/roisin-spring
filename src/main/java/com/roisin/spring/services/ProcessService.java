@@ -76,4 +76,8 @@ public class ProcessService {
 	public Collection<Process> findByAlgorithmAndDataId(int dataId, String algorithm) {
 		return processRepository.findByAlgorithmAndDataId(dataId, algorithm);
 	}
+
+	public Collection<Process> findProcessByLabelId(int labelId) {
+		return processRepository.findProcessByLabelId(labelId);
+	}
 }

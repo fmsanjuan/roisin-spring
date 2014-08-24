@@ -19,19 +19,30 @@
 	</div>
 	<div class="clear"></div>
 	<br />
-	<c:choose>
-		<c:when test="${error !=null && error=='Ripper' }">
-			<a href="#aboutRipperModal" data-toggle="modal"
-				data-target="#ripperModal"><button type="button"
-					class="btn btn-danger">Advanced Settings</button> </a>
-		</c:when>
-		<c:otherwise>
-			<a href="#aboutRipperModal" data-toggle="modal"
-				data-target="#ripperModal"><button type="button"
-					class="btn btn-default">Advanced Settings</button> </a>
-		</c:otherwise>
-	</c:choose>
-	<form:button type="submit" name="ripper" class="btn btn-default">Run Ripper</form:button>
+	<div class="row text-center">
+		<c:choose>
+			<c:when test="${error !=null && error=='Ripper' }">
+				<a href="#aboutRipperModal" data-toggle="modal"
+					data-target="#ripperModal"><button type="button"
+						class="btn btn-danger">
+						<spring:message code="process.advanced.settings" />
+					</button> </a>
+			</c:when>
+			<c:otherwise>
+				<a href="#aboutRipperModal" data-toggle="modal"
+					data-target="#ripperModal"><button type="button"
+						class="btn btn-default">
+						<spring:message code="process.advanced.settings" />
+					</button> </a>
+			</c:otherwise>
+		</c:choose>
+	</div>
+	<br />
+	<div class="row text-center">
+		<form:button type="submit" name="ripper" class="btn btn-default">
+			<spring:message code="process.ripper.run" />
+		</form:button>
+	</div>
 	<div class="modal fade" id="ripperModal" tabindex="-1" role="dialog"
 		aria-labelledby="ripperModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -39,13 +50,15 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true"></button>
-					<h4 class="modal-title" id="ripperModalLabel">Ripper Advanced
-						Settings</h4>
+					<h4 class="modal-title" id="ripperModalLabel">
+						<spring:message code="process.ripper.advanced.settings" />
+					</h4>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
+						<spring:message code="process.ripper.criterion" var="criterion" />
 						<label for="ripperCriterionSelect"
-							class="col-sm-4 col-sm-offset-1 control-label">Criterion</label>
+							class="col-sm-4 col-sm-offset-1 control-label">${criterion }</label>
 						<div class="col-sm-4">
 							<form:select class="form-control" id="ripperCriterionSelect"
 								path="ripperCriterion">
@@ -56,42 +69,48 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<spring:message code="process.ripper.sample.ratio"
+							var="sampleRatio" />
 						<label for="ripperSampleRatio"
-							class="col-sm-4 col-sm-offset-1 control-label">Sample
-							Ratio</label>
+							class="col-sm-4 col-sm-offset-1 control-label">${sampleRatio }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="ripperSampleRatio" placeholder="Sample Ratio"
+								id="ripperSampleRatio" placeholder="${sampleRatio }"
 								path="sampleRatio" />
 							<font color="red"><form:errors path="sampleRatio" /></font>
 						</div>
 					</div>
 					<div class="form-group">
+						<spring:message code="process.ripper.pureness" var="pureness" />
 						<label for="ripperPureness"
-							class="col-sm-4 col-sm-offset-1 control-label">Pureness</label>
+							class="col-sm-4 col-sm-offset-1 control-label">${pureness }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control" id="ripperPureness"
-								placeholder="Pureness" path="pureness" />
+								placeholder="${pureness }" path="pureness" />
 							<font color="red"><form:errors path="pureness" /></font>
 						</div>
 					</div>
 					<div class="form-group">
+						<spring:message code="process.ripper.minimal.prune.benefit"
+							var="mPruneBenefit" />
 						<label for="ripperMinimalPruneBenefit"
-							class="col-sm-4 col-sm-offset-1 control-label">Minimal
-							Prune Benefit</label>
+							class="col-sm-4 col-sm-offset-1 control-label">${mPruneBenefit }</label>
 						<div class="col-sm-4">
 							<form:input type="text" class="form-control"
-								id="ripperMinimalPruneBenefit"
-								placeholder="Minimal Prune Benefit" path="minimalPruneBenefit" />
+								id="ripperMinimalPruneBenefit" placeholder="${mPruneBenefit }"
+								path="minimalPruneBenefit" />
 							<font color="red"><form:errors path="minimalPruneBenefit" /></font>
 						</div>
 					</div>
 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Go
-						Back</button>
-					<form:button type="submit" name="ripper" class="btn btn-default">Run Ripper</form:button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						<spring:message code="process.go.back" />
+					</button>
+					<form:button type="submit" name="ripper" class="btn btn-default">
+						<spring:message code="process.ripper.run" />
+					</form:button>
 				</div>
 			</div>
 		</div>

@@ -68,8 +68,7 @@ public class FileController {
 			}
 			roisinFile.setUser(userService.findByPrincipal());
 			fileService.save(roisinFile);
-			String successMessage = "The file " + file.getOriginalFilename()
-					+ " has been successfully uploaded!";
+			String successMessage = file.getOriginalFilename();
 
 			return createListModelAndView(false, successMessage);
 		}
@@ -79,7 +78,7 @@ public class FileController {
 	public ModelAndView delete(@RequestParam int fileId) {
 		File file = fileService.findOne(fileId);
 		fileService.delete(file);
-		String successMessage = "The file " + file.getName() + " has been deleted.";
+		String successMessage = file.getName();
 
 		return createListModelAndView(false, successMessage);
 	}
