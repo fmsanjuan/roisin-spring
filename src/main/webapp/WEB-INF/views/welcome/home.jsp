@@ -38,7 +38,7 @@
 				<form:form action="/j_spring_security_check"
 					modelAttribute="credentials" role="form">
 					<fieldset>
-						<h2>Sign In</h2>
+						<h2><spring:message code="welcome.sign.in" /></h2>
 						<hr class="colorgraph">
 						<div class="form-group">
 							<form:input path="username" type="text" name="username"
@@ -46,29 +46,32 @@
 							<form:errors class="error" path="username" />
 						</div>
 						<div class="form-group">
+							<spring:message code="welcome.password" var="password" />
 							<form:input path="password" type="password" name="password"
 								id="password" class="form-control input-lg"
-								placeholder="Password" />
+								placeholder="${password }" />
 							<form:errors class="error" path="username" />
 						</div>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
+								<spring:message code="welcome.sign.in" var="signIn" />
 								<input type="submit" class="btn btn-lg btn-success btn-block"
-									value="Sign In" />
+									value="${signIn }" />
 							</div>
 						</div>
 						<br />
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
+								<spring:message code="welcome.sign.up" var="signUp" />
 								<a href="/signup/"> <input
 									class="btn btn-lg btn-primary btn-block" type="button"
-									value="Sign Up" onclick="self.location.href = /signup/" /></a>
+									value="${signUp }" onclick="self.location.href = /signup/" /></a>
 							</div>
 						</div>
 						<br />
 						<c:if test="${showError == true}">
 							<div class="alert alert-danger alert-dismissable">
-								Incorrect username or password.</div>
+								<spring:message code="welcome.incorrect.user" /></div>
 						</c:if>
 						<c:if test="${showError == false}">
 							<br />
@@ -91,19 +94,17 @@
 	<div class="container">
 		<div class="col-md-4 col-md-offset-4">
 			<br />
-			<h2 class="text-center">Association rules</h2>
+			<h2 class="text-center"><spring:message code="welcome.association.rules" /></h2>
 			<br />
 			<p class="text-center">
-				If you want to start processing your data to get association rules.
-				<b>First things first!</b> Upload or use a file you're already
-				uploaded
+				<spring:message code="welcome.association.rules.description" />
 			</p>
 			<a href="/file/list"> <input
 				class="btn btn-lg btn-primary btn-block" type="button"
 				value="My Files" onclick="self.location.href = /file/list" /></a> <br />
-			<h2 class="text-center">Data conversion</h2>
+			<h2 class="text-center"><spring:message code="welcome.data.conversion" /></h2>
 			<br />
-			<p class="text-center">If you just want to convert your files.</p>
+			<p class="text-center"><spring:message code="welcome.data.conversion.description" /></p>
 
 			<a href="/converter/create"> <input
 				class="btn btn-lg btn-primary btn-block" type="button"
