@@ -17,13 +17,17 @@
 
 	<!-- Data source -->
 
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/roisin" />
-		<property name="user" value="root" />
-		<property name="password" value="root" />
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/roisin" />
 	</bean>
+
+<!-- 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" -->
+<!-- 		destroy-method="close"> -->
+<!-- 		<property name="driverClass" value="com.mysql.jdbc.Driver" /> -->
+<!-- 		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/roisin" /> -->
+<!-- 		<property name="user" value="root" /> -->
+<!-- 		<property name="password" value="root" /> -->
+<!-- 	</bean> -->
 
 	<!-- JPA -->
 
