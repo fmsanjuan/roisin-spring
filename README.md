@@ -30,3 +30,17 @@ persistence.xml
 Añadir a persistence-unit:
 
 <non-jta-data-source>java:comp/env/jdbc/roisin</non-jta-data-source>
+
+Definición de rutas necesarias para el despliegue de Roisin:
+
+- En server.xml de Tomcat dentro de <GlobalNamingResources>
+
+<Environment name="storagePath" value="/Users/felix/03.TFG/pruebafiles/" type="java.lang.String" override="false" />
+<Environment name="downloadPath" value="/Users/felix/03.TFG/pruebafiles/downloads/" type="java.lang.String" override="false" />
+<Environment name="convertPath" value="/Users/felix/03.TFG/pruebafiles/convert/" type="java.lang.String" override="false" />
+
+- En context.xml de Tomcat dentro de <Context>
+
+<ResourceLink name="downloadPath" global="downloadPath" type="java.lang.String" />
+	<ResourceLink name="storagePath" global="storagePath" type="java.lang.String" />
+	<ResourceLink name="convertPath" global="convertPath" type="java.lang.String" />

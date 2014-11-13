@@ -2,6 +2,8 @@ package com.roisin.spring.services;
 
 import java.util.Collection;
 
+import javax.naming.NamingException;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,10 +62,10 @@ public class FileService {
 		return fileRepository.findFilesByUserId(userId);
 	}
 
-	public String writeFileFromDb(File file) {
+	public String writeFileFromDb(File file) throws NamingException {
 		byte[] fileArray = file.getOriginalFile();
 		String fileFormat = StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
-		String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
+		String tmpPath = FileUtils.getStoragePath() + file.getHash() + Constants.DOT_SYMBOL
 				+ fileFormat;
 		// Escritura en disco del fichero
 		FileUtils.writeFileFromByteArray(fileArray, tmpPath);

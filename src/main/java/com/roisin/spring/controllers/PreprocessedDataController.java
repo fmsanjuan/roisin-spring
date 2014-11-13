@@ -3,6 +3,8 @@ package com.roisin.spring.controllers;
 import java.util.Collection;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -157,7 +159,7 @@ public class PreprocessedDataController {
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = { "process" })
 	public ModelAndView process(@ModelAttribute PreproSimpleForm form, BindingResult result,
-			RedirectAttributes redirect) {
+			RedirectAttributes redirect) throws NamingException {
 
 		psfValidator.validateProcess(form, result);
 
@@ -180,7 +182,7 @@ public class PreprocessedDataController {
 			File file = storedForm.getFile();
 			String fileFormat = StringUtils
 					.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
-			String tmpPath = Constants.STORAGE_PATH + file.getHash() + Constants.DOT_SYMBOL
+			String tmpPath = FileUtils.getStoragePath() + file.getHash() + Constants.DOT_SYMBOL
 					+ fileFormat;
 			// Escritura en disco del fichero
 			FileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
@@ -226,7 +228,8 @@ public class PreprocessedDataController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = { "export" })
-	public ResponseEntity<byte[]> export(@ModelAttribute PreproSimpleForm form) {
+	public ResponseEntity<byte[]> export(@ModelAttribute PreproSimpleForm form)
+			throws NamingException {
 
 		PreprocessedData data = preprocessedDataService.findOne(Integer.parseInt(form.getDataId()));
 		// Formulario

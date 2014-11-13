@@ -2,6 +2,8 @@ package com.roisin.spring.controllers;
 
 import java.io.IOException;
 
+import javax.naming.NamingException;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,12 +70,12 @@ public class ConverterController {
 						Constants.DOT_SYMBOL);
 				String fileHash = HashUtils.fileChecksum(file.getBytes(), Constants.SHA_256);
 				String outputFormat = convertUploadedFile.getOutputFormat();
-				String outputPath = Constants.CONVERT_PATH + fileHash + Constants.DOT_SYMBOL
+				String outputPath = FileUtils.getConvertPath() + fileHash + Constants.DOT_SYMBOL
 						+ outputFormat;
-				String inputPath = Constants.CONVERT_PATH + fileHash + Constants.DOT_SYMBOL
+				String inputPath = FileUtils.getConvertPath() + fileHash + Constants.DOT_SYMBOL
 						+ inputFormat;
-				FileUtils.writeFileFromByteArray(file.getBytes(), Constants.CONVERT_PATH + fileHash
-						+ Constants.DOT_SYMBOL + inputFormat);
+				FileUtils.writeFileFromByteArray(file.getBytes(), FileUtils.getConvertPath()
+						+ fileHash + Constants.DOT_SYMBOL + inputFormat);
 				Runner.convertFile(inputFormat, outputFormat, inputPath, outputPath);
 
 				DownloadForm form = new DownloadForm();
@@ -90,25 +92,42 @@ public class ConverterController {
 		} catch (IOException e) {
 			logger.error("No ha sido posible convertir el fichero", e);
 			throw new RoisinException("Could not convert file");
+		} catch (NamingException e) {
+			logger.error(
+					"No ha sido posible recuperar el directorio para realizar la conversión del fichero",
+					e);
+			throw new RoisinException(
+					"No ha sido posible recuperar el directorio para realizar la conversión del fichero");
 		}
 	}
 
 	@RequestMapping(value = "/download", method = RequestMethod.POST)
-	public ResponseEntity<byte[]> download(@ModelAttribute DownloadForm form) {
+	public ResponseEntity<byte[]> download(@ModelAttribute DownloadForm form)
+			throws RoisinException {
 
-		String filePath = Constants.CONVERT_PATH + form.getHash() + Constants.DOT_SYMBOL
-				+ form.getOutputFormat();
-		String exportFileName = form.getFileName() + Constants.DOT_SYMBOL + form.getOutputFormat();
-		byte[] fileContent = FileUtils.getFileFromPath(filePath);
-		// Create and configure headers to return the file
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.parseMediaType("application/" + form.getOutputFormat()));
-		headers.setContentDispositionFormData(exportFileName, exportFileName);
-		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(fileContent, headers,
-				HttpStatus.OK);
+		String filePath;
+		try {
+			filePath = FileUtils.getConvertPath() + form.getHash() + Constants.DOT_SYMBOL
+					+ form.getOutputFormat();
+			String exportFileName = form.getFileName() + Constants.DOT_SYMBOL
+					+ form.getOutputFormat();
+			byte[] fileContent = FileUtils.getFileFromPath(filePath);
+			// Create and configure headers to return the file
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.parseMediaType("application/" + form.getOutputFormat()));
+			headers.setContentDispositionFormData(exportFileName, exportFileName);
+			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+			ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(fileContent, headers,
+					HttpStatus.OK);
 
-		return response;
+			return response;
+		} catch (NamingException e) {
+			logger.error(
+					"No ha sido posible recuperar el directorio para realizar la conversión del fichero",
+					e);
+			throw new RoisinException(
+					"No ha sido posible recuperar el directorio para realizar la conversión del fichero");
+		}
 	}
 
 }

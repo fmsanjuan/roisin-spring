@@ -2,6 +2,8 @@ package com.roisin.spring.controllers;
 
 import java.util.Collection;
 
+import javax.naming.NamingException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +93,8 @@ public class ProcessController {
 	private TreeSettingsValidator treeValidator;
 
 	@RequestMapping(value = "/ripper", method = RequestMethod.POST)
-	public ModelAndView ripper(@ModelAttribute RipperSettings ripperSettings, BindingResult result) {
+	public ModelAndView ripper(@ModelAttribute RipperSettings ripperSettings, BindingResult result)
+			throws NamingException {
 
 		ripperValidator.validate(ripperSettings, result);
 
@@ -145,7 +148,7 @@ public class ProcessController {
 
 	@RequestMapping(value = "/subgroup", method = RequestMethod.POST)
 	public ModelAndView subgroup(@ModelAttribute SubgroupSettings subgroupSettings,
-			BindingResult result) {
+			BindingResult result) throws NamingException {
 
 		subgroupValidator.validate(subgroupSettings, result);
 
@@ -195,7 +198,8 @@ public class ProcessController {
 	}
 
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
-	public ModelAndView tree(@ModelAttribute TreeToRulesSettings treeSettings, BindingResult result) {
+	public ModelAndView tree(@ModelAttribute TreeToRulesSettings treeSettings, BindingResult result)
+			throws NamingException {
 
 		treeValidator.validate(treeSettings, result);
 

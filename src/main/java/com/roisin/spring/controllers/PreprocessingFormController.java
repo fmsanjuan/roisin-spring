@@ -3,6 +3,8 @@ package com.roisin.spring.controllers;
 import java.util.Collection;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -67,7 +69,7 @@ public class PreprocessingFormController {
 	private TreeToRulesSettingsService treeToRulesSettingsService;
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create(@RequestParam int fileId) {
+	public ModelAndView create(@RequestParam int fileId) throws NamingException {
 
 		File file = fileService.findOne(fileId);
 		byte[] fileArray = file.getOriginalFile();
