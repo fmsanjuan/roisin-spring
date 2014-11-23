@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rapidminer.example.Attribute;
+import com.roisin.spring.forms.FilterConditionForm;
 import com.roisin.spring.forms.PreproSimpleForm;
+import com.roisin.spring.model.File;
 import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.Process;
 import com.roisin.spring.model.SelectedAttribute;
 import com.roisin.spring.repositories.PreprocessingFormRepository;
+import com.roisin.spring.utils.RoisinUtils;
 
 @Service
 @Transactional
@@ -110,6 +114,30 @@ public class PreprocessingFormService {
 
 	public void deleteNullDataForms(Collection<PreprocessingForm> forms) {
 		preprocessingFormRepository.deleteInBatch(forms);
+	}
+
+	public PreproSimpleForm loadAttributesInPreproSimpleForm(Attribute[] attributes) {
+		PreproSimpleForm form = new PreproSimpleForm();
+		form.setProcessAttributeSelection(RoisinUtils
+				.getAttributeNameListFromExampleSet(attributes));
+		form.setExportAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
+		return form;
+	}
+
+	public PreprocessingForm createSavePreprocessingFormFromFile(File file) {
+		PreprocessingForm preform = create();
+		preform.setFile(file);
+		preform = save(preform);
+		return preform;
+	}
+
+	public Attribute loadFilterAttribute(Attribute[] attributes, FilterConditionForm form) {
+		for (int i = 0; i < attributes.length; i++) {
+			if (attributes[i].getName().equals(form.getFilterAttribute())) {
+				return attributes[i];
+			}
+		}
+		return null;
 	}
 
 }

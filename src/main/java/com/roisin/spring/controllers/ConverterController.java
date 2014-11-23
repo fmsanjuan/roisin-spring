@@ -1,5 +1,11 @@
 package com.roisin.spring.controllers;
 
+import static com.roisin.spring.utils.Constants.DOT_SYMBOL;
+import static com.roisin.spring.utils.Constants.SHA_256;
+import static com.roisin.spring.utils.ModelViewConstants.ERROR_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.FORM_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.UPLOADED_FILE;
+
 import java.io.IOException;
 
 import javax.naming.NamingException;
@@ -22,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.roisin.spring.forms.DownloadForm;
 import com.roisin.spring.model.ConvertUploadFile;
-import com.roisin.spring.utils.Constants;
 import com.roisin.spring.utils.FileUtils;
 import com.roisin.spring.utils.HashUtils;
 import com.roisin.spring.utils.Runner;
@@ -43,14 +48,14 @@ public class ConverterController {
 	public ModelAndView upload() {
 
 		ModelAndView res = new ModelAndView("converter/create");
-		res.addObject("uploadedFile", new ConvertUploadFile());
+		res.addObject(UPLOADED_FILE, new ConvertUploadFile());
 
 		return res;
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public ModelAndView uploaded(
-			@ModelAttribute("uploadedFile") ConvertUploadFile convertUploadedFile,
+			@ModelAttribute(UPLOADED_FILE) ConvertUploadFile convertUploadedFile,
 			BindingResult result) throws RoisinException {
 		try {
 
@@ -59,23 +64,22 @@ public class ConverterController {
 
 			if (result.hasErrors()) {
 				ModelAndView res = new ModelAndView("converter/create");
-				res.addObject("error", true);
+				res.addObject(ERROR_LOWER_CASE, true);
 
 				return res;
 			} else {
 
 				String originalFileName = StringUtils.substringBeforeLast(
-						file.getOriginalFilename(), Constants.DOT_SYMBOL);
+						file.getOriginalFilename(), DOT_SYMBOL);
 				String inputFormat = StringUtils.substringAfterLast(file.getOriginalFilename(),
-						Constants.DOT_SYMBOL);
-				String fileHash = HashUtils.fileChecksum(file.getBytes(), Constants.SHA_256);
+						DOT_SYMBOL);
+				String fileHash = HashUtils.fileChecksum(file.getBytes(), SHA_256);
 				String outputFormat = convertUploadedFile.getOutputFormat();
-				String outputPath = FileUtils.getConvertPath() + fileHash + Constants.DOT_SYMBOL
+				String outputPath = FileUtils.getConvertPath() + fileHash + DOT_SYMBOL
 						+ outputFormat;
-				String inputPath = FileUtils.getConvertPath() + fileHash + Constants.DOT_SYMBOL
-						+ inputFormat;
+				String inputPath = FileUtils.getConvertPath() + fileHash + DOT_SYMBOL + inputFormat;
 				FileUtils.writeFileFromByteArray(file.getBytes(), FileUtils.getConvertPath()
-						+ fileHash + Constants.DOT_SYMBOL + inputFormat);
+						+ fileHash + DOT_SYMBOL + inputFormat);
 				Runner.convertFile(inputFormat, outputFormat, inputPath, outputPath);
 
 				DownloadForm form = new DownloadForm();
@@ -84,8 +88,8 @@ public class ConverterController {
 				form.setFileName(originalFileName);
 
 				ModelAndView res = new ModelAndView("converter/create");
-				res.addObject("uploadedFile", new ConvertUploadFile());
-				res.addObject("form", form);
+				res.addObject(UPLOADED_FILE, new ConvertUploadFile());
+				res.addObject(FORM_LOWER_CASE, form);
 
 				return res;
 			}
@@ -107,10 +111,9 @@ public class ConverterController {
 
 		String filePath;
 		try {
-			filePath = FileUtils.getConvertPath() + form.getHash() + Constants.DOT_SYMBOL
+			filePath = FileUtils.getConvertPath() + form.getHash() + DOT_SYMBOL
 					+ form.getOutputFormat();
-			String exportFileName = form.getFileName() + Constants.DOT_SYMBOL
-					+ form.getOutputFormat();
+			String exportFileName = form.getFileName() + DOT_SYMBOL + form.getOutputFormat();
 			byte[] fileContent = FileUtils.getFileFromPath(filePath);
 			// Create and configure headers to return the file
 			HttpHeaders headers = new HttpHeaders();

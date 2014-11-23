@@ -1,10 +1,14 @@
 package com.roisin.spring.controllers;
 
+import static com.roisin.spring.utils.ModelViewConstants.CHART_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.REMOVED_RULES;
+import static com.roisin.spring.utils.ModelViewConstants.REQUEST_URI;
+import static com.roisin.spring.utils.ModelViewConstants.RESULTS_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.RULES_LOWER_CASE;
+
 import java.util.Collection;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,8 +31,6 @@ import com.roisin.spring.utils.RoisinUtils;
 @Controller
 @RequestMapping("/results")
 public class ResultsController {
-
-	private static final Logger logger = LoggerFactory.getLogger(ResultsController.class);
 
 	@Autowired
 	private ResultsService resultsService;
@@ -78,10 +80,10 @@ public class ResultsController {
 		XYLineChart chart = RoisinUtils.getAucChart(rules, RoisinUtils.calculateRulesAuc(rules));
 
 		ModelAndView res = new ModelAndView("results/optimization");
-		res.addObject("rules", rules);
-		res.addObject("removedRules", removedRules);
-		res.addObject("chart", chart.toURLString());
-		res.addObject("results", results);
+		res.addObject(RULES_LOWER_CASE, rules);
+		res.addObject(REMOVED_RULES, removedRules);
+		res.addObject(CHART_LOWER_CASE, chart.toURLString());
+		res.addObject(RESULTS_LOWER_CASE, results);
 
 		return res;
 	}
@@ -94,11 +96,11 @@ public class ResultsController {
 		Results results = resultsService.findOne(resultsId);
 
 		ModelAndView res = new ModelAndView("results/view");
-		res.addObject("rules", rules);
-		res.addObject("requestURI", "results/view?=resultsId=" + resultsId);
-		res.addObject("chart", chart.toURLString());
-		res.addObject("rules", rules);
-		res.addObject("results", results);
+		res.addObject(RULES_LOWER_CASE, rules);
+		res.addObject(REQUEST_URI, "results/view?=resultsId=" + resultsId);
+		res.addObject(CHART_LOWER_CASE, chart.toURLString());
+		res.addObject(RULES_LOWER_CASE, rules);
+		res.addObject(RESULTS_LOWER_CASE, results);
 
 		return res;
 	}

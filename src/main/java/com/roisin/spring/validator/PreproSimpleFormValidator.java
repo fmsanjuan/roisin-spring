@@ -1,23 +1,26 @@
 package com.roisin.spring.validator;
 
+import static com.roisin.spring.utils.Constants.FORMAT_ARFF;
+import static com.roisin.spring.utils.Constants.FORMAT_CSV;
+import static com.roisin.spring.utils.Constants.FORMAT_XLS;
+import static com.roisin.spring.utils.Constants.FORMAT_XLSX;
+import static com.roisin.spring.utils.Constants.FORMAT_XRFF;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.roisin.spring.forms.PreproSimpleForm;
-import com.roisin.spring.utils.Constants;
 
 public class PreproSimpleFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -29,11 +32,11 @@ public class PreproSimpleFormValidator implements Validator {
 					"preform.error.attribute");
 		}
 
-		if (!form.getExportFormat().equals(Constants.FORMAT_XLSX)
-				&& !form.getExportFormat().equals(Constants.FORMAT_XLS)
-				&& !form.getExportFormat().equals(Constants.FORMAT_ARFF)
-				&& !form.getExportFormat().equals(Constants.FORMAT_XRFF)
-				&& !form.getExportFormat().equals(Constants.FORMAT_CSV)) {
+		if (!form.getExportFormat().equals(FORMAT_XLSX)
+				&& !form.getExportFormat().equals(FORMAT_XLS)
+				&& !form.getExportFormat().equals(FORMAT_ARFF)
+				&& !form.getExportFormat().equals(FORMAT_XRFF)
+				&& !form.getExportFormat().equals(FORMAT_CSV)) {
 			errors.rejectValue("exportFormat", "preform.error.format", "preform.error.format");
 		}
 

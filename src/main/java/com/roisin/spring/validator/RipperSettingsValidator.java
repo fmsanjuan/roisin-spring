@@ -1,11 +1,13 @@
 package com.roisin.spring.validator;
 
+import static com.roisin.spring.utils.ProcessConstants.ACCURACY_RIPPER_TREE;
+import static com.roisin.spring.utils.ProcessConstants.INFORMATION_GAIN;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.roisin.spring.model.RipperSettings;
-import com.roisin.spring.utils.ProcessConstants;
 
 public class RipperSettingsValidator implements Validator {
 
@@ -19,8 +21,8 @@ public class RipperSettingsValidator implements Validator {
 		RipperSettings form = (RipperSettings) target;
 
 		if (StringUtils.isBlank(form.getRipperCriterion())
-				|| (!form.getRipperCriterion().equals(ProcessConstants.INFORMATION_GAIN) && !form
-						.getRipperCriterion().equals(ProcessConstants.ACCURACY_RIPPER_TREE))) {
+				|| (!form.getRipperCriterion().equals(INFORMATION_GAIN) && !form
+						.getRipperCriterion().equals(ACCURACY_RIPPER_TREE))) {
 			errors.rejectValue("ripperCriterion", "process.ripper.error.criterion",
 					"process.ripper.error.criterion");
 		}

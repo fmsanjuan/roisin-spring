@@ -1,7 +1,8 @@
 package com.roisin.spring.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.roisin.spring.utils.ModelViewConstants.CHART_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.RULE_LOWER_CASE;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,6 @@ import com.roisin.spring.utils.RoisinUtils;
 @RequestMapping("/rule")
 public class RuleController {
 
-	private static final Logger logger = LoggerFactory.getLogger(RuleController.class);
-
 	@Autowired
 	private RuleService ruleService;
 
@@ -31,8 +30,8 @@ public class RuleController {
 		XYLineChart chart = RoisinUtils.getSingleRuleAucChart(rule);
 
 		ModelAndView res = new ModelAndView("rule/view");
-		res.addObject("rule", rule);
-		res.addObject("chart", chart.toURLString());
+		res.addObject(RULE_LOWER_CASE, rule);
+		res.addObject(CHART_LOWER_CASE, chart.toURLString());
 
 		return res;
 	}

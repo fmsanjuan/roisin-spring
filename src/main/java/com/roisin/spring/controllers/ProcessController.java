@@ -1,11 +1,23 @@
 package com.roisin.spring.controllers;
 
+import static com.roisin.spring.utils.ModelViewConstants.CHART_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.DATA_NAME;
+import static com.roisin.spring.utils.ModelViewConstants.ERROR_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.PROCESSES_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.REQUEST_URI;
+import static com.roisin.spring.utils.ModelViewConstants.RESULTS_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.RIPPER_SETTINGS;
+import static com.roisin.spring.utils.ModelViewConstants.RULES_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.SUBGROUP_SETTINGS;
+import static com.roisin.spring.utils.ModelViewConstants.TREE_SETTINGS;
+import static com.roisin.spring.utils.ProcessConstants.RIPPER;
+import static com.roisin.spring.utils.ProcessConstants.SUBGROUP_DISCOVERY;
+import static com.roisin.spring.utils.ProcessConstants.TREE_TO_RULES;
+
 import java.util.Collection;
 
 import javax.naming.NamingException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,17 +28,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.googlecode.charts4j.XYLineChart;
-import com.roisin.core.results.RoisinResults;
 import com.roisin.spring.forms.PreproSimpleForm;
-import com.roisin.spring.model.DeletedRow;
-import com.roisin.spring.model.File;
 import com.roisin.spring.model.PreprocessedData;
-import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.Process;
 import com.roisin.spring.model.Results;
 import com.roisin.spring.model.RipperSettings;
 import com.roisin.spring.model.Rule;
-import com.roisin.spring.model.SelectedAttribute;
 import com.roisin.spring.model.SubgroupSettings;
 import com.roisin.spring.model.TreeToRulesSettings;
 import com.roisin.spring.services.DeletedRowService;
@@ -39,10 +46,7 @@ import com.roisin.spring.services.RuleService;
 import com.roisin.spring.services.SelectedAttributeService;
 import com.roisin.spring.services.SubgroupSettingsService;
 import com.roisin.spring.services.TreeToRulesSettingsService;
-import com.roisin.spring.utils.Constants;
-import com.roisin.spring.utils.ProcessConstants;
 import com.roisin.spring.utils.RoisinUtils;
-import com.roisin.spring.utils.Runner;
 import com.roisin.spring.validator.RipperSettingsValidator;
 import com.roisin.spring.validator.SubgroupSettingsValidator;
 import com.roisin.spring.validator.TreeSettingsValidator;
@@ -50,8 +54,6 @@ import com.roisin.spring.validator.TreeSettingsValidator;
 @Controller
 @RequestMapping("/process")
 public class ProcessController {
-
-	private static final Logger logger = LoggerFactory.getLogger(ProcessController.class);
 
 	@Autowired
 	private ProcessService processService;
@@ -105,42 +107,16 @@ public class ProcessController {
 			treeSettings.setProcess(ripperSettings.getProcess());
 
 			ModelAndView res = new ModelAndView("process/create");
-			res.addObject("ripperSettings", ripperSettings);
-			res.addObject("subgroupSettings", subgroupSettings);
-			res.addObject("treeSettings", treeSettings);
-			res.addObject("error", ProcessConstants.RIPPER);
+			res.addObject(RIPPER_SETTINGS, ripperSettings);
+			res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
+			res.addObject(TREE_SETTINGS, treeSettings);
+			res.addObject(ERROR_LOWER_CASE, RIPPER);
 
 			return res;
 
 		} else {
-			// Process
-			Process process = ripperSettings.getProcess();
-			process = processService.saveProcessAlgorithm(process, ProcessConstants.RIPPER);
-			// Se vuelve a salvar por si se ha creado un proceso nuevo
-			ripperSettings.setProcess(process);
-			ripperSettings = ripperSettingsService.save(ripperSettings);
-			// Data and form
-			PreprocessedData data = process.getPreprocessedData();
-			PreprocessingForm form = data.getPreprocessingForm();
-			// Extracción de file de BD
-			File file = form.getFile();
-			String tmpPath = fileService.writeFileFromDb(file);
-			// Getting selected attributes and deleted rows
-			Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
-					.findSelectedAttributesByFormId(form.getId());
-			Collection<DeletedRow> deletedRows = deletedRowService
-					.findFormDeletedRows(form.getId());
-			// Numerical label
-			boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet()
-					.getExampleTable().getAttributes(), process.getLabel().getName());
-			// Roisin core is used to get RoisinResults
-			RoisinResults roisinResults = Runner.getRipperResults(ripperSettings, tmpPath, process
-					.getLabel().getName(), form.getFilterCondition(), RoisinUtils
-					.getAttributesFromSelectedAttributes(selectedAttributes), RoisinUtils
-					.getRowsFromDeletedRows(deletedRows), numericalLabel);
-			// Truncate results
-			roisinResults.truncateResults();
-			Results results = resultsService.saveResultRules(roisinResults, process);
+
+			Results results = resultsService.calculateRipperResults(ripperSettings);
 
 			return createResultsModelAndView(results);
 		}
@@ -159,39 +135,15 @@ public class ProcessController {
 			treeSettings.setProcess(subgroupSettings.getProcess());
 
 			ModelAndView res = new ModelAndView("process/create");
-			res.addObject("ripperSettings", ripperSettings);
-			res.addObject("subgroupSettings", subgroupSettings);
-			res.addObject("treeSettings", treeSettings);
-			res.addObject("error", ProcessConstants.SUBGROUP_DISCOVERY);
+			res.addObject(RIPPER_SETTINGS, ripperSettings);
+			res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
+			res.addObject(TREE_SETTINGS, treeSettings);
+			res.addObject(ERROR_LOWER_CASE, SUBGROUP_DISCOVERY);
 
 			return res;
 		} else {
-			// Process
-			Process process = subgroupSettings.getProcess();
-			process = processService.saveProcessAlgorithm(process,
-					ProcessConstants.SUBGROUP_DISCOVERY);
-			// Se vuelve a salvar por si se ha creado un proceso nuevo
-			subgroupSettings.setProcess(process);
-			subgroupSettings = subgroupSettingsService.save(subgroupSettings);
-			// Data and form
-			PreprocessedData data = process.getPreprocessedData();
-			PreprocessingForm form = data.getPreprocessingForm();
-			// Extracción de file de BD
-			File file = form.getFile();
-			String tmpPath = fileService.writeFileFromDb(file);
-			// Getting selected attributes and deleted rows
-			Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
-					.findSelectedAttributesByFormId(form.getId());
-			Collection<DeletedRow> deletedRows = deletedRowService
-					.findFormDeletedRows(form.getId());
-			// Roisin core is used to get RoisinResults
-			RoisinResults roisinResults = Runner.getSubgroupResults(subgroupSettings, tmpPath,
-					process.getLabel().getName(), form.getFilterCondition(),
-					RoisinUtils.getAttributesFromSelectedAttributes(selectedAttributes),
-					RoisinUtils.getRowsFromDeletedRows(deletedRows));
-			// Truncate results
-			roisinResults.truncateResults();
-			Results results = resultsService.saveResultRules(roisinResults, process);
+
+			Results results = resultsService.calculateSubgroupResults(subgroupSettings);
 
 			return createResultsModelAndView(results);
 		}
@@ -210,42 +162,15 @@ public class ProcessController {
 			subgroupSettings.setProcess(treeSettings.getProcess());
 
 			ModelAndView res = new ModelAndView("process/create");
-			res.addObject("ripperSettings", ripperSettings);
-			res.addObject("subgroupSettings", subgroupSettings);
-			res.addObject("treeSettings", treeSettings);
-			res.addObject("error", ProcessConstants.TREE_TO_RULES);
+			res.addObject(RIPPER_SETTINGS, ripperSettings);
+			res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
+			res.addObject(TREE_SETTINGS, treeSettings);
+			res.addObject(ERROR_LOWER_CASE, TREE_TO_RULES);
 
 			return res;
 		} else {
 
-			// Process
-			Process process = treeSettings.getProcess();
-			process = processService.saveProcessAlgorithm(process, ProcessConstants.TREE_TO_RULES);
-			// Se vuelve a salvar por si se ha creado un proceso nuevo
-			treeSettings.setProcess(process);
-			treeSettings = treeToRulesSettingsService.save(treeSettings);
-			// Data and form
-			PreprocessedData data = process.getPreprocessedData();
-			PreprocessingForm form = data.getPreprocessingForm();
-			// Extracción de file de BD
-			File file = form.getFile();
-			String tmpPath = fileService.writeFileFromDb(file);
-			// Getting selected attributes and deleted rows
-			Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
-					.findSelectedAttributesByFormId(form.getId());
-			Collection<DeletedRow> deletedRows = deletedRowService
-					.findFormDeletedRows(form.getId());
-			// Numerical label
-			boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet()
-					.getExampleTable().getAttributes(), process.getLabel().getName());
-			// Roisin core is used to get RoisinResults
-			RoisinResults roisinResults = Runner.getTreeToRulesResults(treeSettings, tmpPath,
-					process.getLabel().getName(), form.getFilterCondition(),
-					RoisinUtils.getAttributesFromSelectedAttributes(selectedAttributes),
-					RoisinUtils.getRowsFromDeletedRows(deletedRows), numericalLabel);
-			// Truncate results
-			roisinResults.truncateResults();
-			Results results = resultsService.saveResultRules(roisinResults, process);
+			Results results = resultsService.calculateTreeToRulesResults(treeSettings);
 
 			return createResultsModelAndView(results);
 		}
@@ -256,10 +181,10 @@ public class ProcessController {
 		XYLineChart chart = RoisinUtils.getAucChart(rules, results.getAuc());
 
 		ModelAndView res = new ModelAndView("results/view");
-		res.addObject("rules", rules);
-		res.addObject("requestURI", "results/view?resultsId=" + results.getId());
-		res.addObject("chart", chart.toURLString());
-		res.addObject("results", results);
+		res.addObject(RULES_LOWER_CASE, rules);
+		res.addObject(REQUEST_URI, "results/view?resultsId=" + results.getId());
+		res.addObject(CHART_LOWER_CASE, chart.toURLString());
+		res.addObject(RESULTS_LOWER_CASE, results);
 
 		return res;
 	}
@@ -267,13 +192,12 @@ public class ProcessController {
 	@RequestMapping(value = "/details", method = RequestMethod.POST, params = { "ripper" })
 	public ModelAndView ripperDetails(@RequestParam int dataId) {
 
-		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId,
-				ProcessConstants.RIPPER);
+		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId, RIPPER);
 		PreprocessedData data = preprocessedDataService.findOne(dataId);
 
 		ModelAndView res = new ModelAndView("details/ripper");
-		res.addObject("processes", processes);
-		res.addObject("dataName", data.getName());
+		res.addObject(PROCESSES_LOWER_CASE, processes);
+		res.addObject(DATA_NAME, data.getName());
 
 		return res;
 	}
@@ -282,12 +206,12 @@ public class ProcessController {
 	public ModelAndView subgroupDetails(@RequestParam int dataId) {
 
 		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId,
-				ProcessConstants.SUBGROUP_DISCOVERY);
+				SUBGROUP_DISCOVERY);
 		PreprocessedData data = preprocessedDataService.findOne(dataId);
 
 		ModelAndView res = new ModelAndView("details/subgroup");
-		res.addObject("processes", processes);
-		res.addObject("dataName", data.getName());
+		res.addObject(PROCESSES_LOWER_CASE, processes);
+		res.addObject(DATA_NAME, data.getName());
 
 		return res;
 	}
@@ -296,31 +220,21 @@ public class ProcessController {
 	public ModelAndView treeDetails(@RequestParam int dataId) {
 
 		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId,
-				ProcessConstants.TREE_TO_RULES);
+				TREE_TO_RULES);
 		PreprocessedData data = preprocessedDataService.findOne(dataId);
 
 		ModelAndView res = new ModelAndView("details/tree");
-		res.addObject("processes", processes);
-		res.addObject("dataName", data.getName());
+		res.addObject(PROCESSES_LOWER_CASE, processes);
+		res.addObject(DATA_NAME, data.getName());
 
 		return res;
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public ModelAndView create(@ModelAttribute PreproSimpleForm form) {
-		int dataId = Integer.parseInt(form.getDataId());
-		PreprocessedData data = preprocessedDataService.findOne(dataId);
-		// Finalmente se manda al usuario al formulario de proceso
-		processService.cleanTempProcesses(dataId);
-		// Creación del proceso
-		Process process = processService.create();
-		process.setPreprocessedData(data);
-		process.setAlgorithm(Constants.ROISIN_NULL);
-		// Se establece la label (clase) para este proceso
-		SelectedAttribute label = selectedAttributeService
-				.findLabel(data.getPreprocessingForm().getId(), form.getLabel()).iterator().next();
-		process.setLabel(label);
-		process = processService.save(process);
+	public ModelAndView create(@ModelAttribute PreproSimpleForm form) throws NamingException {
+
+		Process process = processService.createInitialProcessNoAlgorithm(form);
+
 		// Creación de los formularios
 		RipperSettings ripperSettings = ripperSettingsService.create();
 		ripperSettings.setProcess(process);
@@ -330,9 +244,9 @@ public class ProcessController {
 		treeToRulesSettings.setProcess(process);
 
 		ModelAndView res = new ModelAndView("process/create");
-		res.addObject("ripperSettings", ripperSettings);
-		res.addObject("subgroupSettings", subgroupSettings);
-		res.addObject("treeSettings", treeToRulesSettings);
+		res.addObject(RIPPER_SETTINGS, ripperSettings);
+		res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
+		res.addObject(TREE_SETTINGS, treeToRulesSettings);
 
 		return res;
 	}

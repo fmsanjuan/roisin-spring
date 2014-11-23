@@ -1,5 +1,22 @@
 package com.roisin.spring.utils;
 
+import static com.roisin.spring.utils.Constants.CHART_HEIGTH;
+import static com.roisin.spring.utils.Constants.CHART_WIDTH;
+import static com.roisin.spring.utils.Constants.EQUALS;
+import static com.roisin.spring.utils.Constants.EQUALS_SYMBOL;
+import static com.roisin.spring.utils.Constants.GREATER_OR_EQUALS;
+import static com.roisin.spring.utils.Constants.GREATER_OR_EQUALS_SYMBOL;
+import static com.roisin.spring.utils.Constants.GREATER_THAN;
+import static com.roisin.spring.utils.Constants.GREATER_THAN_SYMBOL;
+import static com.roisin.spring.utils.Constants.NON_EQUALS;
+import static com.roisin.spring.utils.Constants.NON_EQUALS_SYMBOL;
+import static com.roisin.spring.utils.Constants.ONE;
+import static com.roisin.spring.utils.Constants.SMALLER_OR_EQUALS;
+import static com.roisin.spring.utils.Constants.SMALLER_OR_EQUALS_SYMBOL;
+import static com.roisin.spring.utils.Constants.SMALLER_THAN;
+import static com.roisin.spring.utils.Constants.SMALLER_THAN_SYMBOL;
+import static com.roisin.spring.utils.Constants.ZERO;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -27,24 +44,26 @@ import com.roisin.spring.model.SelectedAttribute;
 
 public class RoisinUtils {
 
+	private static final String AREA_UNDER_THE_CURVE = "Area under the curve = ";
+
 	public static String calculateFilterCondition(String filterAttribute, String filterOperator,
 			String filterValue) {
 		// Transformación de condición provisional
 		StringBuilder condition = new StringBuilder();
 		if (!StringUtils.isBlank(filterValue)) {
 			condition.append(filterAttribute);
-			if (filterOperator.equals(Constants.EQUALS)) {
-				condition.append(Constants.EQUALS_SYMBOL);
-			} else if (filterOperator.equals(Constants.NON_EQUALS)) {
-				condition.append(Constants.NON_EQUALS_SYMBOL);
-			} else if (filterOperator.equals(Constants.GREATER_OR_EQUALS)) {
-				condition.append(Constants.GREATER_OR_EQUALS_SYMBOL);
-			} else if (filterOperator.equals(Constants.SMALLER_OR_EQUALS)) {
-				condition.append(Constants.SMALLER_OR_EQUALS_SYMBOL);
-			} else if (filterOperator.equals(Constants.SMALLER_THAN)) {
-				condition.append(Constants.SMALLER_THAN_SYMBOL);
-			} else if (filterOperator.equals(Constants.GREATER_THAN)) {
-				condition.append(Constants.GREATER_THAN_SYMBOL);
+			if (filterOperator.equals(EQUALS)) {
+				condition.append(EQUALS_SYMBOL);
+			} else if (filterOperator.equals(NON_EQUALS)) {
+				condition.append(NON_EQUALS_SYMBOL);
+			} else if (filterOperator.equals(GREATER_OR_EQUALS)) {
+				condition.append(GREATER_OR_EQUALS_SYMBOL);
+			} else if (filterOperator.equals(SMALLER_OR_EQUALS)) {
+				condition.append(SMALLER_OR_EQUALS_SYMBOL);
+			} else if (filterOperator.equals(SMALLER_THAN)) {
+				condition.append(SMALLER_THAN_SYMBOL);
+			} else if (filterOperator.equals(GREATER_THAN)) {
+				condition.append(GREATER_THAN_SYMBOL);
 			}
 			condition.append(filterValue);
 		}
@@ -92,18 +111,18 @@ public class RoisinUtils {
 		if (!StringUtils.isBlank(form.getFilterValue())) {
 			StringBuilder condition = new StringBuilder();
 			condition.append(form.getFilterAttribute());
-			if (form.getFilterOperator().equals(Constants.EQUALS)) {
-				condition.append(Constants.EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.NON_EQUALS)) {
-				condition.append(Constants.NON_EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.GREATER_OR_EQUALS)) {
-				condition.append(Constants.GREATER_OR_EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.SMALLER_OR_EQUALS)) {
-				condition.append(Constants.SMALLER_OR_EQUALS_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.SMALLER_THAN)) {
-				condition.append(Constants.SMALLER_THAN_SYMBOL);
-			} else if (form.getFilterOperator().equals(Constants.GREATER_THAN)) {
-				condition.append(Constants.GREATER_THAN_SYMBOL);
+			if (form.getFilterOperator().equals(EQUALS)) {
+				condition.append(EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(NON_EQUALS)) {
+				condition.append(NON_EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(GREATER_OR_EQUALS)) {
+				condition.append(GREATER_OR_EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(SMALLER_OR_EQUALS)) {
+				condition.append(SMALLER_OR_EQUALS_SYMBOL);
+			} else if (form.getFilterOperator().equals(SMALLER_THAN)) {
+				condition.append(SMALLER_THAN_SYMBOL);
+			} else if (form.getFilterOperator().equals(GREATER_THAN)) {
+				condition.append(GREATER_THAN_SYMBOL);
 			}
 			condition.append(form.getFilterValue());
 			return condition.toString();
@@ -152,8 +171,8 @@ public class RoisinUtils {
 		// Curve
 		double[] xValues = new double[rulesSize + 2];
 		double[] yValues = new double[rulesSize + 2];
-		xValues[0] = Constants.ZERO;
-		yValues[0] = Constants.ZERO;
+		xValues[0] = ZERO;
+		yValues[0] = ZERO;
 
 		int i;
 
@@ -162,17 +181,17 @@ public class RoisinUtils {
 			yValues[i + 1] = sortedRules.get(i).getTpr();
 		}
 
-		xValues[i + 1] = Constants.ONE;
-		yValues[i + 1] = Constants.ONE;
+		xValues[i + 1] = ONE;
+		yValues[i + 1] = ONE;
 
-		Data xData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, xValues);
-		Data yData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, yValues);
+		Data xData = DataUtil.scaleWithinRange(ZERO, ONE, xValues);
+		Data yData = DataUtil.scaleWithinRange(ZERO, ONE, yValues);
 
 		XYLine line = Plots.newXYLine(xData, yData);
 		line.setFillAreaColor(Color.YELLOW);
 		XYLineChart chart = GCharts.newXYLineChart(line);
-		chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
-		chart.setTitle("Area under the curve = " + auc);
+		chart.setSize(CHART_WIDTH, CHART_HEIGTH);
+		chart.setTitle(AREA_UNDER_THE_CURVE + auc);
 
 		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
 
@@ -184,21 +203,21 @@ public class RoisinUtils {
 		double[] xValues = new double[3];
 		double[] yValues = new double[3];
 
-		xValues[0] = Constants.ZERO;
-		yValues[0] = Constants.ZERO;
+		xValues[0] = ZERO;
+		yValues[0] = ZERO;
 		xValues[1] = rule.getFpr();
 		yValues[1] = rule.getTpr();
-		xValues[2] = Constants.ONE;
-		yValues[2] = Constants.ONE;
+		xValues[2] = ONE;
+		yValues[2] = ONE;
 
-		Data xData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, xValues);
-		Data yData = DataUtil.scaleWithinRange(Constants.ZERO, Constants.ONE, yValues);
+		Data xData = DataUtil.scaleWithinRange(ZERO, ONE, xValues);
+		Data yData = DataUtil.scaleWithinRange(ZERO, ONE, yValues);
 
 		XYLine line = Plots.newXYLine(xData, yData);
 		line.setFillAreaColor(Color.YELLOW);
 		XYLineChart chart = GCharts.newXYLineChart(line);
-		chart.setSize(Constants.CHART_WIDTH, Constants.CHART_HEIGTH);
-		chart.setTitle("Area under the curve = " + rule.getAuc());
+		chart.setSize(CHART_WIDTH, CHART_HEIGTH);
+		chart.setTitle(AREA_UNDER_THE_CURVE + rule.getAuc());
 
 		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
 

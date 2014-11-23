@@ -1,5 +1,11 @@
 package com.roisin.spring.controllers;
 
+import static com.roisin.spring.utils.ModelViewConstants.CREDENTIALS;
+import static com.roisin.spring.utils.ModelViewConstants.ERROR_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.ERROR_MESSAGE;
+import static com.roisin.spring.utils.ModelViewConstants.FORM_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.SUCCESS_MESSAGE;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,20 +37,20 @@ public class SignupController {
 	public ModelAndView newUser() {
 		SignupForm form = userService.constructNew();
 		ModelAndView res = new ModelAndView("signup/new");
-		res.addObject("form", form);
-		res.addObject("error", false);
+		res.addObject(FORM_LOWER_CASE, form);
+		res.addObject(ERROR_LOWER_CASE, false);
 		return res;
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public ModelAndView save(@ModelAttribute("form") SignupForm form, BindingResult result) {
+	public ModelAndView save(@ModelAttribute(FORM_LOWER_CASE) SignupForm form, BindingResult result) {
 
 		formValidator.validate(form, result);
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("signup/new");
-			res.addObject("form", form);
-			res.addObject("error", true);
+			res.addObject(FORM_LOWER_CASE, form);
+			res.addObject(ERROR_LOWER_CASE, true);
 			return res;
 		} else {
 			try {
@@ -52,8 +58,8 @@ public class SignupController {
 				userService.save(user, true);
 
 				ModelAndView res = new ModelAndView("welcome/home");
-				res.addObject("credentials", new Credentials());
-				res.addObject("successMessage", user.getEmail());
+				res.addObject(CREDENTIALS, new Credentials());
+				res.addObject(SUCCESS_MESSAGE, user.getEmail());
 				return res;
 			} catch (Throwable oops) {
 				ModelAndView res;
@@ -71,20 +77,21 @@ public class SignupController {
 	public ModelAndView editUser() {
 		EditProfileForm form = userService.constructEditForm();
 		ModelAndView res = new ModelAndView("profile/edit");
-		res.addObject("form", form);
-		res.addObject("error", false);
+		res.addObject(FORM_LOWER_CASE, form);
+		res.addObject(ERROR_LOWER_CASE, false);
 		return res;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public ModelAndView edit(@ModelAttribute("form") EditProfileForm form, BindingResult result) {
+	public ModelAndView edit(@ModelAttribute(FORM_LOWER_CASE) EditProfileForm form,
+			BindingResult result) {
 
 		formValidator.validateEditForm(form, result);
 
 		if (result.hasErrors()) {
 			ModelAndView res = new ModelAndView("profile/edit");
-			res.addObject("form", form);
-			res.addObject("error", true);
+			res.addObject(FORM_LOWER_CASE, form);
+			res.addObject(ERROR_LOWER_CASE, true);
 			return res;
 		} else {
 			try {
@@ -92,7 +99,7 @@ public class SignupController {
 				userService.save(user, StringUtils.isNotBlank(form.getNewPassword()));
 
 				ModelAndView res = new ModelAndView("profile/edit");
-				res.addObject("successMessage", user.getEmail());
+				res.addObject(SUCCESS_MESSAGE, user.getEmail());
 				return res;
 			} catch (Throwable oops) {
 				ModelAndView res;
@@ -109,18 +116,18 @@ public class SignupController {
 	public ModelAndView createEditModelAndViewCustomer(SignupForm form, String message) {
 
 		ModelAndView res = new ModelAndView("signup/new");
-		res.addObject("form", form);
-		res.addObject("error", true);
-		res.addObject("errorMessage", message);
+		res.addObject(FORM_LOWER_CASE, form);
+		res.addObject(ERROR_LOWER_CASE, true);
+		res.addObject(ERROR_MESSAGE, message);
 		return res;
 	}
 
 	public ModelAndView createEditProfileModelAndViewCustomer(EditProfileForm form, String message) {
 
 		ModelAndView res = new ModelAndView("profile/edit");
-		res.addObject("form", form);
-		res.addObject("error", true);
-		res.addObject("errorMessage", message);
+		res.addObject(FORM_LOWER_CASE, form);
+		res.addObject(ERROR_LOWER_CASE, true);
+		res.addObject(ERROR_MESSAGE, message);
 		return res;
 	}
 

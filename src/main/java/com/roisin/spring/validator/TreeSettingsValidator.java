@@ -1,11 +1,15 @@
 package com.roisin.spring.validator;
 
+import static com.roisin.spring.utils.ProcessConstants.ACCURACY_RIPPER_TREE;
+import static com.roisin.spring.utils.ProcessConstants.GAIN_RATIO;
+import static com.roisin.spring.utils.ProcessConstants.GINI_INDEX;
+import static com.roisin.spring.utils.ProcessConstants.INFORMATION_GAIN;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.roisin.spring.model.TreeToRulesSettings;
-import com.roisin.spring.utils.ProcessConstants;
 
 public class TreeSettingsValidator implements Validator {
 
@@ -20,10 +24,10 @@ public class TreeSettingsValidator implements Validator {
 		TreeToRulesSettings form = (TreeToRulesSettings) target;
 
 		if (StringUtils.isBlank(form.getTree2RulesCriterion())
-				|| (!form.getTree2RulesCriterion().equals(ProcessConstants.GAIN_RATIO)
-						&& !form.getTree2RulesCriterion().equals(ProcessConstants.INFORMATION_GAIN)
-						&& !form.getTree2RulesCriterion().equals(ProcessConstants.GINI_INDEX) && !form
-						.getTree2RulesCriterion().equals(ProcessConstants.ACCURACY_RIPPER_TREE))) {
+				|| (!form.getTree2RulesCriterion().equals(GAIN_RATIO)
+						&& !form.getTree2RulesCriterion().equals(INFORMATION_GAIN)
+						&& !form.getTree2RulesCriterion().equals(GINI_INDEX) && !form
+						.getTree2RulesCriterion().equals(ACCURACY_RIPPER_TREE))) {
 			errors.rejectValue("tree2RulesCriterion", "process.tree.error.criterion",
 					"process.tree.error.criterion");
 		}

@@ -1,7 +1,13 @@
 package com.roisin.spring.services;
 
+import static com.roisin.spring.utils.ProcessConstants.RIPPER;
+import static com.roisin.spring.utils.ProcessConstants.SUBGROUP_DISCOVERY;
+import static com.roisin.spring.utils.ProcessConstants.TREE_TO_RULES;
+
 import java.io.IOException;
 import java.util.Collection;
+
+import javax.naming.NamingException;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -14,11 +20,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.roisin.core.results.RoisinResults;
 import com.roisin.core.results.RoisinRule;
+import com.roisin.spring.model.DeletedRow;
+import com.roisin.spring.model.File;
+import com.roisin.spring.model.PreprocessedData;
+import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.Process;
 import com.roisin.spring.model.Results;
+import com.roisin.spring.model.RipperSettings;
 import com.roisin.spring.model.Rule;
+import com.roisin.spring.model.SelectedAttribute;
+import com.roisin.spring.model.SubgroupSettings;
+import com.roisin.spring.model.TreeToRulesSettings;
 import com.roisin.spring.repositories.ResultsRepository;
 import com.roisin.spring.utils.RoisinUtils;
+import com.roisin.spring.utils.Runner;
 
 @Service
 @Transactional
@@ -29,6 +44,27 @@ public class ResultsService {
 
 	@Autowired
 	private RuleService ruleService;
+
+	@Autowired
+	private ProcessService processService;
+
+	@Autowired
+	private RipperSettingsService ripperSettingsService;
+
+	@Autowired
+	private SubgroupSettingsService subgroupSettingsService;
+
+	@Autowired
+	private TreeToRulesSettingsService treeToRulesSettingsService;
+
+	@Autowired
+	private FileService fileService;
+
+	@Autowired
+	private SelectedAttributeService selectedAttributeService;
+
+	@Autowired
+	private DeletedRowService deletedRowService;
 
 	public ResultsService() {
 		super();
@@ -196,5 +232,101 @@ public class ResultsService {
 
 		}
 		return worksheet;
+	}
+
+	public Results calculateRipperResults(RipperSettings ripperSettings) throws NamingException {
+		// Process
+		Process process = ripperSettings.getProcess();
+		process = processService.saveProcessAlgorithm(process, RIPPER);
+		// Se vuelve a salvar por si se ha creado un proceso nuevo
+		ripperSettings.setProcess(process);
+		ripperSettings = ripperSettingsService.save(ripperSettings);
+		// Data and form
+		PreprocessedData data = process.getPreprocessedData();
+		PreprocessingForm form = data.getPreprocessingForm();
+		// Extracción de file de BD
+		File file = form.getFile();
+		String tmpPath = fileService.writeFileFromDb(file);
+		// Getting selected attributes and deleted rows
+		Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
+				.findSelectedAttributesByFormId(form.getId());
+		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form.getId());
+		// Numerical label
+		boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet().getExampleTable()
+				.getAttributes(), process.getLabel().getName());
+		// Roisin core is used to get RoisinResults
+		RoisinResults roisinResults = Runner.getRipperResults(ripperSettings, tmpPath, process
+				.getLabel().getName(), form.getFilterCondition(), RoisinUtils
+				.getAttributesFromSelectedAttributes(selectedAttributes), RoisinUtils
+				.getRowsFromDeletedRows(deletedRows), numericalLabel);
+		// Truncate results
+		roisinResults.truncateResults();
+		Results results = saveResultRules(roisinResults, process);
+
+		return results;
+	}
+
+	public Results calculateSubgroupResults(SubgroupSettings subgroupSettings)
+			throws NamingException {
+		// Process
+		Process process = subgroupSettings.getProcess();
+		process = processService.saveProcessAlgorithm(process, SUBGROUP_DISCOVERY);
+		// Se vuelve a salvar por si se ha creado un proceso nuevo
+		subgroupSettings.setProcess(process);
+		subgroupSettings = subgroupSettingsService.save(subgroupSettings);
+		// Data and form
+		PreprocessedData data = process.getPreprocessedData();
+		PreprocessingForm form = data.getPreprocessingForm();
+		// Extracción de file de BD
+		File file = form.getFile();
+		String tmpPath = fileService.writeFileFromDb(file);
+		// Getting selected attributes and deleted rows
+		Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
+				.findSelectedAttributesByFormId(form.getId());
+		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form.getId());
+		// Roisin core is used to get RoisinResults
+		RoisinResults roisinResults = Runner.getSubgroupResults(subgroupSettings, tmpPath, process
+				.getLabel().getName(), form.getFilterCondition(), RoisinUtils
+				.getAttributesFromSelectedAttributes(selectedAttributes), RoisinUtils
+				.getRowsFromDeletedRows(deletedRows));
+		// Truncate results
+		roisinResults.truncateResults();
+		Results results = saveResultRules(roisinResults, process);
+
+		return results;
+	}
+
+	public Results calculateTreeToRulesResults(TreeToRulesSettings treeSettings)
+			throws NamingException {
+
+		// Process
+		Process process = treeSettings.getProcess();
+		process = processService.saveProcessAlgorithm(process, TREE_TO_RULES);
+		// Se vuelve a salvar por si se ha creado un proceso nuevo
+		treeSettings.setProcess(process);
+		treeSettings = treeToRulesSettingsService.save(treeSettings);
+		// Data and form
+		PreprocessedData data = process.getPreprocessedData();
+		PreprocessingForm form = data.getPreprocessingForm();
+		// Extracción de file de BD
+		File file = form.getFile();
+		String tmpPath = fileService.writeFileFromDb(file);
+		// Getting selected attributes and deleted rows
+		Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
+				.findSelectedAttributesByFormId(form.getId());
+		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form.getId());
+		// Numerical label
+		boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet().getExampleTable()
+				.getAttributes(), process.getLabel().getName());
+		// Roisin core is used to get RoisinResults
+		RoisinResults roisinResults = Runner.getTreeToRulesResults(treeSettings, tmpPath, process
+				.getLabel().getName(), form.getFilterCondition(), RoisinUtils
+				.getAttributesFromSelectedAttributes(selectedAttributes), RoisinUtils
+				.getRowsFromDeletedRows(deletedRows), numericalLabel);
+		// Truncate results
+		roisinResults.truncateResults();
+		Results results = saveResultRules(roisinResults, process);
+
+		return results;
 	}
 }

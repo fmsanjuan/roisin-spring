@@ -1,5 +1,7 @@
 package com.roisin.spring.utils;
 
+import static com.roisin.spring.utils.Constants.DOT_SYMBOL;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -40,20 +42,20 @@ public class FileUtils {
 	}
 
 	public static String getFileFormat(File file) {
-		return StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
+		return StringUtils.substringAfterLast(file.getName(), DOT_SYMBOL);
 	}
 
 	public static String getFileTmpPath(File file) throws NamingException {
-		return getStoragePath() + file.getHash() + Constants.DOT_SYMBOL + getFileFormat(file);
+		return getStoragePath() + file.getHash() + DOT_SYMBOL + getFileFormat(file);
 	}
 
 	public static String getFileDownloadPath(File file, String fileFormat) throws NamingException {
-		return getDownloadPath() + file.getHash() + Constants.DOT_SYMBOL + fileFormat;
+		return getDownloadPath() + file.getHash() + DOT_SYMBOL + fileFormat;
 	}
 
 	public static String getExportFileName(String originalFileName, String exportFormat) {
-		String name = StringUtils.substringBeforeLast(originalFileName, Constants.DOT_SYMBOL);
-		return name + Constants.DOT_SYMBOL + exportFormat;
+		String name = StringUtils.substringBeforeLast(originalFileName, DOT_SYMBOL);
+		return name + DOT_SYMBOL + exportFormat;
 	}
 
 	public static String getStoragePath() throws NamingException {

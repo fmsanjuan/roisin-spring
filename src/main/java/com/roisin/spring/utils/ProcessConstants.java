@@ -7,67 +7,67 @@ package com.roisin.spring.utils;
  * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
  *
  */
-public interface ProcessConstants {
+public final class ProcessConstants {
 
 	/*
 	 * Algorithms
 	 */
 
-	String RIPPER = "Ripper";
+	public static final String RIPPER = "Ripper";
 
-	String SUBGROUP_DISCOVERY = "Subgroup Discovery";
+	public static final String SUBGROUP_DISCOVERY = "Subgroup Discovery";
 
-	String TREE_TO_RULES = "Tree to Rules";
+	public static final String TREE_TO_RULES = "Tree to Rules";
 
 	/*
 	 * Ripper
 	 */
-	String INFORMATION_GAIN = "information_gain";
+	public static final String INFORMATION_GAIN = "information_gain";
 
-	String ACCURACY_RIPPER_TREE = "accuracy";
+	public static final String ACCURACY_RIPPER_TREE = "accuracy";
 
 	/*
 	 * Subgroup Discovery
 	 */
 
-	String K_BEST_RULES = "k best rules";
+	public static final String K_BEST_RULES = "k best rules";
 
-	String ABOVE_MINIMUM_UTILITY = "above minimum utility";
+	public static final String ABOVE_MINIMUM_UTILITY = "above minimum utility";
 
-	String WRACC = "WRAcc";
+	public static final String WRACC = "WRAcc";
 
-	String COVERAGE = "Coverage";
+	public static final String COVERAGE = "Coverage";
 
-	String PRECISION = "Precision";
+	public static final String PRECISION = "Precision";
 
-	String ACCURACY_SUBGROUP = "Accuracy";
+	public static final String ACCURACY_SUBGROUP = "Accuracy";
 
-	String BIAS = "Bias";
+	public static final String BIAS = "Bias";
 
-	String LIFT = "Lift";
+	public static final String LIFT = "Lift";
 
-	String BINOMINAL = "Binominal";
+	public static final String BINOMINAL = "Binominal";
 
-	String SQUARED = "Squared";
+	public static final String SQUARED = "Squared";
 
-	String ODDS = "Odds";
+	public static final String ODDS = "Odds";
 
-	String ODDS_RATIO = "Odds Ratio";
+	public static final String ODDS_RATIO = "Odds Ratio";
 
-	String POSITIVE = "positive";
+	public static final String POSITIVE = "positive";
 
-	String NEGATIVE = "negative";
+	public static final String NEGATIVE = "negative";
 
-	String PREDICTION = "prediction";
+	public static final String PREDICTION = "prediction";
 
-	String BOTH = "both";
+	public static final String BOTH = "both";
 
 	/*
 	 * Decision Tree
 	 */
 
-	String GAIN_RATIO = "gain_ratio";
+	public static final String GAIN_RATIO = "gain_ratio";
 
-	String GINI_INDEX = "gini_index";
+	public static final String GINI_INDEX = "gini_index";
 
 }

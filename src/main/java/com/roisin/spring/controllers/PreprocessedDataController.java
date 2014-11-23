@@ -1,14 +1,26 @@
 package com.roisin.spring.controllers;
 
+import static com.roisin.spring.utils.Constants.ERROR;
+import static com.roisin.spring.utils.ModelViewConstants.ATTRIBUTES_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.DATA_ID_FORM;
+import static com.roisin.spring.utils.ModelViewConstants.DATA_LIST;
+import static com.roisin.spring.utils.ModelViewConstants.ERROR_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.EXAMPLES_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.FILE_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.FORMS_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.FORM_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.LIST_LOWER_CASE;
+import static com.roisin.spring.utils.ModelViewConstants.REQUEST_URI;
+import static com.roisin.spring.utils.ModelViewConstants.RIPPER_SETTINGS;
+import static com.roisin.spring.utils.ModelViewConstants.SUBGROUP_SETTINGS;
+import static com.roisin.spring.utils.ModelViewConstants.TREE_SETTINGS;
+
 import java.util.Collection;
 import java.util.List;
 
 import javax.naming.NamingException;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,7 +48,6 @@ import com.roisin.spring.model.PreprocessedData;
 import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.Process;
 import com.roisin.spring.model.RipperSettings;
-import com.roisin.spring.model.SelectedAttribute;
 import com.roisin.spring.model.SubgroupSettings;
 import com.roisin.spring.model.TreeToRulesSettings;
 import com.roisin.spring.services.DeletedRowService;
@@ -45,11 +56,8 @@ import com.roisin.spring.services.PreprocessedDataService;
 import com.roisin.spring.services.PreprocessingFormService;
 import com.roisin.spring.services.ProcessService;
 import com.roisin.spring.services.RipperSettingsService;
-import com.roisin.spring.services.SelectedAttributeService;
 import com.roisin.spring.services.SubgroupSettingsService;
 import com.roisin.spring.services.TreeToRulesSettingsService;
-import com.roisin.spring.services.UserService;
-import com.roisin.spring.utils.Constants;
 import com.roisin.spring.utils.FileUtils;
 import com.roisin.spring.utils.RoisinUtils;
 import com.roisin.spring.utils.Runner;
@@ -59,19 +67,11 @@ import com.roisin.spring.validator.PreproSimpleFormValidator;
 @RequestMapping("/data")
 public class PreprocessedDataController {
 
-	private static final Logger logger = LoggerFactory.getLogger(PreprocessedDataController.class);
-
-	@Autowired
-	private UserService userService;
-
 	@Autowired
 	private PreprocessedDataService preprocessedDataService;
 
 	@Autowired
 	private PreprocessingFormService preprocessingFormService;
-
-	@Autowired
-	private SelectedAttributeService selectedAttributeService;
 
 	@Autowired
 	private DeletedRowService deletedRowService;
@@ -100,10 +100,10 @@ public class PreprocessedDataController {
 		File file = fileService.findOne(fileId);
 		Collection<PreprocessedData> forms = preprocessedDataService.findDataByFileId(fileId);
 		ModelAndView res = new ModelAndView("data/list");
-		res.addObject("forms", forms);
-		res.addObject("file", file);
-		res.addObject("dataIdForm", new DataIdForm());
-		res.addObject("requestURI", "list?fileId=" + fileId);
+		res.addObject(FORMS_LOWER_CASE, forms);
+		res.addObject(FILE_LOWER_CASE, file);
+		res.addObject(DATA_ID_FORM, new DataIdForm());
+		res.addObject(REQUEST_URI, "list?fileId=" + fileId);
 
 		return res;
 	}
@@ -119,10 +119,10 @@ public class PreprocessedDataController {
 				.getFileId());
 
 		ModelAndView res = new ModelAndView("data/list");
-		res.addObject("forms", forms);
-		res.addObject("file", file);
-		res.addObject("dataIdForm", new DataIdForm());
-		res.addObject("requestURI", "list?fileId=" + form.getFileId());
+		res.addObject(FORMS_LOWER_CASE, forms);
+		res.addObject(FILE_LOWER_CASE, file);
+		res.addObject(DATA_ID_FORM, new DataIdForm());
+		res.addObject(REQUEST_URI, "list?fileId=" + form.getFileId());
 
 		return res;
 	}
@@ -138,10 +138,10 @@ public class PreprocessedDataController {
 		form.setDataId(String.valueOf(dataId));
 
 		ModelAndView res = new ModelAndView("data/details");
-		res.addObject("examples", examples);
-		res.addObject("attributes", attributes);
-		res.addObject("form", form);
-		res.addObject("requestURI", "details?dataId=" + dataId);
+		res.addObject(EXAMPLES_LOWER_CASE, examples);
+		res.addObject(ATTRIBUTES_LOWER_CASE, attributes);
+		res.addObject(FORM_LOWER_CASE, form);
+		res.addObject(REQUEST_URI, "details?dataId=" + dataId);
 
 		return res;
 	}
@@ -151,8 +151,8 @@ public class PreprocessedDataController {
 
 		Collection<PreprocessedData> dataList = preprocessedDataService.findAll();
 		ModelAndView res = new ModelAndView("data/list");
-		res.addObject("dataList", dataList);
-		res.addObject("requestURI", "list");
+		res.addObject(DATA_LIST, dataList);
+		res.addObject(REQUEST_URI, LIST_LOWER_CASE);
 
 		return res;
 	}
@@ -165,51 +165,15 @@ public class PreprocessedDataController {
 
 		if (result.hasErrors()) {
 			for (FieldError fieldError : result.getFieldErrors()) {
-				redirect.addFlashAttribute(fieldError.getField() + Constants.ERROR,
+				redirect.addFlashAttribute(fieldError.getField() + ERROR,
 						fieldError.getDefaultMessage());
 			}
-			redirect.addFlashAttribute("error", true);
+			redirect.addFlashAttribute(ERROR_LOWER_CASE, true);
 			ModelAndView res = new ModelAndView("redirect:/preform/list?dataId=" + form.getDataId());
 			return res;
 		} else {
 
-			PreprocessedData data = preprocessedDataService.findOne(Integer.parseInt(form
-					.getDataId()));
-			// Formulario
-			PreprocessingForm storedForm = preprocessingFormService.saveSubmitedSimpleForm(
-					data.getPreprocessingForm(), form);
-			// Extracción de file de BD
-			File file = storedForm.getFile();
-			String fileFormat = StringUtils
-					.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
-			String tmpPath = FileUtils.getStoragePath() + file.getHash() + Constants.DOT_SYMBOL
-					+ fileFormat;
-			// Escritura en disco del fichero
-			FileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
-			// Colección de deleted rows
-			Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(storedForm
-					.getId());
-			// Obtención del example set resultante
-			ExampleSet exampleSet = Runner.getPreprocessedExampleSetFromFile(tmpPath,
-					RoisinUtils.getRowsFromDeletedRows(deletedRows),
-					storedForm.getFilterCondition(), form.getProcessAttributeSelection());
-			// Se almacen el example set
-			data = preprocessedDataService.findOne(data.getId());
-			data.setExampleSet(exampleSet);
-			data.setName(form.getName());
-			data.setDescription(form.getDescription());
-			data = preprocessedDataService.save(data);
-			// Finalmente se manda al usuario al formulario de proceso
-			processService.cleanTempProcesses(data.getId());
-			// Creación del proceso
-			Process process = processService.create();
-			process.setPreprocessedData(data);
-			process.setAlgorithm(Constants.ROISIN_NULL);
-			// Se establece la label (clase) para este proceso
-			SelectedAttribute label = selectedAttributeService
-					.findLabel(storedForm.getId(), form.getLabel()).iterator().next();
-			process.setLabel(label);
-			process = processService.save(process);
+			Process process = processService.createInitialProcessNoAlgorithm(form);
 			// Creación de los formularios
 			RipperSettings ripperSettings = ripperSettingsService.create();
 			ripperSettings.setProcess(process);
@@ -219,9 +183,9 @@ public class PreprocessedDataController {
 			treeToRulesSettings.setProcess(process);
 
 			ModelAndView res = new ModelAndView("process/create");
-			res.addObject("ripperSettings", ripperSettings);
-			res.addObject("subgroupSettings", subgroupSettings);
-			res.addObject("treeSettings", treeToRulesSettings);
+			res.addObject(RIPPER_SETTINGS, ripperSettings);
+			res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
+			res.addObject(TREE_SETTINGS, treeToRulesSettings);
 
 			return res;
 		}

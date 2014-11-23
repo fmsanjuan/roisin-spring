@@ -1,13 +1,13 @@
 package com.roisin.spring.model;
 
+import static com.roisin.spring.utils.ProcessConstants.INFORMATION_GAIN;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 import org.hibernate.validator.constraints.NotBlank;
-
-import com.roisin.spring.utils.ProcessConstants;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -25,7 +25,7 @@ public class RipperSettings extends DomainEntity {
 
 	public RipperSettings() {
 		super();
-		this.ripperCriterion = ProcessConstants.INFORMATION_GAIN;
+		this.ripperCriterion = INFORMATION_GAIN;
 		this.sampleRatio = 0.9;
 		this.pureness = 0.9;
 		this.minimalPruneBenefit = 0.25;

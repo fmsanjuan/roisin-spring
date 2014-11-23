@@ -1,5 +1,10 @@
 package com.roisin.spring.services;
 
+import static com.roisin.spring.utils.Constants.DOT_SYMBOL;
+import static com.roisin.spring.utils.Constants.ROISIN_NULL;
+import static com.roisin.spring.utils.Constants.SHA_256;
+
+import java.io.IOException;
 import java.util.Collection;
 
 import javax.naming.NamingException;
@@ -9,12 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.rapidminer.example.ExampleSet;
+import com.roisin.spring.exception.RoisinSpringException;
 import com.roisin.spring.model.File;
 import com.roisin.spring.model.User;
 import com.roisin.spring.repositories.FileRepository;
-import com.roisin.spring.utils.Constants;
 import com.roisin.spring.utils.FileUtils;
+import com.roisin.spring.utils.HashUtils;
+import com.roisin.spring.utils.Runner;
 
 @Service
 @Transactional
@@ -64,9 +73,8 @@ public class FileService {
 
 	public String writeFileFromDb(File file) throws NamingException {
 		byte[] fileArray = file.getOriginalFile();
-		String fileFormat = StringUtils.substringAfterLast(file.getName(), Constants.DOT_SYMBOL);
-		String tmpPath = FileUtils.getStoragePath() + file.getHash() + Constants.DOT_SYMBOL
-				+ fileFormat;
+		String fileFormat = StringUtils.substringAfterLast(file.getName(), DOT_SYMBOL);
+		String tmpPath = FileUtils.getStoragePath() + file.getHash() + DOT_SYMBOL + fileFormat;
 		// Escritura en disco del fichero
 		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
 
@@ -75,5 +83,32 @@ public class FileService {
 
 	public File findFileByFormId(int formId) {
 		return fileRepository.findFileByFormId(formId);
+	}
+
+	public String upload(MultipartFile file) throws RoisinSpringException {
+		File roisinFile = create();
+		roisinFile.setName(file.getOriginalFilename());
+		roisinFile.setDescription(ROISIN_NULL);
+		try {
+			String hash = HashUtils.fileChecksum(file.getBytes(), SHA_256);
+			roisinFile.setHash(hash);
+			roisinFile.setOriginalFile(file.getBytes());
+		} catch (IOException e) {
+			throw new RoisinSpringException(
+					"No ha sido posible acceder al fichero subido por el usuario", e);
+		}
+		roisinFile.setUser(userService.findByPrincipal());
+		save(roisinFile);
+		return file.getOriginalFilename();
+	}
+
+	public ExampleSet getExampleSetFromFile(File file) throws NamingException {
+		byte[] fileArray = file.getOriginalFile();
+		String tmpPath = FileUtils.getFileTmpPath(file);
+
+		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
+		ExampleSet exampleSet = Runner
+				.getExampleSetFromFile(FileUtils.getFileFormat(file), tmpPath);
+		return exampleSet;
 	}
 }

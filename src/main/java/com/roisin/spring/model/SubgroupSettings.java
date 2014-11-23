@@ -1,11 +1,13 @@
 package com.roisin.spring.model;
 
+import static com.roisin.spring.utils.ProcessConstants.BOTH;
+import static com.roisin.spring.utils.ProcessConstants.K_BEST_RULES;
+import static com.roisin.spring.utils.ProcessConstants.WRACC;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-
-import com.roisin.spring.utils.ProcessConstants;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -29,11 +31,11 @@ public class SubgroupSettings extends DomainEntity {
 
 	public SubgroupSettings() {
 		super();
-		this.mode = ProcessConstants.K_BEST_RULES;
-		this.utilityFunction = ProcessConstants.WRACC;
+		this.mode = K_BEST_RULES;
+		this.utilityFunction = WRACC;
 		this.minUtility = 0.0;
 		this.kBestRules = 10;
-		this.ruleGeneration = ProcessConstants.BOTH;
+		this.ruleGeneration = BOTH;
 		this.maxDepth = 5;
 		this.minCoverage = 0.0;
 	}
