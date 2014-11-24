@@ -16,6 +16,12 @@ public class RuleService {
 	@Autowired
 	private RuleRepository ruleRepository;
 
+	@Autowired
+	private ResultsService resultsService;
+
+	@Autowired
+	private UserService userService;
+
 	public RuleService() {
 		super();
 	}
@@ -42,9 +48,8 @@ public class RuleService {
 		return ruleRepository.findAll();
 	}
 
-	// TODO: Método para obtener todas las reglas de un proceso.
-
 	public Collection<Rule> findRulesByResultsId(int resultsId) {
+		resultsService.findOne(resultsId);
 		return ruleRepository.findRulesByResultsId(resultsId);
 	}
 

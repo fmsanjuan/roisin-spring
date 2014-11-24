@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.rapidminer.example.ExampleSet;
 import com.roisin.spring.forms.PreproSimpleForm;
@@ -20,6 +21,7 @@ import com.roisin.spring.model.PreprocessedData;
 import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.Process;
 import com.roisin.spring.model.SelectedAttribute;
+import com.roisin.spring.model.User;
 import com.roisin.spring.repositories.ProcessRepository;
 import com.roisin.spring.utils.FileUtils;
 import com.roisin.spring.utils.RoisinUtils;
@@ -44,6 +46,9 @@ public class ProcessService {
 	@Autowired
 	private SelectedAttributeService selectedAttributeService;
 
+	@Autowired
+	private UserService userService;
+
 	public ProcessService() {
 		super();
 	}
@@ -59,7 +64,13 @@ public class ProcessService {
 	}
 
 	public Process findOne(int processId) {
-		return processRepository.findOne(processId);
+		Assert.notNull(processId);
+		User principal = userService.findByPrincipal();
+		Process process = processRepository.findOne(processId);
+		boolean isOwner = principal.equals(process.getPreprocessedData().getPreprocessingForm()
+				.getFile().getUser());
+		Assert.isTrue(isOwner);
+		return process;
 	}
 
 	public Process save(Process process) {
@@ -67,6 +78,11 @@ public class ProcessService {
 	}
 
 	public void delete(Process process) {
+		Assert.notNull(process);
+		User principal = userService.findByPrincipal();
+		boolean isOwner = principal.equals(process.getPreprocessedData().getPreprocessingForm()
+				.getFile().getUser());
+		Assert.isTrue(isOwner);
 		processRepository.delete(process);
 	}
 

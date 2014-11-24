@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.roisin.core.results.RoisinResults;
 import com.roisin.core.results.RoisinRule;
@@ -31,6 +32,7 @@ import com.roisin.spring.model.Rule;
 import com.roisin.spring.model.SelectedAttribute;
 import com.roisin.spring.model.SubgroupSettings;
 import com.roisin.spring.model.TreeToRulesSettings;
+import com.roisin.spring.model.User;
 import com.roisin.spring.repositories.ResultsRepository;
 import com.roisin.spring.utils.RoisinUtils;
 import com.roisin.spring.utils.Runner;
@@ -66,6 +68,9 @@ public class ResultsService {
 	@Autowired
 	private DeletedRowService deletedRowService;
 
+	@Autowired
+	private UserService userService;
+
 	public ResultsService() {
 		super();
 	}
@@ -81,7 +86,13 @@ public class ResultsService {
 	}
 
 	public Results findOne(int resultsId) {
-		return resultsRepository.findOne(resultsId);
+		Assert.notNull(resultsId);
+		User principal = userService.findByPrincipal();
+		Results results = resultsRepository.findOne(resultsId);
+		boolean isOwner = principal.equals(results.getProcess().getPreprocessedData()
+				.getPreprocessingForm().getFile().getUser());
+		Assert.isTrue(isOwner);
+		return results;
 	}
 
 	public Results save(Results results) {
@@ -89,6 +100,11 @@ public class ResultsService {
 	}
 
 	public void delete(Results results) {
+		Assert.notNull(results);
+		User principal = userService.findByPrincipal();
+		boolean isOwner = principal.equals(results.getProcess().getPreprocessedData()
+				.getPreprocessingForm().getFile().getUser());
+		Assert.isTrue(isOwner);
 		resultsRepository.delete(results);
 	}
 

@@ -50,7 +50,12 @@ public class FileService {
 	}
 
 	public File findOne(int fileId) {
-		return fileRepository.findOne(fileId);
+		Assert.notNull(fileId);
+		User principal = userService.findByPrincipal();
+		File file = fileRepository.findOne(fileId);
+		boolean isOwner = principal.equals(file.getUser());
+		Assert.isTrue(isOwner);
+		return file;
 	}
 
 	public void save(File file) {

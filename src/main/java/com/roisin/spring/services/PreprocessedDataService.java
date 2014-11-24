@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.google.common.collect.Lists;
 import com.rapidminer.example.Attribute;
@@ -23,6 +24,7 @@ import com.roisin.spring.forms.FilterConditionForm;
 import com.roisin.spring.model.DeletedRow;
 import com.roisin.spring.model.PreprocessedData;
 import com.roisin.spring.model.PreprocessingForm;
+import com.roisin.spring.model.User;
 import com.roisin.spring.repositories.PreprocessedDataRepository;
 import com.roisin.spring.utils.RoisinUtils;
 
@@ -39,6 +41,9 @@ public class PreprocessedDataService {
 	@Autowired
 	private DeletedRowService deletedRowService;
 
+	@Autowired
+	private UserService userService;
+
 	public PreprocessedDataService() {
 		super();
 	}
@@ -54,7 +59,12 @@ public class PreprocessedDataService {
 	}
 
 	public PreprocessedData findOne(int preprocessedDataId) {
-		return preprocessedDataRepository.findOne(preprocessedDataId);
+		Assert.notNull(preprocessedDataId);
+		User principal = userService.findByPrincipal();
+		PreprocessedData data = preprocessedDataRepository.findOne(preprocessedDataId);
+		boolean isOwner = principal.equals(data.getPreprocessingForm().getFile().getUser());
+		Assert.isTrue(isOwner);
+		return data;
 	}
 
 	public PreprocessedData save(PreprocessedData preprocessedData) {
@@ -62,6 +72,11 @@ public class PreprocessedDataService {
 	}
 
 	public void delete(PreprocessedData preprocessedData) {
+		Assert.notNull(preprocessedData);
+		User principal = userService.findByPrincipal();
+		boolean isOwner = principal.equals(preprocessedData.getPreprocessingForm().getFile()
+				.getUser());
+		Assert.isTrue(isOwner);
 		preprocessedDataRepository.delete(preprocessedData);
 	}
 

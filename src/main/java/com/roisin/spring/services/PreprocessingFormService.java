@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.rapidminer.example.Attribute;
 import com.roisin.spring.forms.FilterConditionForm;
@@ -13,6 +14,7 @@ import com.roisin.spring.model.File;
 import com.roisin.spring.model.PreprocessingForm;
 import com.roisin.spring.model.Process;
 import com.roisin.spring.model.SelectedAttribute;
+import com.roisin.spring.model.User;
 import com.roisin.spring.repositories.PreprocessingFormRepository;
 import com.roisin.spring.utils.RoisinUtils;
 
@@ -29,6 +31,12 @@ public class PreprocessingFormService {
 	@Autowired
 	private ProcessService processService;
 
+	@Autowired
+	private FileService fileService;
+
+	@Autowired
+	private UserService userService;
+
 	public PreprocessingFormService() {
 		super();
 	}
@@ -44,7 +52,12 @@ public class PreprocessingFormService {
 	}
 
 	public PreprocessingForm findOne(int preprocessingFormId) {
-		return preprocessingFormRepository.findOne(preprocessingFormId);
+		Assert.notNull(preprocessingFormId);
+		User principal = userService.findByPrincipal();
+		PreprocessingForm form = preprocessingFormRepository.findOne(preprocessingFormId);
+		boolean isOwner = principal.equals(form.getFile().getUser());
+		Assert.isTrue(isOwner);
+		return form;
 	}
 
 	public PreprocessingForm save(PreprocessingForm preprocessingForm) {
@@ -52,13 +65,22 @@ public class PreprocessingFormService {
 	}
 
 	public void delete(PreprocessingForm preprocessingForm) {
+		Assert.notNull(preprocessingForm);
+		User principal = userService.findByPrincipal();
+		boolean isOwner = principal.equals(preprocessingForm.getFile().getUser());
+		Assert.isTrue(isOwner);
 		preprocessingFormRepository.delete(preprocessingForm);
 	}
 
 	// Extra methods
 
 	public PreprocessingForm findFormByDataId(int dataId) {
-		return preprocessingFormRepository.findFormByDataId(dataId);
+		Assert.notNull(dataId);
+		User principal = userService.findByPrincipal();
+		PreprocessingForm form = preprocessingFormRepository.findFormByDataId(dataId);
+		boolean isOwner = principal.equals(form.getFile().getUser());
+		Assert.isTrue(isOwner);
+		return form;
 	}
 
 	public PreprocessingForm saveSubmitedSimpleForm(PreprocessingForm storedForm,
@@ -105,6 +127,11 @@ public class PreprocessingFormService {
 	}
 
 	public Collection<PreprocessingForm> findFormsByFileId(int fileId) {
+		Assert.notNull(fileId);
+		User principal = userService.findByPrincipal();
+		File file = fileService.findOne(fileId);
+		boolean isOwner = principal.equals(file.getUser());
+		Assert.isTrue(isOwner);
 		return preprocessingFormRepository.findFormsByFileId(fileId);
 	}
 
