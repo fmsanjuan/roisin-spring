@@ -8,8 +8,6 @@ import static com.roisin.spring.utils.ModelViewConstants.UPLOADED_FILE;
 
 import java.io.IOException;
 
-import javax.naming.NamingException;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.roisin.spring.forms.DownloadForm;
 import com.roisin.spring.model.ConvertUploadFile;
-import com.roisin.spring.utils.FileUtils;
+import com.roisin.spring.services.FileUtils;
 import com.roisin.spring.utils.HashUtils;
 import com.roisin.spring.utils.Runner;
 import com.roisin.spring.validator.FileConverterValidator;
@@ -43,6 +41,9 @@ public class ConverterController {
 
 	@Autowired
 	private FileConverterValidator fileConverterValidator;
+	
+	@Autowired
+	private FileUtils fileUtils;
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView upload() {
@@ -75,10 +76,10 @@ public class ConverterController {
 						DOT_SYMBOL);
 				String fileHash = HashUtils.fileChecksum(file.getBytes(), SHA_256);
 				String outputFormat = convertUploadedFile.getOutputFormat();
-				String outputPath = FileUtils.getConvertPath() + fileHash + DOT_SYMBOL
+				String outputPath = fileUtils.getConvertPath() + fileHash + DOT_SYMBOL
 						+ outputFormat;
-				String inputPath = FileUtils.getConvertPath() + fileHash + DOT_SYMBOL + inputFormat;
-				FileUtils.writeFileFromByteArray(file.getBytes(), FileUtils.getConvertPath()
+				String inputPath = fileUtils.getConvertPath() + fileHash + DOT_SYMBOL + inputFormat;
+				fileUtils.writeFileFromByteArray(file.getBytes(), fileUtils.getConvertPath()
 						+ fileHash + DOT_SYMBOL + inputFormat);
 				Runner.convertFile(inputFormat, outputFormat, inputPath, outputPath);
 
@@ -96,13 +97,7 @@ public class ConverterController {
 		} catch (IOException e) {
 			logger.error("No ha sido posible convertir el fichero", e);
 			throw new RoisinException("Could not convert file");
-		} catch (NamingException e) {
-			logger.error(
-					"No ha sido posible recuperar el directorio para realizar la conversión del fichero",
-					e);
-			throw new RoisinException(
-					"No ha sido posible recuperar el directorio para realizar la conversión del fichero");
-		}
+		} 
 	}
 
 	@RequestMapping(value = "/download", method = RequestMethod.POST)
@@ -110,27 +105,19 @@ public class ConverterController {
 			throws RoisinException {
 
 		String filePath;
-		try {
-			filePath = FileUtils.getConvertPath() + form.getHash() + DOT_SYMBOL
-					+ form.getOutputFormat();
-			String exportFileName = form.getFileName() + DOT_SYMBOL + form.getOutputFormat();
-			byte[] fileContent = FileUtils.getFileFromPath(filePath);
-			// Create and configure headers to return the file
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.parseMediaType("application/" + form.getOutputFormat()));
-			headers.setContentDispositionFormData(exportFileName, exportFileName);
-			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-			ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(fileContent, headers,
-					HttpStatus.OK);
+		filePath = fileUtils.getConvertPath() + form.getHash() + DOT_SYMBOL
+				+ form.getOutputFormat();
+		String exportFileName = form.getFileName() + DOT_SYMBOL + form.getOutputFormat();
+		byte[] fileContent = fileUtils.getFileFromPath(filePath);
+		// Create and configure headers to return the file
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType("application/" + form.getOutputFormat()));
+		headers.setContentDispositionFormData(exportFileName, exportFileName);
+		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(fileContent, headers,
+				HttpStatus.OK);
 
-			return response;
-		} catch (NamingException e) {
-			logger.error(
-					"No ha sido posible recuperar el directorio para realizar la conversión del fichero",
-					e);
-			throw new RoisinException(
-					"No ha sido posible recuperar el directorio para realizar la conversión del fichero");
-		}
+		return response;
 	}
 
 }

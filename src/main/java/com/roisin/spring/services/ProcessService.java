@@ -5,8 +5,6 @@ import static com.roisin.spring.utils.Constants.ROISIN_NULL;
 
 import java.util.Collection;
 
-import javax.naming.NamingException;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +21,6 @@ import com.roisin.spring.model.Process;
 import com.roisin.spring.model.SelectedAttribute;
 import com.roisin.spring.model.User;
 import com.roisin.spring.repositories.ProcessRepository;
-import com.roisin.spring.utils.FileUtils;
 import com.roisin.spring.utils.RoisinUtils;
 import com.roisin.spring.utils.Runner;
 
@@ -48,6 +45,9 @@ public class ProcessService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private FileUtils fileUtils;
 
 	public ProcessService() {
 		super();
@@ -120,7 +120,7 @@ public class ProcessService {
 		return processRepository.findProcessByLabelId(labelId);
 	}
 
-	public Process createInitialProcessNoAlgorithm(PreproSimpleForm form) throws NamingException {
+	public Process createInitialProcessNoAlgorithm(PreproSimpleForm form) {
 		PreprocessedData data = preprocessedDataService.findOne(Integer.parseInt(form.getDataId()));
 		// Formulario
 		PreprocessingForm storedForm = preprocessingFormService.saveSubmitedSimpleForm(
@@ -128,9 +128,9 @@ public class ProcessService {
 		// Extracción de file de BD
 		File file = storedForm.getFile();
 		String fileFormat = StringUtils.substringAfterLast(file.getName(), DOT_SYMBOL);
-		String tmpPath = FileUtils.getStoragePath() + file.getHash() + DOT_SYMBOL + fileFormat;
+		String tmpPath = fileUtils.getStoragePath() + file.getHash() + DOT_SYMBOL + fileFormat;
 		// Escritura en disco del fichero
-		FileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
+		fileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
 		// Colección de deleted rows
 		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(storedForm
 				.getId());

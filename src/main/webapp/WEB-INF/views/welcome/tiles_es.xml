@@ -12,4 +12,8 @@
 		<put-attribute name="title" value="Iniciar sesión" />
 		<put-attribute name="body" value="/views/security/login.jsp" />
 	</definition>
+	<definition name="security/activation" extends="base.definition">
+		<put-attribute name="title" value="Activación de cuenta" />
+		<put-attribute name="body" value="/WEB-INF/views/welcome/activation.jsp" />
+	</definition>
 </tiles-definitions>

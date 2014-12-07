@@ -8,6 +8,10 @@ package com.roisin.spring.utils;
  */
 public final class Constants {
 
+	public final static String T = "T";
+
+	public final static String F = "F";
+
 	public final static String DOT_SYMBOL = ".";
 
 	public final static String EQUALS = "eq";

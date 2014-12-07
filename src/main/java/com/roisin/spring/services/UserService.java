@@ -2,6 +2,7 @@ package com.roisin.spring.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,7 @@ public class UserService {
 		return user;
 	}
 
-	public void save(User user, boolean passwordEncode) {
+	public User save(User user, boolean passwordEncode) {
 		Assert.notNull(user);
 		if (passwordEncode) {
 			encoder = new Md5PasswordEncoder();
@@ -102,7 +103,7 @@ public class UserService {
 			String newPassword = encoder.encodePassword(oldPassword, null);
 			user.getUserAccount().setPassword(newPassword);
 		}
-		userRepository.save(user);
+		return userRepository.save(user);
 	}
 
 	public SignupForm constructNew() {
@@ -152,6 +153,9 @@ public class UserService {
 
 		user.getUserAccount().setUsername(form.getEmail());
 		user.getUserAccount().setPassword(form.getPassword());
+		user.getUserAccount().setEnabled(false);
+		user.getUserAccount().setLocked(false);
+		user.getUserAccount().setActivation(new Date());
 
 		return user;
 	}
@@ -169,6 +173,9 @@ public class UserService {
 		user.setVersion(form.getVersion());
 
 		user.getUserAccount().setUsername(form.getEmail());
+		user.getUserAccount().setEnabled(true);
+		user.getUserAccount().setLocked(false);
+		user.getUserAccount().setActivation(new Date());
 		if (StringUtils.isNotBlank(form.getNewPassword())) {
 			user.getUserAccount().setPassword(form.getNewPassword());
 		}

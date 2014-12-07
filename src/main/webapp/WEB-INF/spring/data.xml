@@ -17,17 +17,17 @@
 
 	<!-- Data source -->
 
-	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="java:comp/env/jdbc/roisin" />
-	</bean>
-
-<!-- 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" -->
-<!-- 		destroy-method="close"> -->
-<!-- 		<property name="driverClass" value="com.mysql.jdbc.Driver" /> -->
-<!-- 		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/roisin" /> -->
-<!-- 		<property name="user" value="root" /> -->
-<!-- 		<property name="password" value="root" /> -->
+<!-- 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!-- 		<property name="jndiName" value="java:comp/env/jdbc/roisin" /> -->
 <!-- 	</bean> -->
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${db.driverClass}" />
+		<property name="jdbcUrl" value="${db.jdbcUrl}" />
+		<property name="user" value="${db.user}" />
+		<property name="password" value="${db.password}" />
+	</bean>
 
 	<!-- JPA -->
 
@@ -36,14 +36,13 @@
 	</bean>
 
 	<bean id="sqlDialect" class="java.lang.String">
-		<constructor-arg value="org.hibernate.dialect.MySQLDialect" />
+		<constructor-arg value="${hibernate.sqlDialect}" />
 	</bean>
 
 	<util:properties id="jpaProperties">
-		<prop key="hibernate.format_sql">true</prop>
-		<prop key="hibernate.show_sql">false</prop>
-		<!-- <prop key="hibernate.hbm2ddl.auto">verify</prop> -->
-		<prop key="hibernate.cglib.use_reflection_optimizer">true</prop>
+		<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+		<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+		<prop key="hibernate.cglib.use_reflection_optimizer">${hibernate.cglib.use_reflection_optimizer}</prop>
 	</util:properties>
 
 </beans>

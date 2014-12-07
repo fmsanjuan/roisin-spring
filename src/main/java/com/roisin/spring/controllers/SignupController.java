@@ -20,6 +20,7 @@ import com.roisin.spring.forms.EditProfileForm;
 import com.roisin.spring.forms.SignupForm;
 import com.roisin.spring.model.User;
 import com.roisin.spring.security.Credentials;
+import com.roisin.spring.security.MailService;
 import com.roisin.spring.services.UserService;
 import com.roisin.spring.validator.SignupFormValidator;
 
@@ -32,6 +33,9 @@ public class SignupController {
 
 	@Autowired
 	private SignupFormValidator formValidator;
+
+	@Autowired
+	private MailService mailService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView newUser() {
@@ -55,7 +59,9 @@ public class SignupController {
 		} else {
 			try {
 				User user = userService.reconstruct(form);
-				userService.save(user, true);
+				user = userService.save(user, true);
+
+				mailService.sendActivationEmail(user);
 
 				ModelAndView res = new ModelAndView("welcome/home");
 				res.addObject(CREDENTIALS, new Credentials());

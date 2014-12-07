@@ -18,8 +18,6 @@ import static com.roisin.spring.utils.ModelViewConstants.TREE_SETTINGS;
 import java.util.Collection;
 import java.util.List;
 
-import javax.naming.NamingException;
-
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -52,13 +50,13 @@ import com.roisin.spring.model.SubgroupSettings;
 import com.roisin.spring.model.TreeToRulesSettings;
 import com.roisin.spring.services.DeletedRowService;
 import com.roisin.spring.services.FileService;
+import com.roisin.spring.services.FileUtils;
 import com.roisin.spring.services.PreprocessedDataService;
 import com.roisin.spring.services.PreprocessingFormService;
 import com.roisin.spring.services.ProcessService;
 import com.roisin.spring.services.RipperSettingsService;
 import com.roisin.spring.services.SubgroupSettingsService;
 import com.roisin.spring.services.TreeToRulesSettingsService;
-import com.roisin.spring.utils.FileUtils;
 import com.roisin.spring.utils.RoisinUtils;
 import com.roisin.spring.utils.Runner;
 import com.roisin.spring.validator.PreproSimpleFormValidator;
@@ -93,6 +91,9 @@ public class PreprocessedDataController {
 
 	@Autowired
 	private PreproSimpleFormValidator psfValidator;
+	
+	@Autowired
+	private FileUtils fileUtils;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam int fileId) {
@@ -159,7 +160,7 @@ public class PreprocessedDataController {
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = { "process" })
 	public ModelAndView process(@ModelAttribute PreproSimpleForm form, BindingResult result,
-			RedirectAttributes redirect) throws NamingException {
+			RedirectAttributes redirect) {
 
 		psfValidator.validateProcess(form, result);
 
@@ -192,8 +193,7 @@ public class PreprocessedDataController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = { "export" })
-	public ResponseEntity<byte[]> export(@ModelAttribute PreproSimpleForm form)
-			throws NamingException {
+	public ResponseEntity<byte[]> export(@ModelAttribute PreproSimpleForm form) {
 
 		PreprocessedData data = preprocessedDataService.findOne(Integer.parseInt(form.getDataId()));
 		// Formulario
@@ -203,9 +203,9 @@ public class PreprocessedDataController {
 		File file = storedForm.getFile();
 		String exportFormat = form.getExportFormat();
 		String exportFileName = FileUtils.getExportFileName(file.getName(), exportFormat);
-		String tmpPath = FileUtils.getFileTmpPath(file);
+		String tmpPath = fileUtils.getFileTmpPath(file);
 		// Escritura en disco del fichero
-		FileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
+		fileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
 		// Colección de deleted rows
 		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(storedForm
 				.getId());
@@ -213,7 +213,7 @@ public class PreprocessedDataController {
 		ByteArrayOutputStream document = Runner.exportData(tmpPath,
 				RoisinUtils.getRowsFromDeletedRows(deletedRows), storedForm.getFilterCondition(),
 				form.getExportAttributeSelection(),
-				FileUtils.getFileDownloadPath(file, exportFormat));
+				fileUtils.getFileDownloadPath(file, exportFormat));
 		// Create and configure headers to return the file
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/" + exportFormat));

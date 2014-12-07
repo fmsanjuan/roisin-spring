@@ -7,8 +7,6 @@ import static com.roisin.spring.utils.Constants.SHA_256;
 import java.io.IOException;
 import java.util.Collection;
 
-import javax.naming.NamingException;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,6 @@ import com.roisin.spring.exception.RoisinSpringException;
 import com.roisin.spring.model.File;
 import com.roisin.spring.model.User;
 import com.roisin.spring.repositories.FileRepository;
-import com.roisin.spring.utils.FileUtils;
 import com.roisin.spring.utils.HashUtils;
 import com.roisin.spring.utils.Runner;
 
@@ -33,7 +30,10 @@ public class FileService {
 	private FileRepository fileRepository;
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
+	
+	@Autowired
+	private FileUtils fileUtils;
 
 	public FileService() {
 		super();
@@ -76,12 +76,12 @@ public class FileService {
 		return fileRepository.findFilesByUserId(userId);
 	}
 
-	public String writeFileFromDb(File file) throws NamingException {
+	public String writeFileFromDb(File file) {
 		byte[] fileArray = file.getOriginalFile();
 		String fileFormat = StringUtils.substringAfterLast(file.getName(), DOT_SYMBOL);
-		String tmpPath = FileUtils.getStoragePath() + file.getHash() + DOT_SYMBOL + fileFormat;
+		String tmpPath = fileUtils.getStoragePath() + file.getHash() + DOT_SYMBOL + fileFormat;
 		// Escritura en disco del fichero
-		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
+		fileUtils.writeFileFromByteArray(fileArray, tmpPath);
 
 		return tmpPath;
 	}
@@ -107,13 +107,13 @@ public class FileService {
 		return file.getOriginalFilename();
 	}
 
-	public ExampleSet getExampleSetFromFile(File file) throws NamingException {
+	public ExampleSet getExampleSetFromFile(File file) {
 		byte[] fileArray = file.getOriginalFile();
-		String tmpPath = FileUtils.getFileTmpPath(file);
+		String tmpPath = fileUtils.getFileTmpPath(file);
 
-		FileUtils.writeFileFromByteArray(fileArray, tmpPath);
+		fileUtils.writeFileFromByteArray(fileArray, tmpPath);
 		ExampleSet exampleSet = Runner
-				.getExampleSetFromFile(FileUtils.getFileFormat(file), tmpPath);
+				.getExampleSetFromFile(fileUtils.getFileFormat(file), tmpPath);
 		return exampleSet;
 	}
 }

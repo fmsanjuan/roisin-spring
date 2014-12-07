@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/jee
+        http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	    <property name="host" value="${mail.host}"/>
+        <property name="port" value="${mail.port}"/>
+        <property name="username" value="${mail.username}"/>
+        <property name="password" value="${mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">${mail.transport.protocol}</prop>
+                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+                <prop key="mail.debug">${mail.debug}</prop>
+            </props>
+        </property>
+	</bean>
+
+	<bean id="emailServiceImpl" class="com.roisin.spring.security.MailService">
+	  	<property name="mailSender" ref="mailSender"/>
+	</bean>
+
+	<!-- Mail message -->
+	<bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
+		<property name="from">
+			<value><![CDATA[Roisin Data Mining <${mail.username}>]]></value>
+		</property>
+		<property name="subject" value="Roisin Data Mining Account Activation" />
+		<property name="text">
+			<value>
+				<![CDATA[
+					Dear %s,
+					
+ 					You have just created an account at Roisin Data Mining. Please, click on the following link to activate you account
+ 					
+ 					%s
+					
+ 					This activation link will be valid within the next 24 hours.
+					
+ 					Thanks for signing up.
+					
+					Kind Regards,
+					
+ 					Félix Sanjuán
+ 				]]>
+			</value>
+		</property>
+	</bean>
+
+</beans>

@@ -12,6 +12,7 @@ package com.roisin.spring.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -20,6 +21,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -49,6 +51,9 @@ public class UserAccount extends DomainEntity implements UserDetails {
 	private String username;
 	private String password;
 	private Collection<Authority> authorities;
+	private Boolean enabled;
+	private Boolean locked;
+	private Date activation;
 
 	@Size(min = 5, max = 32)
 	@Column(unique = true)
@@ -85,6 +90,22 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		this.authorities = authorities;
 	}
 
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(Boolean locked) {
+		this.locked = locked;
+	}
+
 	public void addAuthority(Authority authority) {
 		Assert.notNull(authority);
 		Assert.isTrue(!authorities.contains(authority));
@@ -108,7 +129,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 	@Transient
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return !locked;
 	}
 
 	@Transient
@@ -120,7 +141,16 @@ public class UserAccount extends DomainEntity implements UserDetails {
 	@Transient
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
+	}
+
+	@NotNull
+	public Date getActivation() {
+		return activation;
+	}
+
+	public void setActivation(Date activation) {
+		this.activation = activation;
 	}
 
 }

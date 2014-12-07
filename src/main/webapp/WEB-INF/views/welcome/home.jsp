@@ -24,7 +24,6 @@
 	border-radius: 5px;
 }
 </style>
-
 	<div class="container">
 		<c:if test="${successMessage != null}">
 			<div
@@ -33,6 +32,10 @@
 					aria-hidden="true">&times;</button>
 				<spring:message code="welcome.success.the.user" /> ${successMessage } <spring:message code="welcome.success.has.been" />
 			</div>
+		</c:if>
+		<c:if test="${errorMessage == true}">
+			<div class="alert alert-danger alert-dismissable">
+				<spring:message code="welcome.incorrect.user" /></div>
 		</c:if>
 		<div class="row" style="margin-top: 20px">
 			<div
@@ -71,10 +74,6 @@
 							</div>
 						</div>
 						<br />
-						<c:if test="${showError == true}">
-							<div class="alert alert-danger alert-dismissable">
-								<spring:message code="welcome.incorrect.user" /></div>
-						</c:if>
 						<c:if test="${showError == false}">
 							<br />
 							<br />

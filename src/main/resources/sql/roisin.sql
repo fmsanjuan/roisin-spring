@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `roisin`
 --
-CREATE DATABASE IF NOT EXISTS `roisin` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `roisin` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `roisin`;
 
 -- --------------------------------------------------------
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `Administrator` (
   `userAccount_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_idt4b4u259p6vs4pyr9lax4eg` (`userAccount_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `Administrator`
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `DeletedRow` (
   `preprocessingForm_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_l901h0g3x3888s2ewxm62w0yd` (`preprocessingForm_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `File` (
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_hpo4utwhhxcalm7ml3jwq0iob` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `File` (
 CREATE TABLE IF NOT EXISTS `hibernate_sequences` (
   `sequence_name` varchar(255) DEFAULT NULL,
   `sequence_next_hi_value` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `hibernate_sequences`
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `PreprocessedData` (
   `preprocessingForm_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_dea1kimbjlto9voehdf0bvsj2` (`preprocessingForm_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `PreprocessingForm` (
   `file_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_orh9ovajd06hhh296gmco1t48` (`file_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `Process` (
   PRIMARY KEY (`id`),
   KEY `FK_ptcp0r2oejrt2nk0t8pu7lj1u` (`label_id`),
   KEY `FK_ju0bhbyfw9cdkywnyogbfio4h` (`preprocessedData_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `Results` (
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_s3u7cy0btaf0v0v912c1vvv5t` (`process_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `RipperSettings` (
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_p772o6rye7776qnwbstttboan` (`process_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS `Rule` (
   `results_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_bfrqr92ht500ryauufrfvviyj` (`results_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `SelectedAttribute` (
   `preprocessingForm_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_qo6jqtuogeou696ddcod3971l` (`preprocessingForm_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `SubgroupSettings` (
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_m1g4f7hs0id1q2ikkxhp5ex7i` (`process_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS `TreeToRulesSettings` (
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_3ex118p2iqiu5digxtjn92wpl` (`process_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -280,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `User` (
   `userAccount_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_o6s94d43co03sx067ili5760c` (`userAccount_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -293,9 +293,12 @@ CREATE TABLE IF NOT EXISTS `UserAccount` (
   `version` int(11) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
+  `enabled` bit NOT NULL DEFAULT 0,
+  `locked` bit NOT NULL DEFAULT 0,
+  `activation` TIMESTAMP NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_csivo9yqa08nrbkog71ycilh5` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `UserAccount`
@@ -314,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `UserAccount_authorities` (
   `UserAccount_id` int(11) NOT NULL,
   `authority` varchar(255) DEFAULT NULL,
   KEY `FK_b63ua47r0u1m7ccc9lte2ui4r` (`UserAccount_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `UserAccount_authorities`
