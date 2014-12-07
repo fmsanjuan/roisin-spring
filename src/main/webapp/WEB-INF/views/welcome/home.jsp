@@ -74,6 +74,13 @@
 							</div>
 						</div>
 						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<spring:message code="welcome.sign.up" var="signUp" />
+								<a href="/security/forgot/"><spring:message code="welcome.forgot.password" /></a>
+							</div>
+						</div>
+						<br />
 						<c:if test="${showError == false}">
 							<br />
 							<br />

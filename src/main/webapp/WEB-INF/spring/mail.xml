@@ -29,8 +29,8 @@
 	  	<property name="mailSender" ref="mailSender"/>
 	</bean>
 
-	<!-- Mail message -->
-	<bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
+	<!-- Mail messages -->
+	<bean id="activationMessage" class="org.springframework.mail.SimpleMailMessage">
 		<property name="from">
 			<value><![CDATA[Roisin Data Mining <${mail.username}>]]></value>
 		</property>
@@ -47,6 +47,28 @@
  					This activation link will be valid within the next 24 hours.
 					
  					Thanks for signing up.
+					
+					Kind Regards,
+					
+ 					Félix Sanjuán
+ 				]]>
+			</value>
+		</property>
+	</bean>
+	
+	<bean id="passwordRecoverMessage" class="org.springframework.mail.SimpleMailMessage">
+		<property name="from">
+			<value><![CDATA[Roisin Data Mining <${mail.username}>]]></value>
+		</property>
+		<property name="subject" value="Roisin Data Mining Account Activation" />
+		<property name="text">
+			<value>
+				<![CDATA[
+					Dear user,
+					
+ 					click on the next link to set a new password for your Roisin account:
+ 					
+ 					%s
 					
 					Kind Regards,
 					

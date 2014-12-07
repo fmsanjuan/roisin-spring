@@ -16,4 +16,12 @@
 		<put-attribute name="title" value="Activación de cuenta" />
 		<put-attribute name="body" value="/WEB-INF/views/welcome/activation.jsp" />
 	</definition>
+	<definition name="security/forgot" extends="base.definition">
+		<put-attribute name="title" value="Recuperación de contraseña" />
+		<put-attribute name="body" value="/WEB-INF/views/welcome/forgot.jsp" />
+	</definition>
+	<definition name="security/change" extends="base.definition">
+		<put-attribute name="title" value="Cambio de contraseña" />
+		<put-attribute name="body" value="/WEB-INF/views/welcome/changePassword.jsp" />
+	</definition>
 </tiles-definitions>

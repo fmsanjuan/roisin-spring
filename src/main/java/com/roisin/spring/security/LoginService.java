@@ -10,8 +10,11 @@
 
 package com.roisin.spring.security;
 
+import java.util.Date;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +35,7 @@ public class LoginService implements UserDetailsService {
 
 	@Autowired
 	private UserAccountRepository userRepository;
-	
+
 	@Autowired
 	private FileUtils fileUtils;
 
@@ -40,6 +43,10 @@ public class LoginService implements UserDetailsService {
 
 	public UserAccount findOne(Integer id) {
 		return userRepository.findOne(id);
+	}
+
+	public UserAccount findByUsername(String username) {
+		return userRepository.findByUsername(username);
 	}
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -104,6 +111,27 @@ public class LoginService implements UserDetailsService {
 		sb.append(fileUtils.getActivationToken());
 
 		return DigestUtils.sha256Hex(sb.toString());
+	}
+
+	public void sendPasswordRecoverEmail(String email) {
+		UserAccount userAccount = userRepository.findByUsername(email);
+		userAccount.setActivation(new Date());
+
+	}
+
+	public String generatePasswordRecoveryKey(UserAccount userAccount) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(userAccount.getUsername());
+		sb.append(userAccount.getActivation().getTime());
+		sb.append(fileUtils.getActivationToken());
+
+		return DigestUtils.sha256Hex(sb.toString());
+	}
+
+	public UserAccount changePassword(UserAccount userAccount, String newPassword) {
+		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		userAccount.setPassword(encoder.encodePassword(newPassword, null));
+		return userRepository.save(userAccount);
 	}
 
 }

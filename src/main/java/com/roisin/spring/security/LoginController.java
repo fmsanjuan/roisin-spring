@@ -27,6 +27,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.roisin.spring.forms.ChangePasswordForm;
+import com.roisin.spring.forms.PasswordRecoveryRequestForm;
+
+import exception.RoisinException;
+
 @Controller
 @RequestMapping("/security")
 public class LoginController {
@@ -35,6 +40,9 @@ public class LoginController {
 
 	@Autowired
 	private LoginService service;
+
+	@Autowired
+	private MailService mailService;
 
 	// Constructors -----------------------------------------------------------
 
@@ -111,5 +119,81 @@ public class LoginController {
 		result.addObject("activationSuccess", activationSuccess);
 		result.addObject("message", message);
 		return result;
+	}
+
+	// Forgot password?
+	@RequestMapping("/forgot")
+	public ModelAndView forgotPassword() {
+		PasswordRecoveryRequestForm form = new PasswordRecoveryRequestForm();
+		ModelAndView result = new ModelAndView("security/forgot");
+		result.addObject("form", form);
+		return result;
+	}
+
+	@RequestMapping(value = "/request/recovery", method = RequestMethod.POST)
+	public ModelAndView requestRecovery(@ModelAttribute PasswordRecoveryRequestForm form) {
+		UserAccount userAccount = service.findByUsername(form.getEmail());
+		if (userAccount != null) {
+			// Envío de correo para la recuperación de contraseña
+			mailService.sendPasswordRecoverEmail(userAccount);
+			ModelAndView result = new ModelAndView("security/forgot");
+			result.addObject("success", true);
+			return result;
+		} else {
+			ModelAndView result = new ModelAndView("security/forgot");
+			result.addObject("message", "welcome.incorrect.user");
+			result.addObject("form", form);
+			return result;
+		}
+	}
+
+	// Activation
+	@RequestMapping(value = "/recover/{id}/{requestKey}", method = RequestMethod.GET)
+	public ModelAndView passwordChangeRequest(@PathVariable Integer id,
+			@PathVariable String requestKey) throws RoisinException {
+		UserAccount userAccount = service.findOne(id);
+		if (userAccount != null) {
+			String correctRequestKey = service.generatePasswordRecoveryKey(userAccount);
+			if (correctRequestKey.equals(requestKey)) {
+				// Se devuelve el formulario de cambio de contraseña
+				ChangePasswordForm form = new ChangePasswordForm();
+				form.setKey(requestKey);
+				form.setUserAccountId(id);
+				ModelAndView result = new ModelAndView("security/change");
+				result.addObject("form", form);
+				return result;
+			} else {
+				throw new RoisinException("Petición de cambio de contraseña no válida");
+			}
+		} else {
+			throw new RoisinException("Petición de cambio de contraseña no válida");
+		}
+	}
+
+	@RequestMapping(value = "/change", method = RequestMethod.POST)
+	public ModelAndView changePassword(@ModelAttribute ChangePasswordForm form)
+			throws RoisinException {
+		if (!form.getNewPassword().equals(form.getRepeatNewPassword())) {
+			ModelAndView result = new ModelAndView("security/change");
+			result.addObject("form", form);
+			result.addObject("message", "welcome.passwords.incorrect");
+			return result;
+		} else {
+			UserAccount userAccount = service.findOne(form.getUserAccountId());
+			if (userAccount != null) {
+				String correctRequestKey = service.generatePasswordRecoveryKey(userAccount);
+				if (correctRequestKey.equals(form.getKey())) {
+					service.changePassword(userAccount, form.getNewPassword());
+					ModelAndView result = new ModelAndView("security/change");
+					result.addObject("form", form);
+					result.addObject("success", true);
+					return result;
+				} else {
+					throw new RoisinException("Petición de cambio de contraseña no válida");
+				}
+			} else {
+				throw new RoisinException("Petición de cambio de contraseña no válida");
+			}
+		}
 	}
 }

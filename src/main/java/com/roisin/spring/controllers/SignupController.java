@@ -47,7 +47,7 @@ public class SignupController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public ModelAndView save(@ModelAttribute(FORM_LOWER_CASE) SignupForm form, BindingResult result) {
+	public ModelAndView save(@ModelAttribute("form") SignupForm form, BindingResult result) {
 
 		formValidator.validate(form, result);
 
