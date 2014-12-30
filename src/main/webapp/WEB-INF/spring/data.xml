@@ -27,6 +27,21 @@
 		<property name="jdbcUrl" value="${db.jdbcUrl}" />
 		<property name="user" value="${db.user}" />
 		<property name="password" value="${db.password}" />
+		
+		<property name="acquireIncrement" value="${db.acquireIncrement}" />
+		<property name="checkoutTimeout" value="${db.checkoutTimeout}" />
+		<property name="idleConnectionTestPeriod" value="${db.idleConnectionTestPeriod}" />
+		<property name="maxIdleTime" value="${db.maxIdleTime}" />
+		<property name="maxIdleTimeExcessConnections" value="${db.maxIdleTimeExcessConnections}" />
+		<property name="maxPoolSize" value="${db.maxPoolSize}" />
+		<property name="maxStatements" value="${db.maxStatements}" /> 
+		<property name="maxStatementsPerConnection" value="${db.maxStatementsPerConnection}" /> 
+		<property name="minPoolSize" value="${db.minPoolSize}" /> 
+		<property name="numHelperThreads" value="${db.numHelperThreads}" /> 
+		<property name="propertyCycle" value="${db.propertyCycle}" /> 
+		<property name="statementCacheNumDeferredCloseThreads" value="${db.statementCacheNumDeferredCloseThreads}" />
+		<property name="testConnectionOnCheckin" value="${db.testConnectionOnCheckin}" /> 
+		<property name="unreturnedConnectionTimeout" value="${db.unreturnedConnectionTimeout}" /> 
 	</bean>
 
 	<!-- JPA -->
