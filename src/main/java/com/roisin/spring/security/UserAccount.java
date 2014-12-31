@@ -51,8 +51,8 @@ public class UserAccount extends DomainEntity implements UserDetails {
 	private String username;
 	private String password;
 	private Collection<Authority> authorities;
-	private Boolean enabled;
-	private Boolean locked;
+	private boolean enabled;
+	private boolean locked;
 	private Date activation;
 
 	@Size(min = 5, max = 32)
@@ -90,15 +90,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		this.authorities = authorities;
 	}
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public Boolean isLocked() {
+	public boolean getLocked() {
 		return locked;
 	}
 
@@ -129,7 +121,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 	@Transient
 	@Override
 	public boolean isAccountNonLocked() {
-		return !locked;
+		return !getLocked();
 	}
 
 	@Transient
@@ -141,7 +133,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 	@Transient
 	@Override
 	public boolean isEnabled() {
-		return enabled;
+		return getEnabled();
 	}
 
 	@NotNull
@@ -151,6 +143,14 @@ public class UserAccount extends DomainEntity implements UserDetails {
 
 	public void setActivation(Date activation) {
 		this.activation = activation;
+	}
+
+	public boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

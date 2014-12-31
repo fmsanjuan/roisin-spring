@@ -72,6 +72,7 @@ public class SignupController {
 				if (oops instanceof DataIntegrityViolationException) {
 					res = createEditModelAndViewCustomer(form, "sign.error.duplicated.email");
 				} else {
+					oops.printStackTrace();
 					res = createEditModelAndViewCustomer(form, "sign.error");
 				}
 				return res;
@@ -113,6 +114,7 @@ public class SignupController {
 					res = createEditProfileModelAndViewCustomer(form, "sign.error.duplicated.email");
 				} else {
 					res = createEditProfileModelAndViewCustomer(form, "sign.error");
+					oops.printStackTrace();
 				}
 				return res;
 			}

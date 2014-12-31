@@ -98,7 +98,7 @@ public class LoginController {
 		// activación
 
 		UserAccount userAccount = service.findOne(id);
-		if (userAccount.getEnabled()) {
+		if (userAccount.isEnabled()) {
 			// La cuenta ya está activada
 			activationSuccess = false;
 			message = "welcome.activation.already.activated";

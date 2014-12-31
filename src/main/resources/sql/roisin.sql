@@ -293,8 +293,8 @@ CREATE TABLE IF NOT EXISTS `UserAccount` (
   `version` int(11) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
-  `enabled` bit NOT NULL DEFAULT 0,
-  `locked` bit NOT NULL DEFAULT 0,
+  `enabled` TINYINT NOT NULL DEFAULT 0,
+  `locked` TINYINT NOT NULL DEFAULT 0,
   `activation` TIMESTAMP NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_csivo9yqa08nrbkog71ycilh5` (`username`)
@@ -304,8 +304,8 @@ CREATE TABLE IF NOT EXISTS `UserAccount` (
 -- Volcado de datos para la tabla `UserAccount`
 --
 
-INSERT INTO `UserAccount` (`id`, `version`, `password`, `username`) VALUES
-(1, 0, '21232f297a57a5a743894a0e4a801fc3', 'admin');
+INSERT INTO `UserAccount` (`id`, `version`, `password`, `username`, `enabled`, `locked`) VALUES
+(1, 0, '21232f297a57a5a743894a0e4a801fc3', 'admin', 1, 1);
 
 -- --------------------------------------------------------
 
