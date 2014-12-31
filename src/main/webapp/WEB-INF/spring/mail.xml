@@ -34,7 +34,7 @@
 		<property name="from">
 			<value><![CDATA[Roisin Data Mining <${mail.username}>]]></value>
 		</property>
-		<property name="subject" value="Roisin Data Mining Account Activation" />
+		<property name="subject" value="Roisin Data Mining Activation" />
 		<property name="text">
 			<value>
 				<![CDATA[
@@ -60,7 +60,7 @@
 		<property name="from">
 			<value><![CDATA[Roisin Data Mining <${mail.username}>]]></value>
 		</property>
-		<property name="subject" value="Roisin Data Mining Account Activation" />
+		<property name="subject" value="Roisin Data Mining Password Recovery" />
 		<property name="text">
 			<value>
 				<![CDATA[
