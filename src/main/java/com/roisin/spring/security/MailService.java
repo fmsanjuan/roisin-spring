@@ -42,6 +42,8 @@ public class MailService {
 	private String domain;
 
 	public void sendActivationEmail(User user) {
+		// A copy of the message established in mail.xml is modified and sent.
+		SimpleMailMessage message = new SimpleMailMessage(activationMessage);
 		String activationKey = loginService.generateUserAccountActivationKey(user.getUserAccount());
 		StringBuilder activationUrl = new StringBuilder();
 		activationUrl.append(HTTP);
@@ -51,14 +53,15 @@ public class MailService {
 		activationUrl.append(SLASH);
 		activationUrl.append(activationKey);
 
-		activationMessage.setSentDate(new Date());
-		activationMessage.setText(String.format(activationMessage.getText(), user.getName(),
-				activationUrl.toString()));
-		activationMessage.setTo(user.getUserAccount().getUsername());
-		mailSender.send(activationMessage);
+		message.setSentDate(new Date());
+		message.setText(String.format(message.getText(), user.getName(), activationUrl.toString()));
+		message.setTo(user.getUserAccount().getUsername());
+		mailSender.send(message);
 	}
 
 	public void sendPasswordRecoverEmail(UserAccount userAccount) {
+		// A copy of the message established in mail.xml is modified and sent.
+		SimpleMailMessage message = new SimpleMailMessage(passwordRecoverMessage);
 		String passwordRecoveryKey = loginService.generatePasswordRecoveryKey(userAccount);
 		StringBuilder sb = new StringBuilder();
 		sb.append(HTTP);
@@ -68,11 +71,10 @@ public class MailService {
 		sb.append(SLASH);
 		sb.append(passwordRecoveryKey);
 
-		passwordRecoverMessage.setSentDate(new Date());
-		passwordRecoverMessage.setText(String.format(passwordRecoverMessage.getText(),
-				sb.toString()));
-		passwordRecoverMessage.setTo(userAccount.getUsername());
-		mailSender.send(passwordRecoverMessage);
+		message.setSentDate(new Date());
+		message.setText(String.format(message.getText(), sb.toString()));
+		message.setTo(userAccount.getUsername());
+		mailSender.send(message);
 	}
 
 	public JavaMailSender getMailSender() {
