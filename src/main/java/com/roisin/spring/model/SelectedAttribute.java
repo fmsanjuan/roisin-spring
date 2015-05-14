@@ -11,14 +11,29 @@ import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * Selected attribute entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class SelectedAttribute extends DomainEntity {
 
+	/**
+	 * Attribute name
+	 */
 	private String name;
 
+	/**
+	 * Preprocessing forms
+	 */
 	private PreprocessingForm preprocessingForm;
 
+	/**
+	 * Processes
+	 */
 	private Collection<Process> processes;
 
 	public SelectedAttribute() {
@@ -30,7 +45,7 @@ public class SelectedAttribute extends DomainEntity {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -40,17 +55,17 @@ public class SelectedAttribute extends DomainEntity {
 		return preprocessingForm;
 	}
 
-	public void setPreprocessingForm(PreprocessingForm preprocessingForm) {
+	public void setPreprocessingForm(final PreprocessingForm preprocessingForm) {
 		this.preprocessingForm = preprocessingForm;
 	}
 
 	@Valid
 	@OneToMany(mappedBy = "label")
-	public Collection<Process> getProcess() {
+	public Collection<Process> getProcesses() {
 		return processes;
 	}
 
-	public void setProcess(Collection<Process> processes) {
+	public void setProcesses(final Collection<Process> processes) {
 		this.processes = processes;
 	}
 

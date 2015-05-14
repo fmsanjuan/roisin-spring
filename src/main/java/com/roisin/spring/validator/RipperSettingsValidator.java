@@ -12,13 +12,13 @@ import com.roisin.spring.model.RipperSettings;
 public class RipperSettingsValidator implements Validator {
 
 	@Override
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(final Class<?> clazz) {
 		return false;
 	}
 
 	@Override
-	public void validate(Object target, Errors errors) {
-		RipperSettings form = (RipperSettings) target;
+	public void validate(final Object target, final Errors errors) {
+		final RipperSettings form = (RipperSettings) target;
 
 		if (StringUtils.isBlank(form.getRipperCriterion())
 				|| (!form.getRipperCriterion().equals(INFORMATION_GAIN) && !form

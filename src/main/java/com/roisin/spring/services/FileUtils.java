@@ -20,56 +20,71 @@ import com.roisin.spring.model.File;
 @Transactional
 public class FileUtils {
 
-	private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
-	
+	/**
+	 * Class log
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(FileUtils.class);
+
+	/**
+	 * Storage path for files uploaded by the user
+	 */
 	@Value("${storage.path}")
 	private String storagePath;
-	
+
+	/**
+	 * Storage path for files that will be downloaded by the user
+	 */
 	@Value("${download.path}")
 	private String downloadPath;
-	
+
+	/**
+	 * Storage path for Roisin conversion functionality
+	 */
 	@Value("${convert.path}")
 	private String convertPath;
-	
+
+	/**
+	 * Activation token
+	 */
 	@Value("${activation.token}")
 	private String activationToken;
-	
-	public void writeFileFromByteArray(byte[] byteArray, String path) {
+
+	public void writeFileFromByteArray(final byte[] byteArray, final String path) {
 		FileOutputStream fos;
 		try {
 			fos = new FileOutputStream(path);
 			fos.write(byteArray);
 			fos.close();
 		} catch (IOException e) {
-			logger.error("No ha sido posible recuperar el fichero de base de datos para almacenarlo en el servidor");
+			LOG.error("No ha sido posible recuperar el fichero de base de datos para almacenarlo en el servidor");
 		}
 	}
 
-	public byte[] getFileFromPath(String path) {
+	public byte[] getFileFromPath(final String path) {
 		byte fileContent[] = null;
 		try {
-			java.io.File file = new java.io.File(path);
+			final java.io.File file = new java.io.File(path);
 			fileContent = Files.toByteArray(file);
 		} catch (IOException e) {
-			logger.error("No ha sido posible recuperar el fichero del servidor");
+			LOG.error("No ha sido posible recuperar el fichero del servidor");
 		}
 		return fileContent;
 	}
 
-	public String getFileFormat(File file) {
+	public String getFileFormat(final File file) {
 		return StringUtils.substringAfterLast(file.getName(), DOT_SYMBOL);
 	}
 
-	public String getFileTmpPath(File file) {
+	public String getFileTmpPath(final File file) {
 		return getStoragePath() + file.getHash() + DOT_SYMBOL + getFileFormat(file);
 	}
 
-	public String getFileDownloadPath(File file, String fileFormat) {
+	public String getFileDownloadPath(final File file, final String fileFormat) {
 		return getDownloadPath() + file.getHash() + DOT_SYMBOL + fileFormat;
 	}
 
-	public static String getExportFileName(String originalFileName, String exportFormat) {
-		String name = StringUtils.substringBeforeLast(originalFileName, DOT_SYMBOL);
+	public static String getExportFileName(final String originalFileName, final String exportFormat) {
+		final String name = StringUtils.substringBeforeLast(originalFileName, DOT_SYMBOL);
 		return name + DOT_SYMBOL + exportFormat;
 	}
 
@@ -77,7 +92,7 @@ public class FileUtils {
 		return storagePath;
 	}
 
-	public void setStoragePath(String storagePath) {
+	public void setStoragePath(final String storagePath) {
 		this.storagePath = storagePath;
 	}
 
@@ -85,7 +100,7 @@ public class FileUtils {
 		return downloadPath;
 	}
 
-	public void setDownloadPath(String downloadPath) {
+	public void setDownloadPath(final String downloadPath) {
 		this.downloadPath = downloadPath;
 	}
 
@@ -93,7 +108,7 @@ public class FileUtils {
 		return convertPath;
 	}
 
-	public void setConvertPath(String convertPath) {
+	public void setConvertPath(final String convertPath) {
 		this.convertPath = convertPath;
 	}
 
@@ -101,28 +116,8 @@ public class FileUtils {
 		return activationToken;
 	}
 
-	public void setActivationToken(String activationToken) {
+	public void setActivationToken(final String activationToken) {
 		this.activationToken = activationToken;
 	}
-
-//	public static String getStoragePath() throws NamingException {
-//		return (String) (new InitialContext()).lookup("java:comp/env/storagePath");
-//	}
-//
-//	public static String getDownloadPath() throws NamingException {
-//		return (String) (new InitialContext()).lookup("java:comp/env/downloadPath");
-//	}
-//
-//	public static String getConvertPath() throws NamingException {
-//		return (String) (new InitialContext()).lookup("java:comp/env/convertPath");
-//	}
-//
-//	public static String getActivationToken() {
-//		try {
-//			return (String) (new InitialContext()).lookup("java:comp/env/activationToken");
-//		} catch (NamingException e) {
-//			return StringUtils.EMPTY;
-//		}
-//	}
 
 }

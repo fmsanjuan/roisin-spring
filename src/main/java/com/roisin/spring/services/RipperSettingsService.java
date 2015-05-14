@@ -13,33 +13,36 @@ import com.roisin.spring.repositories.RipperSettingsRepository;
 @Transactional
 public class RipperSettingsService {
 
+	/**
+	 * Ripper settings repository
+	 */
 	@Autowired
-	private RipperSettingsRepository ripperSettingsRepository;
+	private transient RipperSettingsRepository ripperSetRepo;
 
 	public RipperSettingsService() {
 		super();
 	}
 
 	public RipperSettings create() {
-		RipperSettings ripperSettings = new RipperSettings();
+		final RipperSettings ripperSettings = new RipperSettings();
 
 		return ripperSettings;
 	}
 
-	public RipperSettings findOne(int ripperSettingsId) {
-		return ripperSettingsRepository.findOne(ripperSettingsId);
+	public RipperSettings findOne(final int ripperSettingsId) {
+		return ripperSetRepo.findOne(ripperSettingsId);
 	}
 
-	public RipperSettings save(RipperSettings ripperSettings) {
-		return ripperSettingsRepository.save(ripperSettings);
+	public RipperSettings save(final RipperSettings ripperSettings) {
+		return ripperSetRepo.save(ripperSettings);
 	}
 
-	public void delete(RipperSettings ripperSettings) {
-		ripperSettingsRepository.delete(ripperSettings);
+	public void delete(final RipperSettings ripperSettings) {
+		ripperSetRepo.delete(ripperSettings);
 	}
 
 	public Collection<RipperSettings> findAll() {
-		return ripperSettingsRepository.findAll();
+		return ripperSetRepo.findAll();
 	}
 
 }

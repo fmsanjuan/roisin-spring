@@ -38,11 +38,17 @@ public class LoginController {
 
 	// Supporting services ----------------------------------------------------
 
+	/**
+	 * Login service
+	 */
 	@Autowired
-	private LoginService service;
+	private transient LoginService service;
 
+	/**
+	 * Mail service
+	 */
 	@Autowired
-	private MailService mailService;
+	private transient MailService mailService;
 
 	// Constructors -----------------------------------------------------------
 
@@ -53,8 +59,9 @@ public class LoginController {
 	// Login ------------------------------------------------------------------
 
 	@RequestMapping("/login")
-	public ModelAndView login(@Valid @ModelAttribute Credentials credentials,
-			BindingResult bindingResult, @RequestParam(required = false) boolean showError) {
+	public ModelAndView login(@Valid @ModelAttribute final Credentials credentials,
+			final BindingResult bindingResult,
+			@RequestParam(required = false) final boolean showError) {
 		Assert.notNull(credentials);
 		Assert.notNull(bindingResult);
 
@@ -71,8 +78,8 @@ public class LoginController {
 
 	@RequestMapping("/credentials")
 	public ModelAndView credentialFailure() {
-		Credentials credentials = new Credentials();
-		ModelAndView result = new ModelAndView("welcome/home");
+		final Credentials credentials = new Credentials();
+		final ModelAndView result = new ModelAndView("welcome/home");
 		result.addObject("errorMessage", true);
 		result.addObject("credentials", credentials);
 		return result;
@@ -80,7 +87,7 @@ public class LoginController {
 
 	@RequestMapping("/activation")
 	public ModelAndView activationRequired() {
-		ModelAndView result = new ModelAndView("security/activation");
+		final ModelAndView result = new ModelAndView("security/activation");
 		result.addObject("notActivated", true);
 		result.addObject("message", "welcome.activation.not.activated");
 		return result;
@@ -88,7 +95,8 @@ public class LoginController {
 
 	// Activation
 	@RequestMapping(value = "/activate/{id}/{activationKey}", method = RequestMethod.GET)
-	public ModelAndView activateAccount(@PathVariable Integer id, @PathVariable String activationKey) {
+	public ModelAndView activateAccount(@PathVariable final Integer identifier,
+			@PathVariable final String activationKey) {
 		Boolean activationSuccess = true;
 		String message = StringUtils.EMPTY;
 
@@ -97,7 +105,7 @@ public class LoginController {
 		// 2: No han pasado más de 24h desde la fecha de envío del email de
 		// activación
 
-		UserAccount userAccount = service.findOne(id);
+		final UserAccount userAccount = service.findOne(identifier);
 		if (userAccount.isEnabled()) {
 			// La cuenta ya está activada
 			activationSuccess = false;
@@ -107,7 +115,7 @@ public class LoginController {
 			activationSuccess = false;
 			message = "welcome.activation.expired";
 		} else {
-			activationSuccess = service.activateAccount(id, activationKey);
+			activationSuccess = service.activateAccount(identifier, activationKey);
 			if (activationSuccess) {
 				message = "welcome.activation.success";
 			} else {
@@ -115,7 +123,7 @@ public class LoginController {
 			}
 		}
 
-		ModelAndView result = new ModelAndView("security/activation");
+		final ModelAndView result = new ModelAndView("security/activation");
 		result.addObject("activationSuccess", activationSuccess);
 		result.addObject("message", message);
 		return result;
@@ -124,23 +132,23 @@ public class LoginController {
 	// Forgot password?
 	@RequestMapping("/forgot")
 	public ModelAndView forgotPassword() {
-		PasswordRecoveryRequestForm form = new PasswordRecoveryRequestForm();
-		ModelAndView result = new ModelAndView("security/forgot");
+		final PasswordRecoveryRequestForm form = new PasswordRecoveryRequestForm();
+		final ModelAndView result = new ModelAndView("security/forgot");
 		result.addObject("form", form);
 		return result;
 	}
 
 	@RequestMapping(value = "/request/recovery", method = RequestMethod.POST)
-	public ModelAndView requestRecovery(@ModelAttribute PasswordRecoveryRequestForm form) {
-		UserAccount userAccount = service.findByUsername(form.getEmail());
+	public ModelAndView requestRecovery(@ModelAttribute final PasswordRecoveryRequestForm form) {
+		final UserAccount userAccount = service.findByUsername(form.getEmail());
 		if (userAccount != null) {
 			// Envío de correo para la recuperación de contraseña
 			mailService.sendPasswordRecoverEmail(userAccount);
-			ModelAndView result = new ModelAndView("security/forgot");
+			final ModelAndView result = new ModelAndView("security/forgot");
 			result.addObject("success", true);
 			return result;
 		} else {
-			ModelAndView result = new ModelAndView("security/forgot");
+			final ModelAndView result = new ModelAndView("security/forgot");
 			result.addObject("message", "welcome.incorrect.user");
 			result.addObject("form", form);
 			return result;
@@ -149,17 +157,17 @@ public class LoginController {
 
 	// Activation
 	@RequestMapping(value = "/recover/{id}/{requestKey}", method = RequestMethod.GET)
-	public ModelAndView passwordChangeRequest(@PathVariable Integer id,
-			@PathVariable String requestKey) throws RoisinException {
-		UserAccount userAccount = service.findOne(id);
+	public ModelAndView passwordChangeRequest(@PathVariable final Integer identifier,
+			@PathVariable final String requestKey) throws RoisinException {
+		final UserAccount userAccount = service.findOne(identifier);
 		if (userAccount != null) {
-			String correctRequestKey = service.generatePasswordRecoveryKey(userAccount);
+			final String correctRequestKey = service.generatePasswordRecoveryKey(userAccount);
 			if (correctRequestKey.equals(requestKey)) {
 				// Se devuelve el formulario de cambio de contraseña
-				ChangePasswordForm form = new ChangePasswordForm();
+				final ChangePasswordForm form = new ChangePasswordForm();
 				form.setKey(requestKey);
-				form.setUserAccountId(id);
-				ModelAndView result = new ModelAndView("security/change");
+				form.setUserAccountId(identifier);
+				final ModelAndView result = new ModelAndView("security/change");
 				result.addObject("form", form);
 				return result;
 			} else {
@@ -171,20 +179,20 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/change", method = RequestMethod.POST)
-	public ModelAndView changePassword(@ModelAttribute ChangePasswordForm form)
+	public ModelAndView changePassword(@ModelAttribute final ChangePasswordForm form)
 			throws RoisinException {
 		if (!form.getNewPassword().equals(form.getRepeatNewPassword())) {
-			ModelAndView result = new ModelAndView("security/change");
+			final ModelAndView result = new ModelAndView("security/change");
 			result.addObject("form", form);
 			result.addObject("message", "welcome.passwords.incorrect");
 			return result;
 		} else {
-			UserAccount userAccount = service.findOne(form.getUserAccountId());
+			final UserAccount userAccount = service.findOne(form.getUserAccountId());
 			if (userAccount != null) {
-				String correctRequestKey = service.generatePasswordRecoveryKey(userAccount);
+				final String correctRequestKey = service.generatePasswordRecoveryKey(userAccount);
 				if (correctRequestKey.equals(form.getKey())) {
 					service.changePassword(userAccount, form.getNewPassword());
-					ModelAndView result = new ModelAndView("security/change");
+					final ModelAndView result = new ModelAndView("security/change");
 					result.addObject("form", form);
 					result.addObject("success", true);
 					return result;

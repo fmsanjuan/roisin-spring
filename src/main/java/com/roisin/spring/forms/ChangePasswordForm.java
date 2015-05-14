@@ -1,13 +1,31 @@
 package com.roisin.spring.forms;
 
+/**
+ * Change password form for password recovery email
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 public class ChangePasswordForm {
 
+	/**
+	 * New password
+	 */
 	private String newPassword;
 
+	/**
+	 * Repeat new password
+	 */
 	private String repeatNewPassword;
 
+	/**
+	 * User account identifier
+	 */
 	private Integer userAccountId;
 
+	/**
+	 * Generated token
+	 */
 	private String key;
 
 	public ChangePasswordForm() {
@@ -18,7 +36,7 @@ public class ChangePasswordForm {
 		return newPassword;
 	}
 
-	public void setNewPassword(String newPassword) {
+	public void setNewPassword(final String newPassword) {
 		this.newPassword = newPassword;
 	}
 
@@ -26,7 +44,7 @@ public class ChangePasswordForm {
 		return repeatNewPassword;
 	}
 
-	public void setRepeatNewPassword(String repeatNewPassword) {
+	public void setRepeatNewPassword(final String repeatNewPassword) {
 		this.repeatNewPassword = repeatNewPassword;
 	}
 
@@ -34,7 +52,7 @@ public class ChangePasswordForm {
 		return key;
 	}
 
-	public void setKey(String key) {
+	public void setKey(final String key) {
 		this.key = key;
 	}
 
@@ -42,7 +60,7 @@ public class ChangePasswordForm {
 		return userAccountId;
 	}
 
-	public void setUserAccountId(Integer userAccountId) {
+	public void setUserAccountId(final Integer userAccountId) {
 		this.userAccountId = userAccountId;
 	}
 

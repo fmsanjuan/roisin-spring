@@ -11,13 +11,15 @@ import com.roisin.spring.model.Results;
 public class ResultsToStringConverter implements Converter<Results, String> {
 
 	@Override
-	public String convert(Results source) {
+	public String convert(final Results source) {
 		String result;
 
-		if (source == null)
+		if (source == null) {
 			result = null;
-		else
+
+		} else {
 			result = String.valueOf(source.getId());
+		}
 
 		return result;
 	}

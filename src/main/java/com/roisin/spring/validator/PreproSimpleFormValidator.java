@@ -15,17 +15,17 @@ import com.roisin.spring.forms.PreproSimpleForm;
 public class PreproSimpleFormValidator implements Validator {
 
 	@Override
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(final Class<?> clazz) {
 		return false;
 	}
 
 	@Override
-	public void validate(Object target, Errors errors) {
+	public void validate(final Object target, final Errors errors) {
 
 	}
 
-	public void validateExport(Object target, Errors errors) {
-		PreproSimpleForm form = (PreproSimpleForm) target;
+	public void validateExport(final Object target, final Errors errors) {
+		final PreproSimpleForm form = (PreproSimpleForm) target;
 
 		if (form.getExportAttributeSelection().size() < 1) {
 			errors.rejectValue("attributeSelection", "preform.error.attribute",
@@ -42,8 +42,8 @@ public class PreproSimpleFormValidator implements Validator {
 
 	}
 
-	public void validateProcess(Object target, Errors errors) {
-		PreproSimpleForm form = (PreproSimpleForm) target;
+	public void validateProcess(final Object target, final Errors errors) {
+		final PreproSimpleForm form = (PreproSimpleForm) target;
 
 		if (StringUtils.isBlank(form.getName())) {
 			errors.rejectValue("name", "preform.error.name", "preform.error.name");

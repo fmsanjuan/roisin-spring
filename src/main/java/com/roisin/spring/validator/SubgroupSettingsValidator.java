@@ -25,15 +25,35 @@ import com.roisin.spring.model.SubgroupSettings;
 
 public class SubgroupSettingsValidator implements Validator {
 
+	/**
+	 * Max depth lowest value
+	 */
+	private static final int MAX_DEPTH_LIM = 0;
+
+	/**
+	 * Min coverage highest value
+	 */
+	private static final double MAX_COVERAGE = 1.0;
+
+	/**
+	 * Min coverage lowest value
+	 */
+	private static final double MIN_COVERAGE = 0.0;
+
+	/**
+	 * Default k best rules value
+	 */
+	private static final int DEF_K_BEST_RULES = 1;
+
 	@Override
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(final Class<?> clazz) {
 		return false;
 	}
 
 	@Override
-	public void validate(Object target, Errors errors) {
+	public void validate(final Object target, final Errors errors) {
 
-		SubgroupSettings form = (SubgroupSettings) target;
+		final SubgroupSettings form = (SubgroupSettings) target;
 
 		if (StringUtils.isBlank(form.getMode())
 				|| (!form.getMode().equals(K_BEST_RULES) && !form.getMode().equals(
@@ -56,7 +76,7 @@ public class SubgroupSettingsValidator implements Validator {
 					"process.subgroup.error.utility.function");
 		}
 
-		if (form.getkBestRules() < 1) {
+		if (form.getKBestRules() < DEF_K_BEST_RULES) {
 			errors.rejectValue("kBestRules", "process.subgroup.error.k.best.rules",
 					"process.subgroup.error.k.best.rules");
 		}
@@ -70,12 +90,13 @@ public class SubgroupSettingsValidator implements Validator {
 					"process.subgroup.error.rule.generation");
 		}
 
-		if (form.getMaxDepth() < 0) {
+		if (form.getMaxDepth() < MAX_DEPTH_LIM) {
 			errors.rejectValue("maxDepth", "process.subgroup.error.max.depth",
 					"process.subgroup.error.max.depth");
 		}
 
-		if (form.getMinCoverage().doubleValue() < 0.0 || form.getMinCoverage().doubleValue() > 1.0) {
+		if (form.getMinCoverage().doubleValue() < MIN_COVERAGE
+				|| form.getMinCoverage().doubleValue() > MAX_COVERAGE) {
 			errors.rejectValue("minCoverage", "process.subgroup.error.min.coverage",
 					"process.subgroup.error.min.coverage");
 		}

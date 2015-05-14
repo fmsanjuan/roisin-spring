@@ -7,28 +7,64 @@ import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
+/**
+ * Tree to rules settings entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class TreeToRulesSettings extends DomainEntity {
 
+	/**
+	 * Tree to rules criterion
+	 */
 	private String tree2RulesCriterion;
 
+	/**
+	 * Minimal size for split
+	 */
 	private Integer minimalSizeForSplit;
 
+	/**
+	 * Minimal leaf size
+	 */
 	private Integer minimalLeafSize;
 
+	/**
+	 * Minimal gain
+	 */
 	private Double minimalGain;
 
+	/**
+	 * Maximal depth
+	 */
 	private Integer maximalDepth;
 
+	/**
+	 * Confidence
+	 */
 	private Double confidence;
 
+	/**
+	 * Prepruning alternatives
+	 */
 	private Integer numberOfPrepruningAlternatives;
 
+	/**
+	 * No prepruning option
+	 */
 	private Boolean noPrepruning;
 
+	/**
+	 * No pruning option
+	 */
 	private Boolean noPruning;
 
+	/**
+	 * Process
+	 */
 	private Process process;
 
 	public TreeToRulesSettings() {
@@ -48,7 +84,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return tree2RulesCriterion;
 	}
 
-	public void setTree2RulesCriterion(String tree2RulesCriterion) {
+	public void setTree2RulesCriterion(final String tree2RulesCriterion) {
 		this.tree2RulesCriterion = tree2RulesCriterion;
 	}
 
@@ -56,7 +92,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return minimalSizeForSplit;
 	}
 
-	public void setMinimalSizeForSplit(Integer minimalSizeForSplit) {
+	public void setMinimalSizeForSplit(final Integer minimalSizeForSplit) {
 		this.minimalSizeForSplit = minimalSizeForSplit;
 	}
 
@@ -64,7 +100,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return minimalLeafSize;
 	}
 
-	public void setMinimalLeafSize(Integer minimalLeafSize) {
+	public void setMinimalLeafSize(final Integer minimalLeafSize) {
 		this.minimalLeafSize = minimalLeafSize;
 	}
 
@@ -72,7 +108,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return minimalGain;
 	}
 
-	public void setMinimalGain(Double minimalGain) {
+	public void setMinimalGain(final Double minimalGain) {
 		this.minimalGain = minimalGain;
 	}
 
@@ -80,7 +116,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return maximalDepth;
 	}
 
-	public void setMaximalDepth(Integer maximalDepth) {
+	public void setMaximalDepth(final Integer maximalDepth) {
 		this.maximalDepth = maximalDepth;
 	}
 
@@ -88,7 +124,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return confidence;
 	}
 
-	public void setConfidence(Double confidence) {
+	public void setConfidence(final Double confidence) {
 		this.confidence = confidence;
 	}
 
@@ -96,7 +132,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return numberOfPrepruningAlternatives;
 	}
 
-	public void setNumberOfPrepruningAlternatives(Integer numberOfPrepruningAlternatives) {
+	public void setNumberOfPrepruningAlternatives(final Integer numberOfPrepruningAlternatives) {
 		this.numberOfPrepruningAlternatives = numberOfPrepruningAlternatives;
 	}
 
@@ -104,7 +140,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return noPrepruning;
 	}
 
-	public void setNoPrepruning(Boolean noPrepruning) {
+	public void setNoPrepruning(final Boolean noPrepruning) {
 		this.noPrepruning = noPrepruning;
 	}
 
@@ -112,7 +148,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return noPruning;
 	}
 
-	public void setNoPruning(Boolean noPruning) {
+	public void setNoPruning(final Boolean noPruning) {
 		this.noPruning = noPruning;
 	}
 
@@ -121,7 +157,7 @@ public class TreeToRulesSettings extends DomainEntity {
 		return process;
 	}
 
-	public void setProcess(Process process) {
+	public void setProcess(final Process process) {
 		this.process = process;
 	}
 

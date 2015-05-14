@@ -41,42 +41,72 @@ import com.roisin.spring.utils.Runner;
 @Transactional
 public class ResultsService {
 
+	/**
+	 * Results service
+	 */
 	@Autowired
-	private ResultsRepository resultsRepository;
+	private transient ResultsRepository resultsRepository;
 
+	/**
+	 * Rule service
+	 */
 	@Autowired
-	private RuleService ruleService;
+	private transient RuleService ruleService;
 
+	/**
+	 * Process service
+	 */
 	@Autowired
-	private ProcessService processService;
+	private transient ProcessService processService;
 
+	/**
+	 * Ripper settings service
+	 */
 	@Autowired
-	private RipperSettingsService ripperSettingsService;
+	private transient RipperSettingsService ripperSetService;
 
+	/**
+	 * Subgroup settings service
+	 */
 	@Autowired
-	private SubgroupSettingsService subgroupSettingsService;
+	private transient SubgroupSettingsService subgroupSetService;
 
+	/**
+	 * Tree to rules settings service
+	 */
 	@Autowired
-	private TreeToRulesSettingsService treeToRulesSettingsService;
+	private transient TreeToRulesSettingsService treeSetService;
 
+	/**
+	 * File Service
+	 */
 	@Autowired
-	private FileService fileService;
+	private transient FileService fileService;
 
+	/**
+	 * Selected attribute servive
+	 */
 	@Autowired
-	private SelectedAttributeService selectedAttributeService;
+	private transient SelectedAttributeService saService;
 
+	/**
+	 * Deleted row service
+	 */
 	@Autowired
-	private DeletedRowService deletedRowService;
+	private transient DeletedRowService deletedRowService;
 
+	/**
+	 * User service
+	 */
 	@Autowired
-	private UserService userService;
+	private transient UserService userService;
 
 	public ResultsService() {
 		super();
 	}
 
 	public Results create() {
-		Results results = new Results();
+		final Results results = new Results();
 
 		return results;
 	}
@@ -85,23 +115,23 @@ public class ResultsService {
 		return resultsRepository.findAll();
 	}
 
-	public Results findOne(int resultsId) {
+	public Results findOne(final int resultsId) {
 		Assert.notNull(resultsId);
-		User principal = userService.findByPrincipal();
-		Results results = resultsRepository.findOne(resultsId);
+		final User principal = userService.findByPrincipal();
+		final Results results = resultsRepository.findOne(resultsId);
 		boolean isOwner = principal.equals(results.getProcess().getPreprocessedData()
 				.getPreprocessingForm().getFile().getUser());
 		Assert.isTrue(isOwner);
 		return results;
 	}
 
-	public Results save(Results results) {
+	public Results save(final Results results) {
 		return resultsRepository.save(results);
 	}
 
-	public void delete(Results results) {
+	public void delete(final Results results) {
 		Assert.notNull(results);
-		User principal = userService.findByPrincipal();
+		final User principal = userService.findByPrincipal();
 		boolean isOwner = principal.equals(results.getProcess().getPreprocessedData()
 				.getPreprocessingForm().getFile().getUser());
 		Assert.isTrue(isOwner);
@@ -110,14 +140,16 @@ public class ResultsService {
 
 	// Extra methods
 
-	public Results saveResultRules(RoisinResults roisinResults, Process process) {
+	public Results saveResultRules(final RoisinResults roisinResults, final Process process) {
 		Results results = create();
 		results.setAuc(roisinResults.getRulesAuc());
 		results.setProcess(process);
 		results = save(results);
 
-		for (RoisinRule roisinRule : roisinResults.getRoisinRules()) {
-			Rule rule = ruleService.create();
+		Rule rule;
+
+		for (final RoisinRule roisinRule : roisinResults.getRoisinRules()) {
+			rule = ruleService.create();
 			rule.setAuc(roisinRule.getAuc());
 			rule.setPremise(roisinRule.getPremise());
 			rule.setConclusion(roisinRule.getConclusion());
@@ -138,13 +170,13 @@ public class ResultsService {
 		return results;
 	}
 
-	public ByteArrayOutputStream getExcelResults(Results results) {
+	public ByteArrayOutputStream getExcelResults(final Results results) {
 
-		Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
-		ByteArrayOutputStream document = new ByteArrayOutputStream();
+		final Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
+		final ByteArrayOutputStream document = new ByteArrayOutputStream();
 
 		try {
-			HSSFWorkbook workbook = new HSSFWorkbook();
+			final HSSFWorkbook workbook = new HSSFWorkbook();
 			HSSFSheet worksheet = workbook.createSheet("Roisin Results");
 			worksheet = writeExcelRules(worksheet, rules, results.getAuc(), 1);
 			workbook.write(document);
@@ -155,24 +187,24 @@ public class ResultsService {
 		return document;
 	}
 
-	public ByteArrayOutputStream getOptimizationExcelResults(Results results) {
+	public ByteArrayOutputStream getOptimizationExcelResults(final Results results) {
 
-		Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
-		Collection<Rule> removedRules = RoisinUtils.getAucOptimizationRemovedRules(rules);
+		final Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
+		final Collection<Rule> removedRules = RoisinUtils.getAucOptimizationRemovedRules(rules);
 		rules.removeAll(removedRules);
 
-		ByteArrayOutputStream document = new ByteArrayOutputStream();
+		final ByteArrayOutputStream document = new ByteArrayOutputStream();
 
 		try {
 			int initRow = 1;
-			HSSFWorkbook workbook = new HSSFWorkbook();
+			final HSSFWorkbook workbook = new HSSFWorkbook();
 			HSSFSheet worksheet = workbook.createSheet("Roisin Results");
 
 			worksheet = writeExcelRules(worksheet, rules, results.getAuc(), initRow);
 
 			initRow += 2;
-			HSSFRow rowTitle = worksheet.createRow(initRow);
-			HSSFCell cellTitle = rowTitle.createCell(0);
+			final HSSFRow rowTitle = worksheet.createRow(initRow);
+			final HSSFCell cellTitle = rowTitle.createCell(0);
 			cellTitle.setCellValue("AUC Optimization Removed Rules");
 
 			initRow++;
@@ -188,62 +220,73 @@ public class ResultsService {
 		return document;
 	}
 
-	public HSSFSheet writeExcelRules(HSSFSheet worksheet, Collection<Rule> rules, double auc,
-			int initRow) {
-		HSSFRow row1 = worksheet.createRow(0);
+	public HSSFSheet writeExcelRules(final HSSFSheet worksheet, final Collection<Rule> rules,
+			final double auc, int initRow) {
+		final HSSFRow row1 = worksheet.createRow(0);
 
-		HSSFCell cellA1 = row1.createCell(0);
+		final HSSFCell cellA1 = row1.createCell(0);
 		cellA1.setCellValue("Premise");
-		HSSFCell cellB1 = row1.createCell(1);
+		final HSSFCell cellB1 = row1.createCell(1);
 		cellB1.setCellValue("Conclusion");
-		HSSFCell cellC1 = row1.createCell(2);
+		final HSSFCell cellC1 = row1.createCell(2);
 		cellC1.setCellValue("Precision");
-		HSSFCell cellD1 = row1.createCell(3);
+		final HSSFCell cellD1 = row1.createCell(3);
 		cellD1.setCellValue("Support");
-		HSSFCell cellE1 = row1.createCell(4);
+		final HSSFCell cellE1 = row1.createCell(4);
 		cellE1.setCellValue("TPR");
-		HSSFCell cellF1 = row1.createCell(5);
+		final HSSFCell cellF1 = row1.createCell(5);
 		cellF1.setCellValue("FPR");
-		HSSFCell cellG1 = row1.createCell(6);
+		final HSSFCell cellG1 = row1.createCell(6);
 		cellG1.setCellValue("TP");
-		HSSFCell cellH1 = row1.createCell(7);
+		final HSSFCell cellH1 = row1.createCell(7);
 		cellH1.setCellValue("FP");
-		HSSFCell cellI1 = row1.createCell(8);
+		final HSSFCell cellI1 = row1.createCell(8);
 		cellI1.setCellValue("FN");
-		HSSFCell cellJ1 = row1.createCell(9);
+		final HSSFCell cellJ1 = row1.createCell(9);
 		cellJ1.setCellValue("TN");
-		HSSFCell cellK1 = row1.createCell(10);
+		final HSSFCell cellK1 = row1.createCell(10);
 		cellK1.setCellValue("AUC");
-		HSSFCell cellM1 = row1.createCell(12);
+		final HSSFCell cellM1 = row1.createCell(12);
 		cellM1.setCellValue("Total AUC");
-		HSSFCell cellN1 = row1.createCell(13);
+		final HSSFCell cellN1 = row1.createCell(13);
 		cellN1.setCellValue(auc);
 
-		for (Rule rule : rules) {
+		HSSFCell cellA;
+		HSSFCell cellB;
+		HSSFCell cellC;
+		HSSFCell cellD;
+		HSSFCell cellE;
+		HSSFCell cellF;
+		HSSFCell cellG;
+		HSSFCell cellH;
+		HSSFCell cellI;
+		HSSFCell cellJ;
+		HSSFCell cellK;
+		for (final Rule rule : rules) {
 			HSSFRow row = worksheet.createRow(initRow);
 			initRow++;
 
-			HSSFCell cellA = row.createCell(0);
+			cellA = row.createCell(0);
 			cellA.setCellValue(rule.getPremise());
-			HSSFCell cellB = row.createCell(1);
+			cellB = row.createCell(1);
 			cellB.setCellValue(rule.getConclusion());
-			HSSFCell cellC = row.createCell(2);
+			cellC = row.createCell(2);
 			cellC.setCellValue(rule.getRulePrecision());
-			HSSFCell cellD = row.createCell(3);
+			cellD = row.createCell(3);
 			cellD.setCellValue(rule.getSupport());
-			HSSFCell cellE = row.createCell(4);
+			cellE = row.createCell(4);
 			cellE.setCellValue(rule.getTpr());
-			HSSFCell cellF = row.createCell(5);
+			cellF = row.createCell(5);
 			cellF.setCellValue(rule.getFpr());
-			HSSFCell cellG = row.createCell(6);
+			cellG = row.createCell(6);
 			cellG.setCellValue(rule.getTp());
-			HSSFCell cellH = row.createCell(7);
+			cellH = row.createCell(7);
 			cellH.setCellValue(rule.getFp());
-			HSSFCell cellI = row.createCell(8);
+			cellI = row.createCell(8);
 			cellI.setCellValue(rule.getFn());
-			HSSFCell cellJ = row.createCell(9);
+			cellJ = row.createCell(9);
 			cellJ.setCellValue(rule.getTn());
-			HSSFCell cellK = row.createCell(10);
+			cellK = row.createCell(10);
 			cellK.setCellValue(rule.getAuc());
 
 		}
@@ -256,17 +299,18 @@ public class ResultsService {
 		process = processService.saveProcessAlgorithm(process, RIPPER);
 		// Se vuelve a salvar por si se ha creado un proceso nuevo
 		ripperSettings.setProcess(process);
-		ripperSettings = ripperSettingsService.save(ripperSettings);
+		ripperSettings = ripperSetService.save(ripperSettings);
 		// Data and form
-		PreprocessedData data = process.getPreprocessedData();
-		PreprocessingForm form = data.getPreprocessingForm();
+		final PreprocessedData data = process.getPreprocessedData();
+		final PreprocessingForm form = data.getPreprocessingForm();
 		// Extracción de file de BD
-		File file = form.getFile();
-		String tmpPath = fileService.writeFileFromDb(file);
+		final File file = form.getFile();
+		final String tmpPath = fileService.writeFileFromDb(file);
 		// Getting selected attributes and deleted rows
-		Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
+		Collection<SelectedAttribute> selectedAttributes = saService
 				.findSelectedAttributesByFormId(form.getId());
-		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form.getId());
+		final Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form
+				.getId());
 		// Numerical label
 		boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet().getExampleTable()
 				.getAttributes(), process.getLabel().getName());
@@ -277,7 +321,7 @@ public class ResultsService {
 				.getRowsFromDeletedRows(deletedRows), numericalLabel);
 		// Truncate results
 		roisinResults.truncateResults();
-		Results results = saveResultRules(roisinResults, process);
+		final Results results = saveResultRules(roisinResults, process);
 
 		return results;
 	}
@@ -289,17 +333,18 @@ public class ResultsService {
 		process = processService.saveProcessAlgorithm(process, SUBGROUP_DISCOVERY);
 		// Se vuelve a salvar por si se ha creado un proceso nuevo
 		subgroupSettings.setProcess(process);
-		subgroupSettings = subgroupSettingsService.save(subgroupSettings);
+		subgroupSettings = subgroupSetService.save(subgroupSettings);
 		// Data and form
-		PreprocessedData data = process.getPreprocessedData();
-		PreprocessingForm form = data.getPreprocessingForm();
+		final PreprocessedData data = process.getPreprocessedData();
+		final PreprocessingForm form = data.getPreprocessingForm();
 		// Extracción de file de BD
-		File file = form.getFile();
-		String tmpPath = fileService.writeFileFromDb(file);
+		final File file = form.getFile();
+		final String tmpPath = fileService.writeFileFromDb(file);
 		// Getting selected attributes and deleted rows
-		Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
+		Collection<SelectedAttribute> selectedAttributes = saService
 				.findSelectedAttributesByFormId(form.getId());
-		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form.getId());
+		final Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form
+				.getId());
 		// Roisin core is used to get RoisinResults
 		RoisinResults roisinResults = Runner.getSubgroupResults(subgroupSettings, tmpPath, process
 				.getLabel().getName(), form.getFilterCondition(), RoisinUtils
@@ -307,7 +352,7 @@ public class ResultsService {
 				.getRowsFromDeletedRows(deletedRows));
 		// Truncate results
 		roisinResults.truncateResults();
-		Results results = saveResultRules(roisinResults, process);
+		final Results results = saveResultRules(roisinResults, process);
 
 		return results;
 	}
@@ -320,17 +365,18 @@ public class ResultsService {
 		process = processService.saveProcessAlgorithm(process, TREE_TO_RULES);
 		// Se vuelve a salvar por si se ha creado un proceso nuevo
 		treeSettings.setProcess(process);
-		treeSettings = treeToRulesSettingsService.save(treeSettings);
+		treeSettings = treeSetService.save(treeSettings);
 		// Data and form
-		PreprocessedData data = process.getPreprocessedData();
-		PreprocessingForm form = data.getPreprocessingForm();
+		final PreprocessedData data = process.getPreprocessedData();
+		final PreprocessingForm form = data.getPreprocessingForm();
 		// Extracción de file de BD
-		File file = form.getFile();
-		String tmpPath = fileService.writeFileFromDb(file);
+		final File file = form.getFile();
+		final String tmpPath = fileService.writeFileFromDb(file);
 		// Getting selected attributes and deleted rows
-		Collection<SelectedAttribute> selectedAttributes = selectedAttributeService
+		Collection<SelectedAttribute> selectedAttributes = saService
 				.findSelectedAttributesByFormId(form.getId());
-		Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form.getId());
+		final Collection<DeletedRow> deletedRows = deletedRowService.findFormDeletedRows(form
+				.getId());
 		// Numerical label
 		boolean numericalLabel = RoisinUtils.isNumericLabel(data.getExampleSet().getExampleTable()
 				.getAttributes(), process.getLabel().getName());
@@ -341,7 +387,7 @@ public class ResultsService {
 				.getRowsFromDeletedRows(deletedRows), numericalLabel);
 		// Truncate results
 		roisinResults.truncateResults();
-		Results results = saveResultRules(roisinResults, process);
+		final Results results = saveResultRules(roisinResults, process);
 
 		return results;
 	}

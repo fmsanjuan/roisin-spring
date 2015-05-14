@@ -13,34 +13,37 @@ import com.roisin.spring.repositories.RuleRepository;
 @Transactional
 public class RuleService {
 
+	/**
+	 * Rule repository
+	 */
 	@Autowired
-	private RuleRepository ruleRepository;
+	private transient RuleRepository ruleRepository;
 
+	/**
+	 * Results service
+	 */
 	@Autowired
-	private ResultsService resultsService;
-
-	@Autowired
-	private UserService userService;
+	private transient ResultsService resultsService;
 
 	public RuleService() {
 		super();
 	}
 
 	public Rule create() {
-		Rule rule = new Rule();
+		final Rule rule = new Rule();
 
 		return rule;
 	}
 
-	public Rule findOne(int roisinRuleId) {
+	public Rule findOne(final int roisinRuleId) {
 		return ruleRepository.findOne(roisinRuleId);
 	}
 
-	public void save(Rule rule) {
+	public void save(final Rule rule) {
 		ruleRepository.save(rule);
 	}
 
-	public void delete(Rule rule) {
+	public void delete(final Rule rule) {
 		ruleRepository.delete(rule);
 	}
 
@@ -48,7 +51,7 @@ public class RuleService {
 		return ruleRepository.findAll();
 	}
 
-	public Collection<Rule> findRulesByResultsId(int resultsId) {
+	public Collection<Rule> findRulesByResultsId(final int resultsId) {
 		resultsService.findOne(resultsId);
 		return ruleRepository.findRulesByResultsId(resultsId);
 	}

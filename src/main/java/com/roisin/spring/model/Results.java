@@ -12,14 +12,29 @@ import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Results entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class Results extends DomainEntity {
 
+	/**
+	 * Area under de curve
+	 */
 	private Double auc;
 
+	/**
+	 * Process
+	 */
 	private Process process;
 
+	/**
+	 * Rules
+	 */
 	private Collection<Rule> rules;
 
 	public Results() {
@@ -31,7 +46,7 @@ public class Results extends DomainEntity {
 		return auc;
 	}
 
-	public void setAuc(Double auc) {
+	public void setAuc(final Double auc) {
 		this.auc = auc;
 	}
 
@@ -42,7 +57,7 @@ public class Results extends DomainEntity {
 		return rules;
 	}
 
-	public void setRules(Collection<Rule> rules) {
+	public void setRules(final Collection<Rule> rules) {
 		this.rules = rules;
 	}
 
@@ -52,7 +67,7 @@ public class Results extends DomainEntity {
 		return process;
 	}
 
-	public void setProcess(Process process) {
+	public void setProcess(final Process process) {
 		this.process = process;
 	}
 

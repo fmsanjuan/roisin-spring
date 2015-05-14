@@ -10,22 +10,49 @@ import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * Process entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class Process extends DomainEntity {
 
+	/**
+	 * ALgorithm
+	 */
 	private String algorithm;
 
+	/**
+	 * Label
+	 */
 	private SelectedAttribute label;
 
+	/**
+	 * Ripper configuration
+	 */
 	private RipperSettings ripperSettings;
 
+	/**
+	 * Subgroup configuration
+	 */
 	private SubgroupSettings subgroupSettings;
 
-	private TreeToRulesSettings treeToRulesSettings;
+	/**
+	 * Tree to rules configuration
+	 */
+	private TreeToRulesSettings treeSettings;
 
+	/**
+	 * Preprocessed data
+	 */
 	private PreprocessedData preprocessedData;
 
+	/**
+	 * Process results
+	 */
 	private Results results;
 
 	public Process() {
@@ -37,7 +64,7 @@ public class Process extends DomainEntity {
 		return algorithm;
 	}
 
-	public void setAlgorithm(String algorithm) {
+	public void setAlgorithm(final String algorithm) {
 		this.algorithm = algorithm;
 	}
 
@@ -46,7 +73,7 @@ public class Process extends DomainEntity {
 		return ripperSettings;
 	}
 
-	public void setRipperSettings(RipperSettings ripperSettings) {
+	public void setRipperSettings(final RipperSettings ripperSettings) {
 		this.ripperSettings = ripperSettings;
 	}
 
@@ -55,17 +82,17 @@ public class Process extends DomainEntity {
 		return subgroupSettings;
 	}
 
-	public void setSubgroupSettings(SubgroupSettings subgroupSettings) {
+	public void setSubgroupSettings(final SubgroupSettings subgroupSettings) {
 		this.subgroupSettings = subgroupSettings;
 	}
 
 	@OneToOne(mappedBy = "process", optional = true, cascade = CascadeType.ALL)
-	public TreeToRulesSettings getTreeToRulesSettings() {
-		return treeToRulesSettings;
+	public TreeToRulesSettings getTreeSettings() {
+		return treeSettings;
 	}
 
-	public void setTreeToRulesSettings(TreeToRulesSettings treeToRulesSettings) {
-		this.treeToRulesSettings = treeToRulesSettings;
+	public void setTreeSettings(final TreeToRulesSettings treeSettings) {
+		this.treeSettings = treeSettings;
 	}
 
 	@Valid
@@ -74,7 +101,7 @@ public class Process extends DomainEntity {
 		return preprocessedData;
 	}
 
-	public void setPreprocessedData(PreprocessedData preprocessedData) {
+	public void setPreprocessedData(final PreprocessedData preprocessedData) {
 		this.preprocessedData = preprocessedData;
 	}
 
@@ -84,7 +111,7 @@ public class Process extends DomainEntity {
 		return results;
 	}
 
-	public void setResults(Results results) {
+	public void setResults(final Results results) {
 		this.results = results;
 	}
 
@@ -94,7 +121,7 @@ public class Process extends DomainEntity {
 		return label;
 	}
 
-	public void setLabel(SelectedAttribute label) {
+	public void setLabel(final SelectedAttribute label) {
 		this.label = label;
 	}
 

@@ -6,18 +6,39 @@ import com.google.common.collect.Lists;
 
 public class PreproSimpleForm {
 
+	/**
+	 * Export attribute selection
+	 */
 	private List<String> exportAttributeSelection;
 
+	/**
+	 * Process attribute selection
+	 */
 	private List<String> processAttributeSelection;
 
+	/**
+	 * Label
+	 */
 	private String label;
 
+	/**
+	 * Data identifier
+	 */
 	private String dataId;
 
+	/**
+	 * Export format
+	 */
 	private String exportFormat;
 
+	/**
+	 * Name
+	 */
 	private String name;
 
+	/**
+	 * Description
+	 */
 	private String description;
 
 	public PreproSimpleForm() {
@@ -29,7 +50,7 @@ public class PreproSimpleForm {
 		return exportAttributeSelection;
 	}
 
-	public void setExportAttributeSelection(List<String> exportAttributeSelection) {
+	public void setExportAttributeSelection(final List<String> exportAttributeSelection) {
 		this.exportAttributeSelection = exportAttributeSelection;
 	}
 
@@ -37,7 +58,7 @@ public class PreproSimpleForm {
 		return processAttributeSelection;
 	}
 
-	public void setProcessAttributeSelection(List<String> processAttributeSelection) {
+	public void setProcessAttributeSelection(final List<String> processAttributeSelection) {
 		this.processAttributeSelection = processAttributeSelection;
 	}
 
@@ -45,7 +66,7 @@ public class PreproSimpleForm {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(final String label) {
 		this.label = label;
 	}
 
@@ -53,7 +74,7 @@ public class PreproSimpleForm {
 		return dataId;
 	}
 
-	public void setDataId(String dataId) {
+	public void setDataId(final String dataId) {
 		this.dataId = dataId;
 	}
 
@@ -61,7 +82,7 @@ public class PreproSimpleForm {
 		return exportFormat;
 	}
 
-	public void setExportFormat(String exportFormat) {
+	public void setExportFormat(final String exportFormat) {
 		this.exportFormat = exportFormat;
 	}
 
@@ -69,7 +90,7 @@ public class PreproSimpleForm {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -77,7 +98,7 @@ public class PreproSimpleForm {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 

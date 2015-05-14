@@ -39,35 +39,46 @@ import com.roisin.spring.utils.RoisinUtils;
 @RequestMapping("/preform")
 public class PreprocessingFormController {
 
-	@Autowired
-	private FileService fileService;
+	private static final String PREFORM_LIST = "preform/list";
 
+	/**
+	 * File service
+	 */
 	@Autowired
-	private PreprocessingFormService preprocessingFormService;
+	private transient FileService fileService;
 
+	/**
+	 * Preprocessing form service
+	 */
 	@Autowired
-	private PreprocessedDataService preprocessedDataService;
+	private transient PreprocessingFormService preproFormService;
+
+	/**
+	 * Preprocessed data service
+	 */
+	@Autowired
+	private transient PreprocessedDataService preproDataService;
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create(@RequestParam int fileId) throws NamingException {
-		File file = fileService.findOne(fileId);
-		ExampleSet exampleSet = fileService.getExampleSetFromFile(file);
-		List<Example> examples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
-		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+	public ModelAndView create(@RequestParam final int fileId) throws NamingException {
+		final File file = fileService.findOne(fileId);
+		final ExampleSet exampleSet = fileService.getExampleSetFromFile(file);
+		final List<Example> examples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
+		final Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
 
-		PreprocessingForm preform = preprocessingFormService
+		final PreprocessingForm preform = preproFormService
 				.createSavePreprocessingFormFromFile(file);
 
-		PreprocessedData data = preprocessedDataService.createSavePreprocessedData(exampleSet,
+		final PreprocessedData data = preproDataService.createSavePreprocessedData(exampleSet,
 				preform);
 
-		PreproSimpleForm form = preprocessingFormService
+		final PreproSimpleForm form = preproFormService
 				.loadAttributesInPreproSimpleForm(attributes);
 
-		FilterConditionForm filterForm = new FilterConditionForm();
+		final FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(data.getId());
 
-		ModelAndView res = new ModelAndView("preform/list");
+		final ModelAndView res = new ModelAndView(PREFORM_LIST);
 		res.addObject(EXAMPLES_LOWER_CASE, examples);
 		res.addObject(ATTRIBUTES_LOWER_CASE, attributes);
 		res.addObject(FORM_LOWER_CASE, form);
@@ -81,18 +92,18 @@ public class PreprocessingFormController {
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam int dataId) {
+	public ModelAndView list(@RequestParam final int dataId) {
 
-		List<Example> examples = preprocessedDataService.getExamplesFromPreprocessedData(dataId);
-		Attribute[] attributes = preprocessedDataService.getAttributesFromPreprocessedData(dataId);
+		final List<Example> examples = preproDataService.getExamplesFromPreprocessedData(dataId);
+		final Attribute[] attributes = preproDataService.getAttributesFromPreprocessedData(dataId);
 
-		PreproSimpleForm form = preprocessingFormService
+		final PreproSimpleForm form = preproFormService
 				.loadAttributesInPreproSimpleForm(attributes);
 
-		FilterConditionForm filterForm = new FilterConditionForm();
+		final FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(dataId);
 
-		ModelAndView res = new ModelAndView("preform/list");
+		final ModelAndView res = new ModelAndView(PREFORM_LIST);
 		res.addObject(EXAMPLES_LOWER_CASE, examples);
 		res.addObject(ATTRIBUTES_LOWER_CASE, attributes);
 		res.addObject(FORM_LOWER_CASE, form);
@@ -106,18 +117,18 @@ public class PreprocessingFormController {
 	}
 
 	@RequestMapping(value = "/deleterow", method = RequestMethod.GET)
-	public ModelAndView deleterow(@RequestParam int dataId, @RequestParam int rowId) {
-		List<Example> examples = preprocessedDataService.getExamplesWithoutDeletedRows(dataId,
+	public ModelAndView deleterow(@RequestParam final int dataId, @RequestParam final int rowId) {
+		final List<Example> examples = preproDataService.getExamplesWithoutDeletedRows(dataId,
 				rowId);
-		Attribute[] attributes = preprocessedDataService.getAttributesFromPreprocessedData(dataId);
+		final Attribute[] attributes = preproDataService.getAttributesFromPreprocessedData(dataId);
 
-		PreproSimpleForm preproForm = preprocessingFormService
+		PreproSimpleForm preproForm = preproFormService
 				.loadAttributesInPreproSimpleForm(attributes);
 
-		FilterConditionForm filterForm = new FilterConditionForm();
+		final FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(dataId);
 
-		ModelAndView res = new ModelAndView("preform/list");
+		final ModelAndView res = new ModelAndView(PREFORM_LIST);
 		res.addObject(EXAMPLES_LOWER_CASE, examples);
 		res.addObject(ATTRIBUTES_LOWER_CASE, attributes);
 		res.addObject(FORM_LOWER_CASE, preproForm);
@@ -131,20 +142,20 @@ public class PreprocessingFormController {
 	}
 
 	@RequestMapping(value = "/filternumerical", method = RequestMethod.POST)
-	public ModelAndView filterNumerical(@ModelAttribute FilterConditionForm form) {
-		Attribute[] attributes = preprocessedDataService.getAttributesFromPreprocessedData(form
+	public ModelAndView filterNumerical(@ModelAttribute final FilterConditionForm form) {
+		final Attribute[] attributes = preproDataService.getAttributesFromPreprocessedData(form
 				.getDataId());
-		Attribute filterAttribute = preprocessingFormService.loadFilterAttribute(attributes, form);
-		List<Example> examples = preprocessedDataService.getNumericalFilteredExamples(form,
+		final Attribute filterAttribute = preproFormService.loadFilterAttribute(attributes, form);
+		final List<Example> examples = preproDataService.getNumericalFilteredExamples(form,
 				filterAttribute);
 
-		PreproSimpleForm preproForm = preprocessingFormService
+		PreproSimpleForm preproForm = preproFormService
 				.loadAttributesInPreproSimpleForm(attributes);
 
-		FilterConditionForm filterForm = new FilterConditionForm();
+		final FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(form.getDataId());
 
-		ModelAndView res = new ModelAndView("preform/list");
+		final ModelAndView res = new ModelAndView(PREFORM_LIST);
 		res.addObject(EXAMPLES_LOWER_CASE, examples);
 		res.addObject(ATTRIBUTES_LOWER_CASE, attributes);
 		res.addObject(FORM_LOWER_CASE, preproForm);
@@ -158,22 +169,22 @@ public class PreprocessingFormController {
 	}
 
 	@RequestMapping(value = "/filternominal", method = RequestMethod.POST)
-	public ModelAndView filterNominal(@ModelAttribute FilterConditionForm form) {
+	public ModelAndView filterNominal(@ModelAttribute final FilterConditionForm form) {
 
-		PreprocessingForm storedForm = preprocessingFormService.findFormByDataId(form.getDataId());
-		Attribute[] attributes = preprocessedDataService.getAttributesFromPreprocessedData(form
+		final PreprocessingForm storedForm = preproFormService.findFormByDataId(form.getDataId());
+		Attribute[] attributes = preproDataService.getAttributesFromPreprocessedData(form
 				.getDataId());
-		Attribute filterAttribute = preprocessingFormService.loadFilterAttribute(attributes, form);
-		List<Example> examples = preprocessedDataService.getNominalFilteredExamples(form,
-				filterAttribute);
+		final Attribute filterAttribute = preproFormService.loadFilterAttribute(attributes, form);
+		List<Example> examples = preproDataService
+				.getNominalFilteredExamples(form, filterAttribute);
 
-		PreproSimpleForm preproForm = preprocessingFormService
+		PreproSimpleForm preproForm = preproFormService
 				.loadAttributesInPreproSimpleForm(attributes);
 
-		FilterConditionForm filterForm = new FilterConditionForm();
+		final FilterConditionForm filterForm = new FilterConditionForm();
 		filterForm.setDataId(storedForm.getId());
 
-		ModelAndView res = new ModelAndView("preform/list");
+		final ModelAndView res = new ModelAndView(PREFORM_LIST);
 		res.addObject(EXAMPLES_LOWER_CASE, examples);
 		res.addObject(ATTRIBUTES_LOWER_CASE, attributes);
 		res.addObject(FORM_LOWER_CASE, preproForm);

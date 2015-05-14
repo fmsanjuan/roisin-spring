@@ -16,6 +16,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount, Integer> {
 
+	/**
+	 * Returns the user account object given a username
+	 * 
+	 * @param username
+	 * @return user account
+	 */
 	UserAccount findByUsername(String username);
 
 }

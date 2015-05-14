@@ -7,12 +7,24 @@ import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+/**
+ * Deleted row entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class DeletedRow extends DomainEntity {
 
+	/**
+	 * Row number
+	 */
 	private Integer number;
 
+	/**
+	 * Preprocessing form
+	 */
 	private PreprocessingForm preprocessingForm;
 
 	public DeletedRow() {
@@ -24,7 +36,7 @@ public class DeletedRow extends DomainEntity {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(final Integer number) {
 		this.number = number;
 	}
 
@@ -34,7 +46,7 @@ public class DeletedRow extends DomainEntity {
 		return preprocessingForm;
 	}
 
-	public void setPreprocessingForm(PreprocessingForm preprocessingForm) {
+	public void setPreprocessingForm(final PreprocessingForm preprocessingForm) {
 		this.preprocessingForm = preprocessingForm;
 	}
 

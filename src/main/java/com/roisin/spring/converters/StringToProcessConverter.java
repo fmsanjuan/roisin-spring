@@ -13,18 +13,21 @@ import com.roisin.spring.repositories.ProcessRepository;
 @Transactional
 public class StringToProcessConverter implements Converter<String, Process> {
 
+	/**
+	 * Process repository
+	 */
 	@Autowired
-	private ProcessRepository processRepository;
+	private transient ProcessRepository processRepository;
 
 	@Override
-	public Process convert(String source) {
+	public Process convert(final String source) {
 		Process res;
 		int id;
 
 		try {
-			if (StringUtils.isEmpty(source))
+			if (StringUtils.isEmpty(source)) {
 				res = null;
-			else {
+			} else {
 				id = Integer.valueOf(source);
 				res = processRepository.findOne(id);
 			}

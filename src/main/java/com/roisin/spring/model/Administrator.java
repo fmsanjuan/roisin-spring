@@ -12,16 +12,34 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.roisin.spring.security.UserAccount;
 
+/**
+ * Administrator entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class Administrator extends DomainEntity {
 
+	/**
+	 * Administrator name
+	 */
 	private String name;
 
+	/**
+	 * Administrator surname
+	 */
 	private String surname;
 
+	/**
+	 * Administrator email
+	 */
 	private String email;
 
+	/**
+	 * Administrator user account
+	 */
 	private UserAccount userAccount;
 
 	public Administrator() {
@@ -33,7 +51,7 @@ public class Administrator extends DomainEntity {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -42,7 +60,7 @@ public class Administrator extends DomainEntity {
 		return surname;
 	}
 
-	public void setSurname(String surname) {
+	public void setSurname(final String surname) {
 		this.surname = surname;
 	}
 
@@ -51,7 +69,7 @@ public class Administrator extends DomainEntity {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 
@@ -62,7 +80,7 @@ public class Administrator extends DomainEntity {
 		return userAccount;
 	}
 
-	public void setUserAccount(UserAccount userAccount) {
+	public void setUserAccount(final UserAccount userAccount) {
 		this.userAccount = userAccount;
 	}
 

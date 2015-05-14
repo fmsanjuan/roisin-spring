@@ -44,12 +44,15 @@ import com.roisin.spring.model.SelectedAttribute;
 
 public class RoisinUtils {
 
-	private static final String AREA_UNDER_THE_CURVE = "Area under the curve = ";
+	/**
+	 * Area under the curve title
+	 */
+	private static final String AUC_TITLE = "Area under the curve = ";
 
-	public static String calculateFilterCondition(String filterAttribute, String filterOperator,
-			String filterValue) {
+	public static String calculateFilterCondition(final String filterAttribute,
+			final String filterOperator, final String filterValue) {
 		// Transformación de condición provisional
-		StringBuilder condition = new StringBuilder();
+		final StringBuilder condition = new StringBuilder();
 		if (!StringUtils.isBlank(filterValue)) {
 			condition.append(filterAttribute);
 			if (filterOperator.equals(EQUALS)) {
@@ -76,8 +79,8 @@ public class RoisinUtils {
 	 * @param exampleSet
 	 * @return
 	 */
-	public static List<Example> getExampleListFromExampleSet(ExampleSet exampleSet) {
-		List<Example> examples = Lists.newArrayList();
+	public static List<Example> getExampleListFromExampleSet(final ExampleSet exampleSet) {
+		final List<Example> examples = Lists.newArrayList();
 		for (int i = 0; i < exampleSet.size(); i++) {
 			examples.add(exampleSet.getExample(i));
 		}
@@ -90,26 +93,27 @@ public class RoisinUtils {
 	 * @param exampleSet
 	 * @return
 	 */
-	public static List<String> getAttributeNameListFromExampleSet(Attribute[] attributes) {
-		List<String> attributeSelection = Lists.newArrayList();
+	public static List<String> getAttributeNameListFromExampleSet(final Attribute[] attributes) {
+		final List<String> attributeSelection = Lists.newArrayList();
 		for (int i = 0; i < attributes.length; i++) {
 			attributeSelection.add(attributes[i].getName());
 		}
 		return attributeSelection;
 	}
 
-	public static List<Integer> getDeletedRowValues(Collection<DeletedRow> deletedRows) {
-		List<Integer> res = Lists.newArrayList();
-		for (DeletedRow deletedRow : deletedRows) {
+	public static List<Integer> getDeletedRowValues(final Collection<DeletedRow> deletedRows) {
+		final List<Integer> res = Lists.newArrayList();
+		for (final DeletedRow deletedRow : deletedRows) {
 			res.add(deletedRow.getNumber());
 		}
 		return res;
 	}
 
-	public static String calculateFilterCondition(FilterConditionForm form) {
+	public static String calculateFilterCondition(final FilterConditionForm form) {
+		String res = StringUtils.EMPTY;
 		// Transformación de condición provisional
 		if (!StringUtils.isBlank(form.getFilterValue())) {
-			StringBuilder condition = new StringBuilder();
+			final StringBuilder condition = new StringBuilder();
 			condition.append(form.getFilterAttribute());
 			if (form.getFilterOperator().equals(EQUALS)) {
 				condition.append(EQUALS_SYMBOL);
@@ -125,9 +129,9 @@ public class RoisinUtils {
 				condition.append(GREATER_THAN_SYMBOL);
 			}
 			condition.append(form.getFilterValue());
-			return condition.toString();
+			res = condition.toString();
 		}
-		return StringUtils.EMPTY;
+		return res;
 	}
 
 	/**
@@ -138,18 +142,18 @@ public class RoisinUtils {
 	 * @param deletedRows
 	 * @return
 	 */
-	public static SortedSet<Integer> getRowsFromDeletedRows(Collection<DeletedRow> deletedRows) {
-		SortedSet<Integer> res = Sets.newTreeSet();
-		for (DeletedRow deletedRow : deletedRows) {
+	public static SortedSet<Integer> getRowsFromDeletedRows(final Collection<DeletedRow> deletedRows) {
+		final SortedSet<Integer> res = Sets.newTreeSet();
+		for (final DeletedRow deletedRow : deletedRows) {
 			res.add(deletedRow.getNumber());
 		}
 		return res;
 	}
 
 	public static List<String> getAttributesFromSelectedAttributes(
-			Collection<SelectedAttribute> selectedAttributes) {
-		List<String> res = Lists.newArrayList();
-		for (SelectedAttribute selectedAttribute : selectedAttributes) {
+			final Collection<SelectedAttribute> selectedAttributes) {
+		final List<String> res = Lists.newArrayList();
+		for (final SelectedAttribute selectedAttribute : selectedAttributes) {
 			res.add(selectedAttribute.getName());
 		}
 		return res;
@@ -162,11 +166,11 @@ public class RoisinUtils {
 	 * @param auc
 	 * @return
 	 */
-	public static XYLineChart getAucChart(Collection<Rule> rules, double auc) {
+	public static XYLineChart getAucChart(final Collection<Rule> rules, final double auc) {
 
-		List<Rule> sortedRules = Lists.newArrayList(rules);
+		final List<Rule> sortedRules = Lists.newArrayList(rules);
 		Collections.sort(sortedRules, new RuleComparator());
-		int rulesSize = sortedRules.size();
+		final int rulesSize = sortedRules.size();
 
 		// Curve
 		double[] xValues = new double[rulesSize + 2];
@@ -184,21 +188,21 @@ public class RoisinUtils {
 		xValues[i + 1] = ONE;
 		yValues[i + 1] = ONE;
 
-		Data xData = DataUtil.scaleWithinRange(ZERO, ONE, xValues);
-		Data yData = DataUtil.scaleWithinRange(ZERO, ONE, yValues);
+		final Data xData = DataUtil.scaleWithinRange(ZERO, ONE, xValues);
+		final Data yData = DataUtil.scaleWithinRange(ZERO, ONE, yValues);
 
-		XYLine line = Plots.newXYLine(xData, yData);
+		final XYLine line = Plots.newXYLine(xData, yData);
 		line.setFillAreaColor(Color.YELLOW);
-		XYLineChart chart = GCharts.newXYLineChart(line);
+		final XYLineChart chart = GCharts.newXYLineChart(line);
 		chart.setSize(CHART_WIDTH, CHART_HEIGTH);
-		chart.setTitle(AREA_UNDER_THE_CURVE + auc);
+		chart.setTitle(AUC_TITLE + auc);
 
 		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
 
 		return chart;
 	}
 
-	public static XYLineChart getSingleRuleAucChart(Rule rule) {
+	public static XYLineChart getSingleRuleAucChart(final Rule rule) {
 		// Curve
 		double[] xValues = new double[3];
 		double[] yValues = new double[3];
@@ -210,14 +214,14 @@ public class RoisinUtils {
 		xValues[2] = ONE;
 		yValues[2] = ONE;
 
-		Data xData = DataUtil.scaleWithinRange(ZERO, ONE, xValues);
-		Data yData = DataUtil.scaleWithinRange(ZERO, ONE, yValues);
+		final Data xData = DataUtil.scaleWithinRange(ZERO, ONE, xValues);
+		final Data yData = DataUtil.scaleWithinRange(ZERO, ONE, yValues);
 
-		XYLine line = Plots.newXYLine(xData, yData);
+		final XYLine line = Plots.newXYLine(xData, yData);
 		line.setFillAreaColor(Color.YELLOW);
-		XYLineChart chart = GCharts.newXYLineChart(line);
+		final XYLineChart chart = GCharts.newXYLineChart(line);
 		chart.setSize(CHART_WIDTH, CHART_HEIGTH);
-		chart.setTitle(AREA_UNDER_THE_CURVE + rule.getAuc());
+		chart.setTitle(AUC_TITLE + rule.getAuc());
 
 		chart.setAreaFill(Fills.newSolidFill(Color.GRAY));
 
@@ -231,32 +235,35 @@ public class RoisinUtils {
 	 * @param rules
 	 * @return
 	 */
-	public static Collection<Rule> getAucOptimizationRemovedRules(Collection<Rule> rules) {
+	public static Collection<Rule> getAucOptimizationRemovedRules(final Collection<Rule> rules) {
 		// Ordenación de reglas (obligatorio)
-		List<Rule> sortedRules = Lists.newArrayList(rules);
+		final List<Rule> sortedRules = Lists.newArrayList(rules);
 		Collections.sort(sortedRules, new RuleComparator());
 		// Reglas eliminadas
-		List<Rule> deletedRules = Lists.newArrayList();
+		final List<Rule> deletedRules = Lists.newArrayList();
 
 		boolean removed = true;
 		// Se debe iterar sobre las reglas hasta que no queden reglas por
 		// eliminar
+		Rule curRule;
+		Rule prevRule;
+		Rule nextRule;
 		while (removed) {
 			removed = false;
 			for (int i = 0; i < sortedRules.size(); i++) {
-				Rule curRule = sortedRules.get(i);
+				curRule = sortedRules.get(i);
 
 				Line line;
 				if (i != 0 && i != (sortedRules.size() - 1)) {
-					Rule prevRule = sortedRules.get(i - 1);
-					Rule nextRule = sortedRules.get(i + 1);
+					prevRule = sortedRules.get(i - 1);
+					nextRule = sortedRules.get(i + 1);
 					line = calculateLine(prevRule.getFpr(), prevRule.getTpr(), nextRule.getFpr(),
 							nextRule.getTpr());
 				} else if (i == 0) {
-					Rule nextRule = sortedRules.get(i + 1);
+					nextRule = sortedRules.get(i + 1);
 					line = calculateLine(0.0, 0.0, nextRule.getFpr(), nextRule.getTpr());
 				} else {
-					Rule prevRule = sortedRules.get(i - 1);
+					prevRule = sortedRules.get(i - 1);
 					line = calculateLine(prevRule.getFpr(), prevRule.getTpr(), 1.0, 1.0);
 				}
 
@@ -285,8 +292,8 @@ public class RoisinUtils {
 	 * @param line
 	 * @return
 	 */
-	public static boolean isUnderTheLine(double x, double y, Line line) {
-		double yLine = (x * line.getM()) + line.getK();
+	public static boolean isUnderTheLine(final double x, final double y, final Line line) {
+		final double yLine = (x * line.getM()) + line.getK();
 		return yLine > y;
 	}
 
@@ -299,20 +306,21 @@ public class RoisinUtils {
 	 * @param yc
 	 * @return
 	 */
-	public static Line calculateLine(double xa, double ya, double xc, double yc) {
-		double m = (ya - yc) / (xa - xc);
-		double k = ya - (xa * m);
+	public static Line calculateLine(final double xa, final double ya, final double xc,
+			final double yc) {
+		final double m = (ya - yc) / (xa - xc);
+		final double k = ya - (xa * m);
 		return new Line(m, k);
 	}
 
-	public static double calculateRulesAuc(Collection<Rule> rules) {
-		SortedSet<Rule> sortedRules = Sets.newTreeSet(new RuleComparator());
+	public static double calculateRulesAuc(final Collection<Rule> rules) {
+		final SortedSet<Rule> sortedRules = Sets.newTreeSet(new RuleComparator());
 		sortedRules.addAll(rules);
 		int ruleCounter = 1;
 		double auc = 0.0;
 		double prevFpr = 0.0;
 		double prevTpr = 0.0;
-		for (Rule roisinRule : sortedRules) {
+		for (final Rule roisinRule : sortedRules) {
 			if (ruleCounter > 1) {
 				// Se debe de calcular el triángulo y el rectángulo teniendo en
 				// cuenta los datos de esta regla y la anterior.
@@ -337,31 +345,34 @@ public class RoisinUtils {
 		return auc;
 	}
 
-	public static boolean isNumericLabel(Attribute[] attributes, String label) {
+	public static boolean isNumericLabel(final Attribute[] attributes, String label) {
+		boolean res = false;
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].getName().equals(label)) {
-				return attributes[i].isNumerical();
+				res = attributes[i].isNumerical();
 			}
 		}
-		return false;
+		return res;
 	}
 
-	public static boolean hasNumerical(Attribute[] attributes) {
+	public static boolean hasNumerical(final Attribute[] attributes) {
+		boolean res = false;
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].isNumerical()) {
-				return true;
+				res = true;
 			}
 		}
-		return false;
+		return res;
 	}
 
-	public static boolean hasNominal(Attribute[] attributes) {
+	public static boolean hasNominal(final Attribute[] attributes) {
+		boolean res = false;
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].isNominal()) {
-				return true;
+				res = true;
 			}
 		}
-		return false;
+		return res;
 	}
 
 }

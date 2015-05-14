@@ -13,34 +13,36 @@ import com.roisin.spring.repositories.SubgroupSettingsRepository;
 @Transactional
 public class SubgroupSettingsService {
 
+	/**
+	 * Subgroup settings repository
+	 */
 	@Autowired
-	private SubgroupSettingsRepository subgroupSettingsRepository;
+	private transient SubgroupSettingsRepository subgroupSetRepo;
 
 	public SubgroupSettingsService() {
 		super();
 	}
 
 	public SubgroupSettings create() {
-		SubgroupSettings subgroupSettings = new SubgroupSettings();
+		final SubgroupSettings subgroupSettings = new SubgroupSettings();
 
 		return subgroupSettings;
 	}
 
-	public SubgroupSettings findOne(int subgroupSettingsId) {
-		return subgroupSettingsRepository.findOne(subgroupSettingsId);
+	public SubgroupSettings findOne(final int identifier) {
+		return subgroupSetRepo.findOne(identifier);
 	}
 
-	public SubgroupSettings save(SubgroupSettings subgroupSettings) {
-		return subgroupSettingsRepository.save(subgroupSettings);
+	public SubgroupSettings save(final SubgroupSettings subgroupSettings) {
+		return subgroupSetRepo.save(subgroupSettings);
 	}
 
-	public void delete(SubgroupSettings ripperSettings) {
-		subgroupSettingsRepository.delete(ripperSettings);
+	public void delete(final SubgroupSettings ripperSettings) {
+		subgroupSetRepo.delete(ripperSettings);
 	}
 
 	public Collection<SubgroupSettings> findAll() {
-		return subgroupSettingsRepository.findAll();
+		return subgroupSetRepo.findAll();
 	}
 
-	// TODO: Método para obtener todas las reglas de un proceso.
 }

@@ -13,43 +13,46 @@ import com.roisin.spring.repositories.DeletedRowRepository;
 @Transactional
 public class DeletedRowService {
 
+	/**
+	 * Deleted row repository
+	 */
 	@Autowired
-	private DeletedRowRepository deletedRowRepository;
+	private transient DeletedRowRepository delRowRepo;
 
 	public DeletedRowService() {
 		super();
 	}
 
 	public DeletedRow create() {
-		DeletedRow deletedRow = new DeletedRow();
+		final DeletedRow deletedRow = new DeletedRow();
 
 		return deletedRow;
 	}
 
 	public Collection<DeletedRow> findAll() {
-		return deletedRowRepository.findAll();
+		return delRowRepo.findAll();
 	}
 
-	public DeletedRow findOne(int deletedRowId) {
-		return deletedRowRepository.findOne(deletedRowId);
+	public DeletedRow findOne(final int deletedRowId) {
+		return delRowRepo.findOne(deletedRowId);
 	}
 
-	public void save(DeletedRow deletedRow) {
-		deletedRowRepository.save(deletedRow);
+	public void save(final DeletedRow deletedRow) {
+		delRowRepo.save(deletedRow);
 	}
 
-	public void delete(DeletedRow deletedRow) {
-		deletedRowRepository.delete(deletedRow);
+	public void delete(final DeletedRow deletedRow) {
+		delRowRepo.delete(deletedRow);
 	}
 
 	// Métodos extras
 
-	public Collection<DeletedRow> findFormDeletedRows(int formId) {
-		return deletedRowRepository.findFormDeletedRows(formId);
+	public Collection<DeletedRow> findFormDeletedRows(final int formId) {
+		return delRowRepo.findFormDeletedRows(formId);
 	}
 
-	public void saveAndOverwrite(DeletedRow deletedRow) {
-		DeletedRow checkDeletedRow = deletedRowRepository.findSpecificDeletedRow(deletedRow
+	public void saveAndOverwrite(final DeletedRow deletedRow) {
+		DeletedRow checkDeletedRow = delRowRepo.findSpecificDeletedRow(deletedRow
 				.getPreprocessingForm().getId(), deletedRow.getNumber());
 		if (checkDeletedRow == null) {
 			save(deletedRow);

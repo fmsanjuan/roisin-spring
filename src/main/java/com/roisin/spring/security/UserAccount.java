@@ -34,26 +34,52 @@ import com.roisin.spring.model.DomainEntity;
 @Access(AccessType.PROPERTY)
 public class UserAccount extends DomainEntity implements UserDetails {
 
-	// Constructors -----------------------------------------------------------
-
+	/**
+	 * Serial uid
+	 */
 	private static final long serialVersionUID = 7254823034213841482L;
+
+	// Attributes -------------------------------------------------------------
+
+	// UserDetails interface --------------------------------------------------
+
+	/**
+	 * User account username
+	 */
+	private String username;
+
+	/**
+	 * User account password
+	 */
+	private String password;
+
+	/**
+	 * User account authorities
+	 */
+	private Collection<Authority> authorities;
+
+	/**
+	 * User account enabled field
+	 */
+	private boolean enabled;
+
+	/**
+	 * User account locked field
+	 */
+	private boolean locked;
+
+	/**
+	 * User account activation date
+	 */
+	private Date activation;
+
+	// Constructors -----------------------------------------------------------
 
 	public UserAccount() {
 		super();
 
 		this.authorities = new ArrayList<Authority>();
 	}
-
-	// Attributes -------------------------------------------------------------
-
-	// UserDetails interface --------------------------------------------------
-
-	private String username;
-	private String password;
-	private Collection<Authority> authorities;
-	private boolean enabled;
-	private boolean locked;
-	private Date activation;
 
 	@Size(min = 5, max = 32)
 	@Column(unique = true)
@@ -62,7 +88,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public void setUsername(final String username) {
 		this.username = username;
 	}
 
@@ -72,7 +98,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -86,7 +112,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		return authorities;
 	}
 
-	public void setAuthorities(Collection<Authority> authorities) {
+	public void setAuthorities(final Collection<Authority> authorities) {
 		this.authorities = authorities;
 	}
 
@@ -94,18 +120,18 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		return locked;
 	}
 
-	public void setLocked(Boolean locked) {
+	public void setLocked(final Boolean locked) {
 		this.locked = locked;
 	}
 
-	public void addAuthority(Authority authority) {
+	public void addAuthority(final Authority authority) {
 		Assert.notNull(authority);
 		Assert.isTrue(!authorities.contains(authority));
 
 		authorities.add(authority);
 	}
 
-	public void removeAuthority(Authority authority) {
+	public void removeAuthority(final Authority authority) {
 		Assert.notNull(authority);
 		Assert.isTrue(authorities.contains(authority));
 
@@ -141,7 +167,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		return activation;
 	}
 
-	public void setActivation(Date activation) {
+	public void setActivation(final Date activation) {
 		this.activation = activation;
 	}
 
@@ -149,7 +175,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 

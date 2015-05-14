@@ -2,12 +2,24 @@ package com.roisin.spring.forms;
 
 public class FilterConditionForm {
 
+	/**
+	 * Filter attribute
+	 */
 	private String filterAttribute;
 
+	/**
+	 * Filter operator
+	 */
 	private String filterOperator;
 
+	/**
+	 * Filter value
+	 */
 	private String filterValue;
 
+	/**
+	 * Data id
+	 */
 	private int dataId;
 
 	public FilterConditionForm() {
@@ -18,7 +30,7 @@ public class FilterConditionForm {
 		return filterAttribute;
 	}
 
-	public void setFilterAttribute(String filterAttribute) {
+	public void setFilterAttribute(final String filterAttribute) {
 		this.filterAttribute = filterAttribute;
 	}
 
@@ -26,7 +38,7 @@ public class FilterConditionForm {
 		return filterOperator;
 	}
 
-	public void setFilterOperator(String filterOperator) {
+	public void setFilterOperator(final String filterOperator) {
 		this.filterOperator = filterOperator;
 	}
 
@@ -34,7 +46,7 @@ public class FilterConditionForm {
 		return filterValue;
 	}
 
-	public void setFilterValue(String filterValue) {
+	public void setFilterValue(final String filterValue) {
 		this.filterValue = filterValue;
 	}
 
@@ -42,7 +54,7 @@ public class FilterConditionForm {
 		return dataId;
 	}
 
-	public void setDataId(int dataId) {
+	public void setDataId(final int dataId) {
 		this.dataId = dataId;
 	}
 

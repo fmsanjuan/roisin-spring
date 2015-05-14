@@ -10,6 +10,7 @@
 
 package com.roisin.spring.security;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -33,23 +34,29 @@ public class LoginService implements UserDetailsService {
 
 	// Managed repository -----------------------------------------------------
 
+	/**
+	 * User account repository
+	 */
 	@Autowired
-	private UserAccountRepository userRepository;
+	private transient UserAccountRepository userRepository;
 
+	/**
+	 * File utility class
+	 */
 	@Autowired
-	private FileUtils fileUtils;
+	private transient FileUtils fileUtils;
 
 	// Business methods -------------------------------------------------------
 
-	public UserAccount findOne(Integer id) {
-		return userRepository.findOne(id);
+	public UserAccount findOne(final Integer identifier) {
+		return userRepository.findOne(identifier);
 	}
 
-	public UserAccount findByUsername(String username) {
+	public UserAccount findByUsername(final String username) {
 		return userRepository.findByUsername(username);
 	}
 
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 		Assert.notNull(username);
 
 		UserDetails result;
@@ -90,11 +97,27 @@ public class LoginService implements UserDetailsService {
 		return result;
 	}
 
-	public boolean activateAccount(Integer id, String activationKey) {
-		boolean activated = false;
-		UserAccount account = userRepository.findOne(id);
+	public static int getPrincipalId(final UserAccount principal) {
+		int principalId = -1;
+		if (principal != null) {
+			principalId = principal.getId();
+		}
+		return principalId;
+	}
 
-		String dbActivationKey = generateUserAccountActivationKey(account);
+	public static Collection<Authority> getPrincipalAuthorities(final UserAccount principal) {
+		Collection<Authority> res = null;
+		if (principal != null) {
+			res = principal.getAuthorities();
+		}
+		return res;
+	}
+
+	public boolean activateAccount(final Integer identifier, final String activationKey) {
+		boolean activated = false;
+		final UserAccount account = userRepository.findOne(identifier);
+
+		final String dbActivationKey = generateUserAccountActivationKey(account);
 
 		if (dbActivationKey.equals(activationKey)) {
 			account.setEnabled(true);
@@ -104,32 +127,32 @@ public class LoginService implements UserDetailsService {
 		return activated;
 	}
 
-	public String generateUserAccountActivationKey(UserAccount account) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(account.getUsername());
-		sb.append(account.getId());
-		sb.append(fileUtils.getActivationToken());
+	public String generateUserAccountActivationKey(final UserAccount account) {
+		final StringBuilder strb = new StringBuilder();
+		strb.append(account.getUsername());
+		strb.append(account.getId());
+		strb.append(fileUtils.getActivationToken());
 
-		return DigestUtils.sha256Hex(sb.toString());
+		return DigestUtils.sha256Hex(strb.toString());
 	}
 
-	public void sendPasswordRecoverEmail(String email) {
-		UserAccount userAccount = userRepository.findByUsername(email);
+	public void sendPasswordRecoverEmail(final String email) {
+		final UserAccount userAccount = userRepository.findByUsername(email);
 		userAccount.setActivation(new Date());
 
 	}
 
-	public String generatePasswordRecoveryKey(UserAccount userAccount) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(userAccount.getUsername());
-		sb.append(userAccount.getActivation().getTime());
-		sb.append(fileUtils.getActivationToken());
+	public String generatePasswordRecoveryKey(final UserAccount userAccount) {
+		final StringBuilder strb = new StringBuilder();
+		strb.append(userAccount.getUsername());
+		strb.append(userAccount.getActivation().getTime());
+		strb.append(fileUtils.getActivationToken());
 
-		return DigestUtils.sha256Hex(sb.toString());
+		return DigestUtils.sha256Hex(strb.toString());
 	}
 
-	public UserAccount changePassword(UserAccount userAccount, String newPassword) {
-		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+	public UserAccount changePassword(final UserAccount userAccount, final String newPassword) {
+		final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
 		userAccount.setPassword(encoder.encodePassword(newPassword, null));
 		return userRepository.save(userAccount);
 	}

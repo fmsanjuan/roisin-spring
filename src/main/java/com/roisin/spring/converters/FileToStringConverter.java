@@ -11,13 +11,14 @@ import com.roisin.spring.model.File;
 public class FileToStringConverter implements Converter<File, String> {
 
 	@Override
-	public String convert(File source) {
+	public String convert(final File source) {
 		String result;
 
-		if (source == null)
+		if (source == null) {
 			result = null;
-		else
+		} else {
 			result = String.valueOf(source.getId());
+		}
 
 		return result;
 	}

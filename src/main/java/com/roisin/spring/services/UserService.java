@@ -23,37 +23,43 @@ import com.roisin.spring.security.UserAccount;
 @Transactional
 public class UserService {
 
+	/**
+	 * User repository
+	 */
 	@Autowired
-	private UserRepository userRepository;
+	private transient UserRepository userRepository;
 
-	private Md5PasswordEncoder encoder;
+	/**
+	 * Md5 password encoder
+	 */
+	private transient Md5PasswordEncoder encoder;
 
 	public UserService() {
 		super();
 	}
 
-	public boolean AmIMySelf(int userId) {
-		return LoginService.getPrincipal().getId() == userId;
+	public boolean amIMySelf(final int userId) {
+		return LoginService.getPrincipalId(LoginService.getPrincipal()) == userId;
 	}
 
-	public boolean IAmACustomer() {
+	public boolean iAmACustomer() {
 		return checkRole(Authority.USER);
 	}
 
-	public boolean IAmAnAdmin() {
+	public boolean iAmAnAdmin() {
 		return checkRole(Authority.ADMIN);
 	}
 
-	public boolean AmIAGuest() {
+	public boolean amIAGuest() {
 		return false;
 	}
 
-	private boolean checkRole(String role) {
-		Collection<Authority> authorities = LoginService.getPrincipal().getAuthorities();
+	private boolean checkRole(final String role) {
+		final Collection<Authority> authorities = LoginService.getPrincipal().getAuthorities();
 
 		boolean res = false;
 
-		for (Authority auth : authorities)
+		for (final Authority auth : authorities)
 			res = res || auth.getAuthority().toUpperCase().compareTo(role) == 0;
 
 		return res;
@@ -71,7 +77,7 @@ public class UserService {
 		return result;
 	}
 
-	public User findByUserAccount(UserAccount userAccount) {
+	public User findByUserAccount(final UserAccount userAccount) {
 
 		Assert.notNull(userAccount);
 		User result;
@@ -81,11 +87,11 @@ public class UserService {
 	}
 
 	public User create() {
-		User user = new User();
+		final User user = new User();
 
-		Authority auth = new Authority();
-		Collection<Authority> lAuthorty = new ArrayList<Authority>();
-		UserAccount usserA = new UserAccount();
+		final Authority auth = new Authority();
+		final Collection<Authority> lAuthorty = new ArrayList<Authority>();
+		final UserAccount usserA = new UserAccount();
 
 		auth.setAuthority("USER");
 		lAuthorty.add(auth);
@@ -95,12 +101,12 @@ public class UserService {
 		return user;
 	}
 
-	public User save(User user, boolean passwordEncode) {
+	public User save(final User user, final boolean passwordEncode) {
 		Assert.notNull(user);
 		if (passwordEncode) {
 			encoder = new Md5PasswordEncoder();
-			String oldPassword = user.getUserAccount().getPassword();
-			String newPassword = encoder.encodePassword(oldPassword, null);
+			final String oldPassword = user.getUserAccount().getPassword();
+			final String newPassword = encoder.encodePassword(oldPassword, null);
 			user.getUserAccount().setPassword(newPassword);
 		}
 		return userRepository.save(user);
@@ -108,8 +114,8 @@ public class UserService {
 
 	public SignupForm constructNew() {
 
-		SignupForm form = new SignupForm();
-		User user = create();
+		final SignupForm form = new SignupForm();
+		final User user = create();
 
 		form.setCity(user.getCity());
 		form.setEmail(user.getUserAccount().getUsername());
@@ -125,8 +131,8 @@ public class UserService {
 
 	public EditProfileForm constructEditForm() {
 
-		EditProfileForm form = new EditProfileForm();
-		User user = findByPrincipal();
+		final EditProfileForm form = new EditProfileForm();
+		final User user = findByPrincipal();
 
 		form.setCity(user.getCity());
 		form.setEmail(user.getUserAccount().getUsername());
@@ -139,9 +145,9 @@ public class UserService {
 		return form;
 	}
 
-	public User reconstruct(SignupForm form) {
+	public User reconstruct(final SignupForm form) {
 
-		User user = create();
+		final User user = create();
 
 		user.setCity(form.getCity());
 		user.setEmail(form.getEmail());
@@ -160,9 +166,9 @@ public class UserService {
 		return user;
 	}
 
-	public User reconstruct(EditProfileForm form) {
+	public User reconstruct(final EditProfileForm form) {
 
-		User user = findByPrincipal();
+		final User user = findByPrincipal();
 
 		user.setCity(form.getCity());
 		user.setEmail(form.getEmail());

@@ -26,21 +26,30 @@ import com.roisin.spring.utils.Runner;
 @Transactional
 public class FileService {
 
+	/**
+	 * File repository
+	 */
 	@Autowired
-	private FileRepository fileRepository;
+	private transient FileRepository fileRepository;
 
+	/**
+	 * User service
+	 */
 	@Autowired
-	private UserService userService;
-	
+	private transient UserService userService;
+
+	/**
+	 * File utility class
+	 */
 	@Autowired
-	private FileUtils fileUtils;
+	private transient FileUtils fileUtils;
 
 	public FileService() {
 		super();
 	}
 
 	public File create() {
-		File file = new File();
+		final File file = new File();
 
 		return file;
 	}
@@ -49,53 +58,54 @@ public class FileService {
 		return fileRepository.findAll();
 	}
 
-	public File findOne(int fileId) {
+	public File findOne(final int fileId) {
 		Assert.notNull(fileId);
-		User principal = userService.findByPrincipal();
-		File file = fileRepository.findOne(fileId);
-		boolean isOwner = principal.equals(file.getUser());
+		final User principal = userService.findByPrincipal();
+		final File file = fileRepository.findOne(fileId);
+		final boolean isOwner = principal.equals(file.getUser());
 		Assert.isTrue(isOwner);
 		return file;
 	}
 
-	public void save(File file) {
+	public void save(final File file) {
 		fileRepository.save(file);
 	}
 
-	public void delete(File file) {
+	public void delete(final File file) {
 		Assert.notNull(file);
-		User principal = userService.findByPrincipal();
-		boolean isOwner = principal.equals(file.getUser());
+		final User principal = userService.findByPrincipal();
+		final boolean isOwner = principal.equals(file.getUser());
 		Assert.isTrue(isOwner);
 		fileRepository.delete(file);
 	}
 
 	// Otros métodos
 
-	public Collection<File> findFilesByUserId(int userId) {
+	public Collection<File> findFilesByUserId(final int userId) {
 		return fileRepository.findFilesByUserId(userId);
 	}
 
-	public String writeFileFromDb(File file) {
-		byte[] fileArray = file.getOriginalFile();
-		String fileFormat = StringUtils.substringAfterLast(file.getName(), DOT_SYMBOL);
-		String tmpPath = fileUtils.getStoragePath() + file.getHash() + DOT_SYMBOL + fileFormat;
+	public String writeFileFromDb(final File file) {
+		final byte[] fileArray = file.getOriginalFile();
+		final String fileFormat = StringUtils.substringAfterLast(file.getName(), DOT_SYMBOL);
+		final String tmpPath = fileUtils.getStoragePath() + file.getHash() + DOT_SYMBOL
+				+ fileFormat;
 		// Escritura en disco del fichero
 		fileUtils.writeFileFromByteArray(fileArray, tmpPath);
 
 		return tmpPath;
 	}
 
-	public File findFileByFormId(int formId) {
+	public File findFileByFormId(final int formId) {
 		return fileRepository.findFileByFormId(formId);
 	}
 
-	public String upload(MultipartFile file) throws RoisinSpringException {
-		File roisinFile = create();
+	public String upload(final MultipartFile file) throws RoisinSpringException {
+		final File roisinFile = create();
 		roisinFile.setName(file.getOriginalFilename());
 		roisinFile.setDescription(ROISIN_NULL);
 		try {
-			String hash = HashUtils.fileChecksum(file.getBytes(), SHA_256);
+			final String hash = HashUtils.fileChecksum(file.getBytes(), SHA_256);
 			roisinFile.setHash(hash);
 			roisinFile.setOriginalFile(file.getBytes());
 		} catch (IOException e) {
@@ -107,9 +117,9 @@ public class FileService {
 		return file.getOriginalFilename();
 	}
 
-	public ExampleSet getExampleSetFromFile(File file) {
-		byte[] fileArray = file.getOriginalFile();
-		String tmpPath = fileUtils.getFileTmpPath(file);
+	public ExampleSet getExampleSetFromFile(final File file) {
+		final byte[] fileArray = file.getOriginalFile();
+		final String tmpPath = fileUtils.getFileTmpPath(file);
 
 		fileUtils.writeFileFromByteArray(fileArray, tmpPath);
 		ExampleSet exampleSet = Runner

@@ -6,54 +6,64 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 
 import com.roisin.spring.controllers.HomeController;
 
+/**
+ * Hash utility class
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 public class HashUtils {
 
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	/**
+	 * HashUtils class log
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(HomeController.class);
 
-	public static String fileChecksum(byte[] file, String digestMethod) {
-		String checkSum = new String();
+	public static String fileChecksum(final byte[] file, final String digestMethod) {
+		String checkSum = StringUtils.EMPTY;
 		try {
-			ByteArrayInputStream fileInputStream = new ByteArrayInputStream(file);
-			MessageDigest md = MessageDigest.getInstance(digestMethod);
+			final ByteArrayInputStream fileInputStream = new ByteArrayInputStream(file);
+			MessageDigest mDiggest = MessageDigest.getInstance(digestMethod);
 			// Obtención de DigestInputStream a partir del fichero y de
 			// MessageDigest
-			DigestInputStream din = new DigestInputStream(fileInputStream, md);
+			final DigestInputStream din = new DigestInputStream(fileInputStream, mDiggest);
 			// Procesamiento de bytes
-			byte[] byteArray = new byte[din.available()];
+			final byte[] byteArray = new byte[din.available()];
 			din.read(byteArray, 0, din.available());
-			md = din.getMessageDigest();
+			mDiggest = din.getMessageDigest();
 			din.close();
 			// Se obtienen los bytes del checksum
-			byte[] digestedArray = md.digest();
+			final byte[] digestedArray = mDiggest.digest();
 			// Transformación a string
-			StringBuffer sb = new StringBuffer();
+			final StringBuffer strb = new StringBuffer();
 			for (int i = 0; i < digestedArray.length; i++) {
 				// Se usa el format con %02X para que obligue a devolver el 0.
 				// En caso de que transforme los bytes y salga un número entre 0
 				// y 15 es decir A, sin este formateo sólo da A, cuando debería
 				// devolver 0A.
-				sb.append(String.format("%02X", digestedArray[i]));
+				strb.append(String.format("%02X", digestedArray[i]));
 				// 02 indica el número de caracteres a devolver y x indica que
 				// deben de ser devueltos en hexdecimal
 			}
-			checkSum = sb.toString();
+			checkSum = strb.toString();
 		} catch (NoSuchAlgorithmException e) {
-			logger.error("El algoritmo indicado no es soportado o no ha sido introducido correctamente.");
+			LOG.error("El algoritmo indicado no es soportado o no ha sido introducido correctamente.");
 		} catch (IOException e) {
-			logger.error("No ha sido posible recuperar el número de bytes del DigestedInputStream.");
+			LOG.error("No ha sido posible recuperar el número de bytes del DigestedInputStream.");
 		}
 		return checkSum;
 	}
 
-	public static String passwordEncoder(String password) {
-		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-		String hash = encoder.encodePassword(password, null);
+	public static String passwordEncoder(final String password) {
+		final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		final String hash = encoder.encodePassword(password, null);
 
 		return hash;
 	}

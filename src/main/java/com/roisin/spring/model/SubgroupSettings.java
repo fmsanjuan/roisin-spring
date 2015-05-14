@@ -9,24 +9,54 @@ import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
+/**
+ * Subgroup settings entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class SubgroupSettings extends DomainEntity {
 
+	/**
+	 * Subgroup mode configuration
+	 */
 	private String mode;
 
+	/**
+	 * Subgroup utility function
+	 */
 	private String utilityFunction;
 
+	/**
+	 * Min utility variable
+	 */
 	private Double minUtility;
 
+	/**
+	 * k best rules
+	 */
 	private Integer kBestRules;
 
+	/**
+	 * Rule generation
+	 */
 	private String ruleGeneration;
 
+	/**
+	 * Max depth
+	 */
 	private Integer maxDepth;
 
+	/**
+	 * Min coverage
+	 */
 	private Double minCoverage;
 
+	/**
+	 * Process
+	 */
 	private Process process;
 
 	public SubgroupSettings() {
@@ -44,7 +74,7 @@ public class SubgroupSettings extends DomainEntity {
 		return mode;
 	}
 
-	public void setMode(String mode) {
+	public void setMode(final String mode) {
 		this.mode = mode;
 	}
 
@@ -52,7 +82,7 @@ public class SubgroupSettings extends DomainEntity {
 		return utilityFunction;
 	}
 
-	public void setUtilityFunction(String utilityFunction) {
+	public void setUtilityFunction(final String utilityFunction) {
 		this.utilityFunction = utilityFunction;
 	}
 
@@ -60,15 +90,15 @@ public class SubgroupSettings extends DomainEntity {
 		return minUtility;
 	}
 
-	public void setMinUtility(Double minUtility) {
+	public void setMinUtility(final Double minUtility) {
 		this.minUtility = minUtility;
 	}
 
-	public Integer getkBestRules() {
+	public Integer getKBestRules() {
 		return kBestRules;
 	}
 
-	public void setkBestRules(Integer kBestRules) {
+	public void setKBestRules(final Integer kBestRules) {
 		this.kBestRules = kBestRules;
 	}
 
@@ -76,7 +106,7 @@ public class SubgroupSettings extends DomainEntity {
 		return ruleGeneration;
 	}
 
-	public void setRuleGeneration(String ruleGeneration) {
+	public void setRuleGeneration(final String ruleGeneration) {
 		this.ruleGeneration = ruleGeneration;
 	}
 
@@ -84,7 +114,7 @@ public class SubgroupSettings extends DomainEntity {
 		return maxDepth;
 	}
 
-	public void setMaxDepth(Integer maxDepth) {
+	public void setMaxDepth(final Integer maxDepth) {
 		this.maxDepth = maxDepth;
 	}
 
@@ -92,7 +122,7 @@ public class SubgroupSettings extends DomainEntity {
 		return minCoverage;
 	}
 
-	public void setMinCoverage(Double minCoverage) {
+	public void setMinCoverage(final Double minCoverage) {
 		this.minCoverage = minCoverage;
 	}
 
@@ -101,7 +131,7 @@ public class SubgroupSettings extends DomainEntity {
 		return process;
 	}
 
-	public void setProcess(Process process) {
+	public void setProcess(final Process process) {
 		this.process = process;
 	}
 

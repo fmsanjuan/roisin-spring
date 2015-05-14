@@ -20,10 +20,29 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Version;
 
+/**
+ * General domain entity. This class will extended by the rest of the
+ * application entities.
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class DomainEntity {
+
+	// Identification ---------------------------------------------------------
+
+	/**
+	 * Domain entity identifier
+	 */
+	private int id;
+
+	/**
+	 * Entity version
+	 */
+	private int version;
 
 	// Constructors -----------------------------------------------------------
 
@@ -31,18 +50,13 @@ public abstract class DomainEntity {
 		super();
 	}
 
-	// Identification ---------------------------------------------------------
-
-	private int id;
-	private int version;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	public int getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(final int id) {
 		this.id = id;
 	}
 
@@ -51,7 +65,7 @@ public abstract class DomainEntity {
 		return version;
 	}
 
-	public void setVersion(int version) {
+	public void setVersion(final int version) {
 		this.version = version;
 	}
 
@@ -63,19 +77,20 @@ public abstract class DomainEntity {
 	}
 
 	@Override
-	public boolean equals(Object other) {
+	public boolean equals(final Object other) {
 		boolean result;
 
-		if (this == other)
+		if (this == other) {
 			result = true;
-		else if (other == null)
+		} else if (other == null) {
 			result = false;
-		else if (other instanceof Integer)
+		} else if (other instanceof Integer) {
 			result = (this.getId() == (Integer) other);
-		else if (!this.getClass().isInstance(other))
+		} else if (!this.getClass().isInstance(other)) {
 			result = false;
-		else
+		} else {
 			result = (this.getId() == ((DomainEntity) other).getId());
+		}
 
 		return result;
 	}

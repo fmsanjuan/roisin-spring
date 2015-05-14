@@ -12,20 +12,44 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.roisin.spring.security.UserAccount;
 
+/**
+ * User entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class User extends DomainEntity {
 
+	/**
+	 * User name
+	 */
 	private String name;
 
+	/**
+	 * User surname
+	 */
 	private String surname;
 
+	/**
+	 * User email
+	 */
 	private String email;
 
+	/**
+	 * User nationality
+	 */
 	private String nationality;
 
+	/**
+	 * User city
+	 */
 	private String city;
 
+	/**
+	 * User account
+	 */
 	private UserAccount userAccount;
 
 	public User() {
@@ -37,7 +61,7 @@ public class User extends DomainEntity {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -46,7 +70,7 @@ public class User extends DomainEntity {
 		return surname;
 	}
 
-	public void setSurname(String surname) {
+	public void setSurname(final String surname) {
 		this.surname = surname;
 	}
 
@@ -55,7 +79,7 @@ public class User extends DomainEntity {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 
@@ -64,7 +88,7 @@ public class User extends DomainEntity {
 		return nationality;
 	}
 
-	public void setNationality(String nationality) {
+	public void setNationality(final String nationality) {
 		this.nationality = nationality;
 	}
 
@@ -73,7 +97,7 @@ public class User extends DomainEntity {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(final String city) {
 		this.city = city;
 	}
 
@@ -84,7 +108,7 @@ public class User extends DomainEntity {
 		return userAccount;
 	}
 
-	public void setUserAccount(UserAccount userAccount) {
+	public void setUserAccount(final UserAccount userAccount) {
 		this.userAccount = userAccount;
 	}
 

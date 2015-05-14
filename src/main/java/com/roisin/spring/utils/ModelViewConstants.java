@@ -67,4 +67,22 @@ public final class ModelViewConstants {
 
 	public static final String DATA_ID = "dataId";
 
+	public static final String FILE2 = "file";
+
+	public static final String REPEAT_NEW_PASSWORD = "repeatNewPassword";
+
+	public static final String OLD_PASSWORD = "oldPassword";
+
+	public static final String NEW_PASSWORD = "newPassword";
+
+	public static final String NATIONALITY = "nationality";
+
+	public static final String CITY = "city";
+
+	public static final String NAME = "name";
+
+	public static final String PASSWORD = "password";
+
+	public static final String EMAIL = "email";
+
 }

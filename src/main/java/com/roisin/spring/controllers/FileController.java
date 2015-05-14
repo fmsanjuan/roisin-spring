@@ -32,14 +32,23 @@ import com.roisin.spring.validator.FileValidator;
 @RequestMapping("/file")
 public class FileController {
 
+	/**
+	 * File service
+	 */
 	@Autowired
-	private FileService fileService;
+	private transient FileService fileService;
 
+	/**
+	 * User service
+	 */
 	@Autowired
-	private UserService userService;
+	private transient UserService userService;
 
+	/**
+	 * File validator
+	 */
 	@Autowired
-	private FileValidator fileValidator;
+	private transient FileValidator fileValidator;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
@@ -48,33 +57,35 @@ public class FileController {
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public ModelAndView uploaded(@ModelAttribute("uploadedFile") UploadedFile uploadedFile,
-			BindingResult result) throws RoisinSpringException {
-		MultipartFile file = uploadedFile.getFile();
+	public ModelAndView uploaded(@ModelAttribute("uploadedFile") final UploadedFile uploadedFile,
+			final BindingResult result) throws RoisinSpringException {
+		final MultipartFile file = uploadedFile.getFile();
 		fileValidator.validate(uploadedFile, result);
+		ModelAndView res;
 		if (result.hasErrors()) {
-			return createListModelAndView(true, null);
+			res = createListModelAndView(true, null);
 		} else {
-			String successMessage = fileService.upload(file);
-			return createListModelAndView(false, successMessage);
+			final String successMessage = fileService.upload(file);
+			res = createListModelAndView(false, successMessage);
 		}
+		return res;
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView delete(@RequestParam int fileId) {
-		File file = fileService.findOne(fileId);
+	public ModelAndView delete(@RequestParam final int fileId) {
+		final File file = fileService.findOne(fileId);
 		fileService.delete(file);
-		String successMessage = file.getName();
+		final String successMessage = file.getName();
 
 		return createListModelAndView(false, successMessage);
 	}
 
-	public ModelAndView createListModelAndView(boolean error, String successMessage) {
+	public ModelAndView createListModelAndView(final boolean error, final String successMessage) {
 
-		User user = userService.findByPrincipal();
-		Collection<File> files = fileService.findFilesByUserId(user.getId());
+		final User user = userService.findByPrincipal();
+		final Collection<File> files = fileService.findFilesByUserId(user.getId());
 
-		ModelAndView res = new ModelAndView("file/list");
+		final ModelAndView res = new ModelAndView("file/list");
 		res.addObject(FILES_LOWER_CASE, files);
 		res.addObject(REQUEST_URI, LIST_LOWER_CASE);
 		res.addObject(FORM_LOWER_CASE, new DataViewForm());

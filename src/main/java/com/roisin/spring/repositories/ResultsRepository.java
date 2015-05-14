@@ -5,6 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import com.roisin.spring.model.Results;
 
+/**
+ * Results repository
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Repository
 public interface ResultsRepository extends JpaRepository<Results, Integer> {
 

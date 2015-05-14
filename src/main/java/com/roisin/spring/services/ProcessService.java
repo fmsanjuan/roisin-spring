@@ -28,33 +28,54 @@ import com.roisin.spring.utils.Runner;
 @Transactional
 public class ProcessService {
 
+	/**
+	 * Process repository
+	 */
 	@Autowired
-	private ProcessRepository processRepository;
+	private transient ProcessRepository processRepository;
 
+	/**
+	 * Preprocessed data service
+	 */
 	@Autowired
-	private PreprocessedDataService preprocessedDataService;
+	private transient PreprocessedDataService preproDataService;
 
+	/**
+	 * Preprocessing form service
+	 */
 	@Autowired
-	private PreprocessingFormService preprocessingFormService;
+	private transient PreprocessingFormService preproFormService;
 
+	/**
+	 * Deleted Row Service
+	 */
 	@Autowired
-	private DeletedRowService deletedRowService;
+	private transient DeletedRowService deletedRowService;
 
+	/**
+	 * Selected Attribute Service
+	 */
 	@Autowired
-	private SelectedAttributeService selectedAttributeService;
+	private transient SelectedAttributeService saService;
 
+	/**
+	 * User service
+	 */
 	@Autowired
-	private UserService userService;
-	
+	private transient UserService userService;
+
+	/**
+	 * File Utils
+	 */
 	@Autowired
-	private FileUtils fileUtils;
+	private transient FileUtils fileUtils;
 
 	public ProcessService() {
 		super();
 	}
 
 	public Process create() {
-		Process process = new Process();
+		final Process process = new Process();
 
 		return process;
 	}
@@ -63,32 +84,32 @@ public class ProcessService {
 		return processRepository.findAll();
 	}
 
-	public Process findOne(int processId) {
+	public Process findOne(final int processId) {
 		Assert.notNull(processId);
-		User principal = userService.findByPrincipal();
-		Process process = processRepository.findOne(processId);
+		final User principal = userService.findByPrincipal();
+		final Process process = processRepository.findOne(processId);
 		boolean isOwner = principal.equals(process.getPreprocessedData().getPreprocessingForm()
 				.getFile().getUser());
 		Assert.isTrue(isOwner);
 		return process;
 	}
 
-	public Process save(Process process) {
+	public Process save(final Process process) {
 		return processRepository.save(process);
 	}
 
-	public void delete(Process process) {
+	public void delete(final Process process) {
 		Assert.notNull(process);
-		User principal = userService.findByPrincipal();
-		boolean isOwner = principal.equals(process.getPreprocessedData().getPreprocessingForm()
-				.getFile().getUser());
+		final User principal = userService.findByPrincipal();
+		final boolean isOwner = principal.equals(process.getPreprocessedData()
+				.getPreprocessingForm().getFile().getUser());
 		Assert.isTrue(isOwner);
 		processRepository.delete(process);
 	}
 
 	// Extra methods
 
-	public Process saveProcessAlgorithm(Process process, String algorithm) {
+	public Process saveProcessAlgorithm(final Process process, final String algorithm) {
 		if (process.getAlgorithm().equals(ROISIN_NULL)) {
 			process.setAlgorithm(algorithm);
 			return save(process);
@@ -96,7 +117,7 @@ public class ProcessService {
 			Process newProcess = create();
 			newProcess.setPreprocessedData(process.getPreprocessedData());
 			newProcess.setAlgorithm(algorithm);
-			SelectedAttribute label = process.getLabel();
+			final SelectedAttribute label = process.getLabel();
 			newProcess.setLabel(process.getLabel());
 			newProcess.setLabel(label);
 			newProcess = save(newProcess);
@@ -105,30 +126,31 @@ public class ProcessService {
 		}
 	}
 
-	public void cleanTempProcesses(int dataId) {
-		Collection<Process> nullProcesses = processRepository.findNullDataProcesses(dataId);
-		for (Process process : nullProcesses) {
+	public void cleanTempProcesses(final int dataId) {
+		final Collection<Process> nullProcesses = processRepository.findNullDataProcesses(dataId);
+		for (final Process process : nullProcesses) {
 			delete(process);
 		}
 	}
 
-	public Collection<Process> findByAlgorithmAndDataId(int dataId, String algorithm) {
+	public Collection<Process> findByAlgorithmAndDataId(final int dataId, final String algorithm) {
 		return processRepository.findByAlgorithmAndDataId(dataId, algorithm);
 	}
 
-	public Collection<Process> findProcessByLabelId(int labelId) {
+	public Collection<Process> findProcessByLabelId(final int labelId) {
 		return processRepository.findProcessByLabelId(labelId);
 	}
 
-	public Process createInitialProcessNoAlgorithm(PreproSimpleForm form) {
-		PreprocessedData data = preprocessedDataService.findOne(Integer.parseInt(form.getDataId()));
+	public Process createInitialProcessNoAlgorithm(final PreproSimpleForm form) {
+		PreprocessedData data = preproDataService.findOne(Integer.parseInt(form.getDataId()));
 		// Formulario
-		PreprocessingForm storedForm = preprocessingFormService.saveSubmitedSimpleForm(
+		PreprocessingForm storedForm = preproFormService.saveSubmitedSimpleForm(
 				data.getPreprocessingForm(), form);
 		// Extracción de file de BD
-		File file = storedForm.getFile();
-		String fileFormat = StringUtils.substringAfterLast(file.getName(), DOT_SYMBOL);
-		String tmpPath = fileUtils.getStoragePath() + file.getHash() + DOT_SYMBOL + fileFormat;
+		final File file = storedForm.getFile();
+		final String fileFormat = StringUtils.substringAfterLast(file.getName(), DOT_SYMBOL);
+		final String tmpPath = fileUtils.getStoragePath() + file.getHash() + DOT_SYMBOL
+				+ fileFormat;
 		// Escritura en disco del fichero
 		fileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
 		// Colección de deleted rows
@@ -139,11 +161,11 @@ public class ProcessService {
 				RoisinUtils.getRowsFromDeletedRows(deletedRows), storedForm.getFilterCondition(),
 				form.getProcessAttributeSelection());
 		// Se almacen el example set
-		data = preprocessedDataService.findOne(data.getId());
+		data = preproDataService.findOne(data.getId());
 		data.setExampleSet(exampleSet);
 		data.setName(form.getName());
 		data.setDescription(form.getDescription());
-		data = preprocessedDataService.save(data);
+		data = preproDataService.save(data);
 		// Finalmente se manda al usuario al formulario de proceso
 		cleanTempProcesses(data.getId());
 		// Creación del proceso
@@ -151,17 +173,17 @@ public class ProcessService {
 		process.setPreprocessedData(data);
 		process.setAlgorithm(ROISIN_NULL);
 		// Se establece la label (clase) para este proceso
-		SelectedAttribute label = selectedAttributeService
-				.findLabel(storedForm.getId(), form.getLabel()).iterator().next();
+		SelectedAttribute label = saService.findLabel(storedForm.getId(), form.getLabel())
+				.iterator().next();
 		process.setLabel(label);
 		process = save(process);
 
 		return process;
 	}
 
-	public Process createInitProcess(PreproSimpleForm form) {
-		int dataId = Integer.parseInt(form.getDataId());
-		PreprocessedData data = preprocessedDataService.findOne(dataId);
+	public Process createInitProcess(final PreproSimpleForm form) {
+		final int dataId = Integer.parseInt(form.getDataId());
+		final PreprocessedData data = preproDataService.findOne(dataId);
 		// Finalmente se manda al usuario al formulario de proceso
 		cleanTempProcesses(dataId);
 		// Creación del proceso
@@ -169,7 +191,7 @@ public class ProcessService {
 		process.setPreprocessedData(data);
 		process.setAlgorithm(ROISIN_NULL);
 		// Se establece la label (clase) para este proceso
-		SelectedAttribute label = selectedAttributeService
+		SelectedAttribute label = saService
 				.findLabel(data.getPreprocessingForm().getId(), form.getLabel()).iterator().next();
 		process.setLabel(label);
 		process = save(process);

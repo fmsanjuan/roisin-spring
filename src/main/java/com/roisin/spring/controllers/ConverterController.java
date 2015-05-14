@@ -37,18 +37,27 @@ import exception.RoisinException;
 @RequestMapping("/converter")
 public class ConverterController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ConverterController.class);
+	/**
+	 * Class log
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(ConverterController.class);
 
+	/**
+	 * File converter validator
+	 */
 	@Autowired
-	private FileConverterValidator fileConverterValidator;
-	
+	private transient FileConverterValidator fileConverterValidator;
+
+	/**
+	 * File utility class
+	 */
 	@Autowired
-	private FileUtils fileUtils;
+	private transient FileUtils fileUtils;
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView upload() {
 
-		ModelAndView res = new ModelAndView("converter/create");
+		final ModelAndView res = new ModelAndView("converter/create");
 		res.addObject(UPLOADED_FILE, new ConvertUploadFile());
 
 		return res;
@@ -56,61 +65,60 @@ public class ConverterController {
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public ModelAndView uploaded(
-			@ModelAttribute(UPLOADED_FILE) ConvertUploadFile convertUploadedFile,
-			BindingResult result) throws RoisinException {
+			@ModelAttribute(UPLOADED_FILE) final ConvertUploadFile convertUploadedFile,
+			final BindingResult result) throws RoisinException {
+		ModelAndView res;
 		try {
 
-			MultipartFile file = convertUploadedFile.getFile();
+			final MultipartFile file = convertUploadedFile.getFile();
 			fileConverterValidator.validate(convertUploadedFile, result);
 
 			if (result.hasErrors()) {
-				ModelAndView res = new ModelAndView("converter/create");
+				res = new ModelAndView("converter/create");
 				res.addObject(ERROR_LOWER_CASE, true);
-
-				return res;
 			} else {
 
 				String originalFileName = StringUtils.substringBeforeLast(
 						file.getOriginalFilename(), DOT_SYMBOL);
 				String inputFormat = StringUtils.substringAfterLast(file.getOriginalFilename(),
 						DOT_SYMBOL);
-				String fileHash = HashUtils.fileChecksum(file.getBytes(), SHA_256);
-				String outputFormat = convertUploadedFile.getOutputFormat();
+				final String fileHash = HashUtils.fileChecksum(file.getBytes(), SHA_256);
+				final String outputFormat = convertUploadedFile.getOutputFormat();
 				String outputPath = fileUtils.getConvertPath() + fileHash + DOT_SYMBOL
 						+ outputFormat;
-				String inputPath = fileUtils.getConvertPath() + fileHash + DOT_SYMBOL + inputFormat;
+				final String inputPath = fileUtils.getConvertPath() + fileHash + DOT_SYMBOL
+						+ inputFormat;
 				fileUtils.writeFileFromByteArray(file.getBytes(), fileUtils.getConvertPath()
 						+ fileHash + DOT_SYMBOL + inputFormat);
 				Runner.convertFile(inputFormat, outputFormat, inputPath, outputPath);
 
-				DownloadForm form = new DownloadForm();
+				final DownloadForm form = new DownloadForm();
 				form.setHash(fileHash);
 				form.setOutputFormat(outputFormat);
 				form.setFileName(originalFileName);
 
-				ModelAndView res = new ModelAndView("converter/create");
+				res = new ModelAndView("converter/create");
 				res.addObject(UPLOADED_FILE, new ConvertUploadFile());
 				res.addObject(FORM_LOWER_CASE, form);
-
-				return res;
 			}
 		} catch (IOException e) {
-			logger.error("No ha sido posible convertir el fichero", e);
+			LOG.error("No ha sido posible convertir el fichero", e);
 			throw new RoisinException("Could not convert file");
-		} 
+		}
+		return res;
 	}
 
 	@RequestMapping(value = "/download", method = RequestMethod.POST)
-	public ResponseEntity<byte[]> download(@ModelAttribute DownloadForm form)
+	public ResponseEntity<byte[]> download(@ModelAttribute final DownloadForm form)
 			throws RoisinException {
 
 		String filePath;
 		filePath = fileUtils.getConvertPath() + form.getHash() + DOT_SYMBOL
 				+ form.getOutputFormat();
-		String exportFileName = form.getFileName() + DOT_SYMBOL + form.getOutputFormat();
-		byte[] fileContent = fileUtils.getFileFromPath(filePath);
+		final String exportFileName = form.getFileName() + DOT_SYMBOL + form.getOutputFormat();
+		final byte[] fileContent = fileUtils.getFileFromPath(filePath);
 		// Create and configure headers to return the file
-		HttpHeaders headers = new HttpHeaders();
+		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/" + form.getOutputFormat()));
 		headers.setContentDispositionFormData(exportFileName, exportFileName);
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");

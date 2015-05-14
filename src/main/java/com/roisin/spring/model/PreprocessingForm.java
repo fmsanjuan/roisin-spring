@@ -12,31 +12,52 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
 
+/**
+ * Preprocessing form entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class PreprocessingForm extends DomainEntity {
 
+	/**
+	 * Filter condition
+	 */
 	private String filterCondition;
 
+	/**
+	 * Deleted rows
+	 */
 	private Collection<DeletedRow> deletedRows;
 
-	private Collection<SelectedAttribute> selectedAttributes;
+	/**
+	 * Selected attributes
+	 */
+	private Collection<SelectedAttribute> selectedAtts;
 
+	/**
+	 * Preprocessed data
+	 */
 	private PreprocessedData preprocessedData;
 
+	/**
+	 * File
+	 */
 	private File file;
 
 	public PreprocessingForm() {
 		super();
 		deletedRows = new ArrayList<DeletedRow>();
-		selectedAttributes = new ArrayList<SelectedAttribute>();
+		selectedAtts = new ArrayList<SelectedAttribute>();
 	}
 
 	public String getFilterCondition() {
 		return filterCondition;
 	}
 
-	public void setFilterCondition(String filterCondition) {
+	public void setFilterCondition(final String filterCondition) {
 		this.filterCondition = filterCondition;
 	}
 
@@ -46,18 +67,18 @@ public class PreprocessingForm extends DomainEntity {
 		return deletedRows;
 	}
 
-	public void setDeletedRows(Collection<DeletedRow> deletedRows) {
+	public void setDeletedRows(final Collection<DeletedRow> deletedRows) {
 		this.deletedRows = deletedRows;
 	}
 
 	@Valid
 	@OneToMany(mappedBy = "preprocessingForm", cascade = CascadeType.ALL)
-	public Collection<SelectedAttribute> getSelectedAttributes() {
-		return selectedAttributes;
+	public Collection<SelectedAttribute> getSelectedAtts() {
+		return selectedAtts;
 	}
 
-	public void setSelectedAttributes(Collection<SelectedAttribute> selectedAttributes) {
-		this.selectedAttributes = selectedAttributes;
+	public void setSelectedAtts(final Collection<SelectedAttribute> selectedAtts) {
+		this.selectedAtts = selectedAtts;
 	}
 
 	@Valid
@@ -66,7 +87,7 @@ public class PreprocessingForm extends DomainEntity {
 		return preprocessedData;
 	}
 
-	public void setPreprocessedData(PreprocessedData preprocessedData) {
+	public void setPreprocessedData(final PreprocessedData preprocessedData) {
 		this.preprocessedData = preprocessedData;
 	}
 
@@ -76,7 +97,7 @@ public class PreprocessingForm extends DomainEntity {
 		return file;
 	}
 
-	public void setFile(File file) {
+	public void setFile(final File file) {
 		this.file = file;
 	}
 

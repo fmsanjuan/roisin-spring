@@ -19,17 +19,20 @@ import com.roisin.spring.utils.RoisinUtils;
 @RequestMapping("/rule")
 public class RuleController {
 
+	/**
+	 * Rule service
+	 */
 	@Autowired
-	private RuleService ruleService;
+	private transient RuleService ruleService;
 
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
-	public ModelAndView view(@RequestParam int ruleId) {
+	public ModelAndView view(@RequestParam final int ruleId) {
 
-		Rule rule = ruleService.findOne(ruleId);
+		final Rule rule = ruleService.findOne(ruleId);
 
-		XYLineChart chart = RoisinUtils.getSingleRuleAucChart(rule);
+		final XYLineChart chart = RoisinUtils.getSingleRuleAucChart(rule);
 
-		ModelAndView res = new ModelAndView("rule/view");
+		final ModelAndView res = new ModelAndView("rule/view");
 		res.addObject(RULE_LOWER_CASE, rule);
 		res.addObject(CHART_LOWER_CASE, chart.toURLString());
 

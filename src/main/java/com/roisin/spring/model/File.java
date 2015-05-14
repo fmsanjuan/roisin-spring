@@ -14,20 +14,44 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * File entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class File extends DomainEntity {
 
+	/**
+	 * File name
+	 */
 	private String name;
 
+	/**
+	 * File description
+	 */
 	private String description;
 
+	/**
+	 * File
+	 */
 	private byte[] originalFile;
 
+	/**
+	 * File hash
+	 */
 	private String hash;
 
+	/**
+	 * File owner
+	 */
 	private User user;
 
+	/**
+	 * Associated preprocessing forms
+	 */
 	private Collection<PreprocessingForm> preprocessingForms;
 
 	public File() {
@@ -40,7 +64,7 @@ public class File extends DomainEntity {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -49,7 +73,7 @@ public class File extends DomainEntity {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -57,7 +81,7 @@ public class File extends DomainEntity {
 		return originalFile;
 	}
 
-	public void setOriginalFile(byte[] originalFile) {
+	public void setOriginalFile(final byte[] originalFile) {
 		this.originalFile = originalFile;
 	}
 
@@ -66,7 +90,7 @@ public class File extends DomainEntity {
 		return hash;
 	}
 
-	public void setHash(String hash) {
+	public void setHash(final String hash) {
 		this.hash = hash;
 	}
 
@@ -76,7 +100,7 @@ public class File extends DomainEntity {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(final User user) {
 		this.user = user;
 	}
 
@@ -87,7 +111,7 @@ public class File extends DomainEntity {
 		return preprocessingForms;
 	}
 
-	public void setPreprocessingForms(Collection<PreprocessingForm> preprocessingForms) {
+	public void setPreprocessingForms(final Collection<PreprocessingForm> preprocessingForms) {
 		this.preprocessingForms = preprocessingForms;
 	}
 

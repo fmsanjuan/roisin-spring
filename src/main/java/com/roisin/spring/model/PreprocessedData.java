@@ -17,18 +17,39 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.rapidminer.example.ExampleSet;
 
+/**
+ * Preprocessed data entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class PreprocessedData extends DomainEntity {
 
+	/**
+	 * Preprocessed data name
+	 */
 	private String name;
 
+	/**
+	 * Preprocessed data description
+	 */
 	private String description;
 
+	/**
+	 * Preprocessed data example set
+	 */
 	private ExampleSet exampleSet;
 
+	/**
+	 * Preprocessing form
+	 */
 	private PreprocessingForm preprocessingForm;
 
+	/**
+	 * Processes
+	 */
 	private Collection<Process> processes;
 
 	public PreprocessedData() {
@@ -41,7 +62,7 @@ public class PreprocessedData extends DomainEntity {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -50,7 +71,7 @@ public class PreprocessedData extends DomainEntity {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -59,7 +80,7 @@ public class PreprocessedData extends DomainEntity {
 		return exampleSet;
 	}
 
-	public void setExampleSet(ExampleSet exampleSet) {
+	public void setExampleSet(final ExampleSet exampleSet) {
 		this.exampleSet = exampleSet;
 	}
 
@@ -68,7 +89,7 @@ public class PreprocessedData extends DomainEntity {
 		return preprocessingForm;
 	}
 
-	public void setPreprocessingForm(PreprocessingForm preprocessingForm) {
+	public void setPreprocessingForm(final PreprocessingForm preprocessingForm) {
 		this.preprocessingForm = preprocessingForm;
 	}
 
@@ -79,7 +100,7 @@ public class PreprocessedData extends DomainEntity {
 		return processes;
 	}
 
-	public void setProcesses(Collection<Process> processes) {
+	public void setProcesses(final Collection<Process> processes) {
 		this.processes = processes;
 	}
 

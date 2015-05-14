@@ -5,24 +5,54 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class EditProfileForm {
 
+	/**
+	 * Profile edition name
+	 */
 	private String name;
 
+	/**
+	 * Profile edition surname
+	 */
 	private String surname;
 
+	/**
+	 * Profile edition email
+	 */
 	private String email;
 
+	/**
+	 * Profile edition city
+	 */
 	private String city;
 
+	/**
+	 * Profile edition nationality
+	 */
 	private String nationality;
 
+	/**
+	 * Profile edition old password
+	 */
 	private String oldPassword;
 
+	/**
+	 * Profile edition new password
+	 */
 	private String newPassword;
 
+	/**
+	 * Profile edition repeat password
+	 */
 	private String repeatNewPassword;
 
+	/**
+	 * Profile identifier
+	 */
 	private int id;
 
+	/**
+	 * Profile version
+	 */
 	private int version;
 
 	public EditProfileForm() {
@@ -34,7 +64,7 @@ public class EditProfileForm {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -42,7 +72,7 @@ public class EditProfileForm {
 		return surname;
 	}
 
-	public void setSurname(String surname) {
+	public void setSurname(final String surname) {
 		this.surname = surname;
 	}
 
@@ -52,7 +82,7 @@ public class EditProfileForm {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 
@@ -61,7 +91,7 @@ public class EditProfileForm {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(final String city) {
 		this.city = city;
 	}
 
@@ -70,7 +100,7 @@ public class EditProfileForm {
 		return nationality;
 	}
 
-	public void setNationality(String nationality) {
+	public void setNationality(final String nationality) {
 		this.nationality = nationality;
 	}
 
@@ -78,15 +108,15 @@ public class EditProfileForm {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(final int identifier) {
+		this.id = identifier;
 	}
 
 	public int getVersion() {
 		return version;
 	}
 
-	public void setVersion(int version) {
+	public void setVersion(final int version) {
 		this.version = version;
 	}
 
@@ -94,7 +124,7 @@ public class EditProfileForm {
 		return oldPassword;
 	}
 
-	public void setOldPassword(String oldPassword) {
+	public void setOldPassword(final String oldPassword) {
 		this.oldPassword = oldPassword;
 	}
 
@@ -102,7 +132,7 @@ public class EditProfileForm {
 		return newPassword;
 	}
 
-	public void setNewPassword(String newPassword) {
+	public void setNewPassword(final String newPassword) {
 		this.newPassword = newPassword;
 	}
 
@@ -110,7 +140,7 @@ public class EditProfileForm {
 		return repeatNewPassword;
 	}
 
-	public void setRepeatNewPassword(String repeatNewPassword) {
+	public void setRepeatNewPassword(final String repeatNewPassword) {
 		this.repeatNewPassword = repeatNewPassword;
 	}
 

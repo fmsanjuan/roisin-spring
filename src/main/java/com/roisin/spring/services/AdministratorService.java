@@ -13,35 +13,40 @@ import com.roisin.spring.security.UserAccount;
 
 public class AdministratorService {
 
+	/**
+	 * Administrator repository
+	 */
 	@Autowired
-	private AdministratorRepository administratorRepository;
+	private transient AdministratorRepository adminRepository;
 
 	public AdministratorService() {
 		super();
 	}
 
-	public boolean AmIMySelf(int userId) {
-		return LoginService.getPrincipal().getId() == userId;
+	public boolean amIMySelf(final int userId) {
+		final UserAccount principal = LoginService.getPrincipal();
+		return LoginService.getPrincipalId(principal) == userId;
 	}
 
-	public boolean IAmACustomer() {
+	public boolean iAmACustomer() {
 		return checkRole(Authority.USER);
 	}
 
-	public boolean IAmAnAdmin() {
+	public boolean iAmAnAdmin() {
 		return checkRole(Authority.ADMIN);
 	}
 
-	public boolean AmIAGuest() {
+	public boolean amIAGuest() {
 		return false;
 	}
 
-	private boolean checkRole(String role) {
-		Collection<Authority> authorities = LoginService.getPrincipal().getAuthorities();
+	private boolean checkRole(final String role) {
+		final UserAccount principal = LoginService.getPrincipal();
+		final Collection<Authority> authorities = LoginService.getPrincipalAuthorities(principal);
 
 		boolean res = false;
 
-		for (Authority auth : authorities)
+		for (final Authority auth : authorities)
 			res = res || auth.getAuthority().toUpperCase().compareTo(role) == 0;
 
 		return res;
@@ -59,11 +64,11 @@ public class AdministratorService {
 		return result;
 	}
 
-	public Administrator findByUserAccount(UserAccount adminAccount) {
+	public Administrator findByUserAccount(final UserAccount adminAccount) {
 
 		Assert.notNull(adminAccount);
 		Administrator result;
-		result = administratorRepository.findByUserAccountId(adminAccount.getId());
+		result = adminRepository.findByUserAccountId(adminAccount.getId());
 
 		return result;
 	}

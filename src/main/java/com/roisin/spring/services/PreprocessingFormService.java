@@ -22,149 +22,167 @@ import com.roisin.spring.utils.RoisinUtils;
 @Transactional
 public class PreprocessingFormService {
 
+	/**
+	 * Preprocessing form repository
+	 */
 	@Autowired
-	private PreprocessingFormRepository preprocessingFormRepository;
+	private transient PreprocessingFormRepository preproFormRepo;
 
+	/**
+	 * Selected attribute service
+	 */
 	@Autowired
-	private SelectedAttributeService selectedAttributeService;
+	private transient SelectedAttributeService saService;
 
+	/**
+	 * Process service
+	 */
 	@Autowired
-	private ProcessService processService;
+	private transient ProcessService processService;
 
+	/**
+	 * File service
+	 */
 	@Autowired
-	private FileService fileService;
+	private transient FileService fileService;
 
+	/**
+	 * User service
+	 */
 	@Autowired
-	private UserService userService;
+	private transient UserService userService;
 
 	public PreprocessingFormService() {
 		super();
 	}
 
 	public PreprocessingForm create() {
-		PreprocessingForm preprocessingForm = new PreprocessingForm();
+		final PreprocessingForm preprocessingForm = new PreprocessingForm();
 
 		return preprocessingForm;
 	}
 
 	public Collection<PreprocessingForm> findAll() {
-		return preprocessingFormRepository.findAll();
+		return preproFormRepo.findAll();
 	}
 
-	public PreprocessingForm findOne(int preprocessingFormId) {
-		Assert.notNull(preprocessingFormId);
-		User principal = userService.findByPrincipal();
-		PreprocessingForm form = preprocessingFormRepository.findOne(preprocessingFormId);
-		boolean isOwner = principal.equals(form.getFile().getUser());
+	public PreprocessingForm findOne(final int preproFormId) {
+		Assert.notNull(preproFormId);
+		final User principal = userService.findByPrincipal();
+		final PreprocessingForm form = preproFormRepo.findOne(preproFormId);
+		final boolean isOwner = principal.equals(form.getFile().getUser());
 		Assert.isTrue(isOwner);
 		return form;
 	}
 
-	public PreprocessingForm save(PreprocessingForm preprocessingForm) {
-		return preprocessingFormRepository.save(preprocessingForm);
+	public PreprocessingForm save(final PreprocessingForm preprocessingForm) {
+		return preproFormRepo.save(preprocessingForm);
 	}
 
-	public void delete(PreprocessingForm preprocessingForm) {
+	public void delete(final PreprocessingForm preprocessingForm) {
 		Assert.notNull(preprocessingForm);
-		User principal = userService.findByPrincipal();
-		boolean isOwner = principal.equals(preprocessingForm.getFile().getUser());
+		final User principal = userService.findByPrincipal();
+		final boolean isOwner = principal.equals(preprocessingForm.getFile().getUser());
 		Assert.isTrue(isOwner);
-		preprocessingFormRepository.delete(preprocessingForm);
+		preproFormRepo.delete(preprocessingForm);
 	}
 
 	// Extra methods
 
-	public PreprocessingForm findFormByDataId(int dataId) {
+	public PreprocessingForm findFormByDataId(final int dataId) {
 		Assert.notNull(dataId);
-		User principal = userService.findByPrincipal();
-		PreprocessingForm form = preprocessingFormRepository.findFormByDataId(dataId);
-		boolean isOwner = principal.equals(form.getFile().getUser());
+		final User principal = userService.findByPrincipal();
+		final PreprocessingForm form = preproFormRepo.findFormByDataId(dataId);
+		final boolean isOwner = principal.equals(form.getFile().getUser());
 		Assert.isTrue(isOwner);
 		return form;
 	}
 
-	public PreprocessingForm saveSubmitedSimpleForm(PreprocessingForm storedForm,
-			PreproSimpleForm form) {
+	public PreprocessingForm saveSubmitedSimpleForm(final PreprocessingForm storedForm,
+			final PreproSimpleForm form) {
 		// Borrado de attributos seleccionados en caso de que ya existan
 		deleteExistingSelectedAttributes(storedForm);
 		// Attributos seleccionados
-		for (String attributeName : form.getProcessAttributeSelection()) {
-			SelectedAttribute sa = selectedAttributeService.create();
-			sa.setPreprocessingForm(storedForm);
-			sa.setName(attributeName);
-			selectedAttributeService.save(sa);
+		for (final String attributeName : form.getProcessAttributeSelection()) {
+			final SelectedAttribute selectedAttribute = saService.create();
+			selectedAttribute.setPreprocessingForm(storedForm);
+			selectedAttribute.setName(attributeName);
+			saService.save(selectedAttribute);
 		}
 
 		return storedForm;
 	}
 
-	public PreprocessingForm saveSubmitedSimpleFormExport(PreprocessingForm storedForm,
-			PreproSimpleForm form) {
+	public PreprocessingForm saveSubmitedSimpleFormExport(final PreprocessingForm storedForm,
+			final PreproSimpleForm form) {
 		// Borrado de attributos seleccionados en caso de que ya existan
 		deleteExistingSelectedAttributes(storedForm);
 		// Attributos seleccionados
-		for (String attributeName : form.getExportAttributeSelection()) {
-			SelectedAttribute sa = selectedAttributeService.create();
-			sa.setPreprocessingForm(storedForm);
-			sa.setName(attributeName);
-			selectedAttributeService.save(sa);
+		for (final String attributeName : form.getExportAttributeSelection()) {
+			final SelectedAttribute selectedAttribute = saService.create();
+			selectedAttribute.setPreprocessingForm(storedForm);
+			selectedAttribute.setName(attributeName);
+			saService.save(selectedAttribute);
 		}
 
 		return storedForm;
 	}
 
-	public void deleteExistingSelectedAttributes(PreprocessingForm storedForm) {
-		Collection<SelectedAttribute> selectedList = selectedAttributeService
+	public void deleteExistingSelectedAttributes(final PreprocessingForm storedForm) {
+		Collection<SelectedAttribute> selectedList = saService
 				.findSelectedAttributesByFormId(storedForm.getId());
-		for (SelectedAttribute selectedAttribute : selectedList) {
-			Collection<Process> ps = processService.findProcessByLabelId(selectedAttribute.getId());
+		for (final SelectedAttribute selectedAttribute : selectedList) {
+			final Collection<Process> process = processService
+					.findProcessByLabelId(selectedAttribute.getId());
 			if (processService.findProcessByLabelId(selectedAttribute.getId()).isEmpty()) {
-				selectedAttributeService.delete(selectedAttribute);
+				saService.delete(selectedAttribute);
 			} else {
-				processService.delete(ps.iterator().next());
+				processService.delete(process.iterator().next());
 			}
 		}
 	}
 
-	public Collection<PreprocessingForm> findFormsByFileId(int fileId) {
+	public Collection<PreprocessingForm> findFormsByFileId(final int fileId) {
 		Assert.notNull(fileId);
-		User principal = userService.findByPrincipal();
-		File file = fileService.findOne(fileId);
-		boolean isOwner = principal.equals(file.getUser());
+		final User principal = userService.findByPrincipal();
+		final File file = fileService.findOne(fileId);
+		final boolean isOwner = principal.equals(file.getUser());
 		Assert.isTrue(isOwner);
-		return preprocessingFormRepository.findFormsByFileId(fileId);
+		return preproFormRepo.findFormsByFileId(fileId);
 	}
 
-	public Collection<PreprocessingForm> findNullDataForms(int fileId) {
-		return preprocessingFormRepository.findNullDataForms(fileId);
+	public Collection<PreprocessingForm> findNullDataForms(final int fileId) {
+		return preproFormRepo.findNullDataForms(fileId);
 	}
 
-	public void deleteNullDataForms(Collection<PreprocessingForm> forms) {
-		preprocessingFormRepository.deleteInBatch(forms);
+	public void deleteNullDataForms(final Collection<PreprocessingForm> forms) {
+		preproFormRepo.deleteInBatch(forms);
 	}
 
-	public PreproSimpleForm loadAttributesInPreproSimpleForm(Attribute[] attributes) {
-		PreproSimpleForm form = new PreproSimpleForm();
+	public PreproSimpleForm loadAttributesInPreproSimpleForm(final Attribute[] attributes) {
+		final PreproSimpleForm form = new PreproSimpleForm();
 		form.setProcessAttributeSelection(RoisinUtils
 				.getAttributeNameListFromExampleSet(attributes));
 		form.setExportAttributeSelection(RoisinUtils.getAttributeNameListFromExampleSet(attributes));
 		return form;
 	}
 
-	public PreprocessingForm createSavePreprocessingFormFromFile(File file) {
+	public PreprocessingForm createSavePreprocessingFormFromFile(final File file) {
 		PreprocessingForm preform = create();
 		preform.setFile(file);
 		preform = save(preform);
 		return preform;
 	}
 
-	public Attribute loadFilterAttribute(Attribute[] attributes, FilterConditionForm form) {
+	public Attribute loadFilterAttribute(final Attribute[] attributes,
+			final FilterConditionForm form) {
+		Attribute res = null;
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].getName().equals(form.getFilterAttribute())) {
-				return attributes[i];
+				res = attributes[i];
 			}
 		}
-		return null;
+		return res;
 	}
 
 }

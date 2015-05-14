@@ -24,13 +24,14 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView home(Locale locale) {
-		ModelAndView res = new ModelAndView("welcome/home");
+	public ModelAndView home(final Locale locale) {
+		final ModelAndView res = new ModelAndView("welcome/home");
 
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
+		final Date date = new Date();
+		final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
+				DateFormat.LONG);
 
-		String formattedDate = dateFormat.format(date);
+		final String formattedDate = dateFormat.format(date);
 
 		res.addObject("serverTime", formattedDate);
 		res.addObject("credentials", new Credentials());

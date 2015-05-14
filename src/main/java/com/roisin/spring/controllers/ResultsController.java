@@ -32,19 +32,25 @@ import com.roisin.spring.utils.RoisinUtils;
 @RequestMapping("/results")
 public class ResultsController {
 
+	/**
+	 * Results service
+	 */
 	@Autowired
-	private ResultsService resultsService;
+	private transient ResultsService resultsService;
 
+	/**
+	 * Rule service
+	 */
 	@Autowired
-	private RuleService ruleService;
+	private transient RuleService ruleService;
 
 	@RequestMapping(value = "/export", method = RequestMethod.POST)
-	public ResponseEntity<byte[]> exportResults(@ModelAttribute Results results) {
+	public ResponseEntity<byte[]> exportResults(@ModelAttribute final Results results) {
 
-		ByteArrayOutputStream document = resultsService.getExcelResults(results);
+		final ByteArrayOutputStream document = resultsService.getExcelResults(results);
 
 		// Create and configure headers to return the file
-		HttpHeaders headers = new HttpHeaders();
+		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/xls"));
 		headers.setContentDispositionFormData("roisin_exported_data", "roisin_exported_data.xls");
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
@@ -55,12 +61,12 @@ public class ResultsController {
 	}
 
 	@RequestMapping(value = "/exportoptimization", method = RequestMethod.POST)
-	public ResponseEntity<byte[]> exportOptimization(@ModelAttribute Results results) {
+	public ResponseEntity<byte[]> exportOptimization(@ModelAttribute final Results results) {
 
-		ByteArrayOutputStream document = resultsService.getOptimizationExcelResults(results);
+		final ByteArrayOutputStream document = resultsService.getOptimizationExcelResults(results);
 
 		// Create and configure headers to return the file
-		HttpHeaders headers = new HttpHeaders();
+		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/xls"));
 		headers.setContentDispositionFormData("roisin_exported_data", "roisin_exported_data.xls");
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
@@ -71,15 +77,16 @@ public class ResultsController {
 	}
 
 	@RequestMapping(value = "/optimization", method = RequestMethod.POST)
-	public ModelAndView optimization(@ModelAttribute Results results) {
+	public ModelAndView optimization(@ModelAttribute final Results results) {
 
-		Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
-		Collection<Rule> removedRules = RoisinUtils.getAucOptimizationRemovedRules(rules);
+		final Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
+		final Collection<Rule> removedRules = RoisinUtils.getAucOptimizationRemovedRules(rules);
 		rules.removeAll(removedRules);
 
-		XYLineChart chart = RoisinUtils.getAucChart(rules, RoisinUtils.calculateRulesAuc(rules));
+		final XYLineChart chart = RoisinUtils.getAucChart(rules,
+				RoisinUtils.calculateRulesAuc(rules));
 
-		ModelAndView res = new ModelAndView("results/optimization");
+		final ModelAndView res = new ModelAndView("results/optimization");
 		res.addObject(RULES_LOWER_CASE, rules);
 		res.addObject(REMOVED_RULES, removedRules);
 		res.addObject(CHART_LOWER_CASE, chart.toURLString());
@@ -89,13 +96,13 @@ public class ResultsController {
 	}
 
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
-	public ModelAndView details(@RequestParam int resultsId) {
+	public ModelAndView details(@RequestParam final int resultsId) {
 
-		Collection<Rule> rules = ruleService.findRulesByResultsId(resultsId);
-		XYLineChart chart = RoisinUtils.getAucChart(rules, resultsId);
-		Results results = resultsService.findOne(resultsId);
+		final Collection<Rule> rules = ruleService.findRulesByResultsId(resultsId);
+		final XYLineChart chart = RoisinUtils.getAucChart(rules, resultsId);
+		final Results results = resultsService.findOne(resultsId);
 
-		ModelAndView res = new ModelAndView("results/view");
+		final ModelAndView res = new ModelAndView("results/view");
 		res.addObject(RULES_LOWER_CASE, rules);
 		res.addObject(REQUEST_URI, "results/view?=resultsId=" + resultsId);
 		res.addObject(CHART_LOWER_CASE, chart.toURLString());

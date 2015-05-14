@@ -36,51 +36,56 @@ import exception.RoisinException;
 
 public class Runner {
 
-	private static final Logger logger = LoggerFactory.getLogger(Runner.class);
+	/**
+	 * Class log
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(Runner.class);
 
-	public static boolean started = false;
+	/**
+	 * Rapidminer instance started variable
+	 */
+	public static boolean started;
 
-	public static ExampleSet getExampleSetFromFile(String fileFormat, String path) {
+	public static ExampleSet getExampleSetFromFile(final String fileFormat, final String path) {
 		checkStarted();
 
-		Process process = com.roisin.core.processes.Preprocessing.getExampleSetFromFileProcess(
-				fileFormat, path);
+		final Process process = Preprocessing.getExampleSetFromFileProcess(fileFormat, path);
 		IOContainer container;
 		ExampleSet res = null;
 		try {
 			container = process.run();
 			res = (ExampleSet) container.asList().get(0);
-			return res;
 		} catch (OperatorException e) {
-			logger.error("No ha sido posible extraer información del fichero");
+			LOG.error("No ha sido posible extraer información del fichero");
 		}
 		return res;
 	}
 
-	public static ExampleSet getPreprocessedExampleSetFromFile(String inputPath,
-			SortedSet<Integer> rowFilter, String filterCondition, List<String> attributeSelection) {
+	public static ExampleSet getPreprocessedExampleSetFromFile(final String inputPath,
+			final SortedSet<Integer> rowFilter, final String filterCondition,
+			final List<String> attributeSelection) {
 		checkStarted();
 
 		ExampleSet res = null;
 		Process process;
 		try {
-			process = com.roisin.core.processes.Preprocessing.getPreprocessedExampleSet(inputPath,
-					rowFilter, filterCondition, attributeSelection);
+			process = Preprocessing.getPreprocessedExampleSet(inputPath, rowFilter,
+					filterCondition, attributeSelection);
 			IOContainer container;
 			container = process.run();
 			res = (ExampleSet) container.asList().get(0);
-			return res;
 		} catch (OperatorException e) {
-			logger.error("No ha sido posible preprocesar la información del fichero", e);
+			LOG.error("No ha sido posible preprocesar la información del fichero", e);
 		} catch (RoisinException e1) {
-			logger.error("No ha sido posible preprocesar la información del fichero", e1);
+			LOG.error("No ha sido posible preprocesar la información del fichero", e1);
 		}
 		return res;
 	}
 
-	public static RoisinResults getRipperResults(RipperSettings form, String filePath,
-			String label, String filterCondition, List<String> attributeSelection,
-			SortedSet<Integer> deletedRows, boolean discretizeLabel) {
+	public static RoisinResults getRipperResults(final RipperSettings form, final String filePath,
+			final String label, final String filterCondition,
+			final List<String> attributeSelection, final SortedSet<Integer> deletedRows,
+			final boolean discretizeLabel) {
 		checkStarted();
 
 		RipperResults results = null;
@@ -89,19 +94,19 @@ public class Runner {
 					filterCondition, attributeSelection, form.getRipperCriterion(), form
 							.getSampleRatio().toString(), form.getPureness().toString(), form
 							.getMinimalPruneBenefit().toString(), discretizeLabel);
-			IOContainer container = process.run();
-			RuleModel ruleModel = (RuleModel) container.asList().get(0);
-			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
+			final IOContainer container = process.run();
+			final RuleModel ruleModel = (RuleModel) container.asList().get(0);
+			final ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
 			results = new RipperResults(ruleModel, exampleSet);
 		} catch (OperatorException e) {
-			logger.error("No ha sido posible ejecutar el proceso con Ripper");
+			LOG.error("No ha sido posible ejecutar el proceso con Ripper");
 		}
 		return results;
 	}
 
-	public static RoisinResults getSubgroupResults(SubgroupSettings form, String filePath,
-			String label, String filterCondition, List<String> attributeSelection,
-			SortedSet<Integer> deletedRows) {
+	public static RoisinResults getSubgroupResults(final SubgroupSettings form,
+			final String filePath, final String label, final String filterCondition,
+			final List<String> attributeSelection, final SortedSet<Integer> deletedRows) {
 		checkStarted();
 
 		SubgroupResults results = null;
@@ -109,21 +114,22 @@ public class Runner {
 			Process process = GenericProcesses.getSubgroupDiscoveryDiscretization(filePath, label,
 					deletedRows, filterCondition, attributeSelection, form.getMode(), form
 							.getUtilityFunction(), form.getMinUtility().toString(), form
-							.getkBestRules().toString(), form.getRuleGeneration().toString(), form
+							.getKBestRules().toString(), form.getRuleGeneration().toString(), form
 							.getMaxDepth().toString(), form.getMinCoverage().toString());
-			IOContainer container = process.run();
-			RuleSet ruleModel = (RuleSet) container.asList().get(0);
-			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
+			final IOContainer container = process.run();
+			final RuleSet ruleModel = (RuleSet) container.asList().get(0);
+			final ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
 			results = new SubgroupResults(ruleModel, exampleSet);
 		} catch (OperatorException e) {
-			logger.error("No ha sido posible ejecutar el proceso con Subgroup Discovery");
+			LOG.error("No ha sido posible ejecutar el proceso con Subgroup Discovery");
 		}
 		return results;
 	}
 
-	public static RoisinResults getTreeToRulesResults(TreeToRulesSettings form, String filePath,
-			String label, String filterCondition, List<String> attributeSelection,
-			SortedSet<Integer> deletedRows, boolean discretizeLabel) {
+	public static RoisinResults getTreeToRulesResults(final TreeToRulesSettings form,
+			final String filePath, final String label, final String filterCondition,
+			final List<String> attributeSelection, final SortedSet<Integer> deletedRows,
+			final boolean discretizeLabel) {
 		checkStarted();
 
 		RipperResults results = null;
@@ -135,12 +141,12 @@ public class Runner {
 							.toString(), form.getConfidence().toString(), form
 							.getNumberOfPrepruningAlternatives().toString(), form.getNoPrepruning()
 							.toString(), form.getNoPruning().toString(), discretizeLabel);
-			IOContainer container = process.run();
-			RuleModel ruleModel = (RuleModel) container.asList().get(0);
-			ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
+			final IOContainer container = process.run();
+			final RuleModel ruleModel = (RuleModel) container.asList().get(0);
+			final ExampleSet exampleSet = (ExampleSet) container.asList().get(1);
 			results = new RipperResults(ruleModel, exampleSet);
 		} catch (OperatorException e) {
-			logger.error("No ha sido posible ejecutar el proceso con Decision Tree to rules");
+			LOG.error("No ha sido posible ejecutar el proceso con Decision Tree to rules");
 		}
 		return results;
 	}
@@ -159,18 +165,19 @@ public class Runner {
 	 * @param outputPath
 	 * @return
 	 */
-	public static ByteArrayOutputStream exportData(String inputPath, SortedSet<Integer> rowFilter,
-			String filterCondition, List<String> attributeSelection, String outputPath) {
+	public static ByteArrayOutputStream exportData(final String inputPath,
+			final SortedSet<Integer> rowFilter, final String filterCondition,
+			final List<String> attributeSelection, final String outputPath) {
 
 		checkStarted();
 
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
 			Process process = Preprocessing.getPreprocessedDataFile(inputPath, rowFilter,
 					filterCondition, attributeSelection, outputPath);
 			process.run();
-			FileInputStream fis = new FileInputStream(new File(outputPath));
-			byte[] buf = new byte[1024];
+			final FileInputStream fis = new FileInputStream(new File(outputPath));
+			final byte[] buf = new byte[1024];
 			for (int readNum; (readNum = fis.read(buf)) != -1;) {
 				bos.write(buf, 0, readNum); // no doubt here is 0
 				// Writes len bytes from the specified byte array starting at
@@ -179,31 +186,30 @@ public class Runner {
 			}
 			fis.close();
 		} catch (Exception e) {
-			logger.error("No ha sido posible exportar el fichero", e);
+			LOG.error("No ha sido posible exportar el fichero", e);
 		}
 		return bos;
 	}
 
-	public static ExampleSet getRequestedExamples(String inputPath, String filterCondition) {
+	public static ExampleSet getRequestedExamples(final String inputPath,
+			final String filterCondition) {
 
 		checkStarted();
 
-		Process process = com.roisin.core.processes.Preprocessing.getConditionFilteredData(
-				inputPath, filterCondition);
+		final Process process = Preprocessing.getConditionFilteredData(inputPath, filterCondition);
 		IOContainer container;
 		ExampleSet res = null;
 		try {
 			container = process.run();
 			res = (ExampleSet) container.asList().get(0);
-			return res;
 		} catch (OperatorException e) {
-			logger.error("No ha sido posible extraer información del fichero");
+			LOG.error("No ha sido posible extraer información del fichero");
 		}
 		return res;
 	}
 
-	public static void convertFile(String inputFormat, String outputFormat, String inputPath,
-			String outputPath) {
+	public static void convertFile(final String inputFormat, final String outputFormat,
+			final String inputPath, final String outputPath) {
 
 		checkStarted();
 
@@ -290,13 +296,13 @@ public class Runner {
 		try {
 			process.run();
 		} catch (OperatorException e) {
-			logger.error("No ha sido posible convertir el fichero", e);
+			LOG.error("No ha sido posible convertir el fichero", e);
 		}
 
 	}
 
 	public static void startRapidminer() {
-		logger.info("Iniciando rapidminer");
+		LOG.info("Iniciando rapidminer");
 		RapidMiner.setExecutionMode(ExecutionMode.APPSERVER);
 		RapidMiner.init();
 		started = true;

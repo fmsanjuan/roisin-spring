@@ -13,43 +13,46 @@ import com.roisin.spring.repositories.SelectedAttributeRepository;
 @Transactional
 public class SelectedAttributeService {
 
+	/**
+	 * Selected attribute repository
+	 */
 	@Autowired
-	private SelectedAttributeRepository selectedAttributeRepository;
+	private transient SelectedAttributeRepository saRepository;
 
 	public SelectedAttributeService() {
 		super();
 	}
 
 	public SelectedAttribute create() {
-		SelectedAttribute selectedAttribute = new SelectedAttribute();
+		final SelectedAttribute selectedAttribute = new SelectedAttribute();
 
 		return selectedAttribute;
 	}
 
-	public SelectedAttribute findOne(int selectedAttributeId) {
-		return selectedAttributeRepository.findOne(selectedAttributeId);
+	public SelectedAttribute findOne(final int saId) {
+		return saRepository.findOne(saId);
 	}
 
-	public SelectedAttribute save(SelectedAttribute selectedAttribute) {
-		return selectedAttributeRepository.save(selectedAttribute);
+	public SelectedAttribute save(final SelectedAttribute selectedAttribute) {
+		return saRepository.save(selectedAttribute);
 	}
 
-	public void delete(SelectedAttribute selectedAttribute) {
-		selectedAttributeRepository.delete(selectedAttribute);
+	public void delete(final SelectedAttribute selectedAttribute) {
+		saRepository.delete(selectedAttribute);
 	}
 
 	public Collection<SelectedAttribute> findAll() {
-		return selectedAttributeRepository.findAll();
+		return saRepository.findAll();
 	}
 
 	// Extra methods
 
-	public Collection<SelectedAttribute> findLabel(int formId, String label) {
-		return selectedAttributeRepository.findLabel(formId, label);
+	public Collection<SelectedAttribute> findLabel(final int formId, final String label) {
+		return saRepository.findLabel(formId, label);
 	}
 
-	public Collection<SelectedAttribute> findSelectedAttributesByFormId(int formId) {
-		return selectedAttributeRepository.findSelectedAttributesByFormId(formId);
+	public Collection<SelectedAttribute> findSelectedAttributesByFormId(final int formId) {
+		return saRepository.findSelectedAttributesByFormId(formId);
 	}
 
 }

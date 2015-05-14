@@ -28,34 +28,45 @@ import com.roisin.spring.validator.SignupFormValidator;
 @RequestMapping("/signup")
 public class SignupController {
 
+	/**
+	 * User service
+	 */
 	@Autowired
-	private UserService userService;
+	private transient UserService userService;
 
+	/**
+	 * Sign up form validator
+	 */
 	@Autowired
-	private SignupFormValidator formValidator;
+	private transient SignupFormValidator formValidator;
 
+	/**
+	 * Mail service
+	 */
 	@Autowired
-	private MailService mailService;
+	private transient MailService mailService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView newUser() {
-		SignupForm form = userService.constructNew();
-		ModelAndView res = new ModelAndView("signup/new");
+		final SignupForm form = userService.constructNew();
+		final ModelAndView res = new ModelAndView("signup/new");
 		res.addObject(FORM_LOWER_CASE, form);
 		res.addObject(ERROR_LOWER_CASE, false);
 		return res;
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public ModelAndView save(@ModelAttribute("form") SignupForm form, BindingResult result) {
+	public ModelAndView save(@ModelAttribute("form") final SignupForm form,
+			final BindingResult result) {
 
 		formValidator.validate(form, result);
 
+		ModelAndView res;
+
 		if (result.hasErrors()) {
-			ModelAndView res = new ModelAndView("signup/new");
+			res = new ModelAndView("signup/new");
 			res.addObject(FORM_LOWER_CASE, form);
 			res.addObject(ERROR_LOWER_CASE, true);
-			return res;
 		} else {
 			try {
 				User user = userService.reconstruct(form);
@@ -63,76 +74,74 @@ public class SignupController {
 
 				mailService.sendActivationEmail(user);
 
-				ModelAndView res = new ModelAndView("welcome/home");
+				res = new ModelAndView("welcome/home");
 				res.addObject(CREDENTIALS, new Credentials());
 				res.addObject(SUCCESS_MESSAGE, user.getEmail());
-				return res;
 			} catch (Throwable oops) {
-				ModelAndView res;
 				if (oops instanceof DataIntegrityViolationException) {
 					res = createEditModelAndViewCustomer(form, "sign.error.duplicated.email");
 				} else {
 					oops.printStackTrace();
 					res = createEditModelAndViewCustomer(form, "sign.error");
 				}
-				return res;
 			}
 		}
+		return res;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView editUser() {
-		EditProfileForm form = userService.constructEditForm();
-		ModelAndView res = new ModelAndView("profile/edit");
+		final EditProfileForm form = userService.constructEditForm();
+		final ModelAndView res = new ModelAndView("profile/edit");
 		res.addObject(FORM_LOWER_CASE, form);
 		res.addObject(ERROR_LOWER_CASE, false);
 		return res;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public ModelAndView edit(@ModelAttribute(FORM_LOWER_CASE) EditProfileForm form,
-			BindingResult result) {
+	public ModelAndView edit(@ModelAttribute(FORM_LOWER_CASE) final EditProfileForm form,
+			final BindingResult result) {
 
 		formValidator.validateEditForm(form, result);
 
+		ModelAndView res;
+
 		if (result.hasErrors()) {
-			ModelAndView res = new ModelAndView("profile/edit");
+			res = new ModelAndView("profile/edit");
 			res.addObject(FORM_LOWER_CASE, form);
 			res.addObject(ERROR_LOWER_CASE, true);
-			return res;
 		} else {
 			try {
-				User user = userService.reconstruct(form);
+				final User user = userService.reconstruct(form);
 				userService.save(user, StringUtils.isNotBlank(form.getNewPassword()));
 
-				ModelAndView res = new ModelAndView("profile/edit");
+				res = new ModelAndView("profile/edit");
 				res.addObject(SUCCESS_MESSAGE, user.getEmail());
-				return res;
 			} catch (Throwable oops) {
-				ModelAndView res;
 				if (oops instanceof DataIntegrityViolationException) {
 					res = createEditProfileModelAndViewCustomer(form, "sign.error.duplicated.email");
 				} else {
 					res = createEditProfileModelAndViewCustomer(form, "sign.error");
 					oops.printStackTrace();
 				}
-				return res;
 			}
 		}
+		return res;
 	}
 
-	public ModelAndView createEditModelAndViewCustomer(SignupForm form, String message) {
+	public ModelAndView createEditModelAndViewCustomer(final SignupForm form, final String message) {
 
-		ModelAndView res = new ModelAndView("signup/new");
+		final ModelAndView res = new ModelAndView("signup/new");
 		res.addObject(FORM_LOWER_CASE, form);
 		res.addObject(ERROR_LOWER_CASE, true);
 		res.addObject(ERROR_MESSAGE, message);
 		return res;
 	}
 
-	public ModelAndView createEditProfileModelAndViewCustomer(EditProfileForm form, String message) {
+	public ModelAndView createEditProfileModelAndViewCustomer(final EditProfileForm form,
+			final String message) {
 
-		ModelAndView res = new ModelAndView("profile/edit");
+		final ModelAndView res = new ModelAndView("profile/edit");
 		res.addObject(FORM_LOWER_CASE, form);
 		res.addObject(ERROR_LOWER_CASE, true);
 		res.addObject(ERROR_MESSAGE, message);

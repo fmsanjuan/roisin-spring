@@ -13,18 +13,21 @@ import com.roisin.spring.services.FileService;
 @Transactional
 public class StringToFileConverter implements Converter<String, File> {
 
+	/**
+	 * File service
+	 */
 	@Autowired
-	private FileService fileService;
+	private transient FileService fileService;
 
 	@Override
-	public File convert(String source) {
+	public File convert(final String source) {
 		File res;
 		int id;
 
 		try {
-			if (StringUtils.isEmpty(source))
+			if (StringUtils.isEmpty(source)) {
 				res = null;
-			else {
+			} else {
 				id = Integer.valueOf(source);
 				res = fileService.findOne(id);
 			}

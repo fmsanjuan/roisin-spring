@@ -13,18 +13,21 @@ import com.roisin.spring.services.ResultsService;
 @Transactional
 public class StringToResultsConverter implements Converter<String, Results> {
 
+	/**
+	 * Results service
+	 */
 	@Autowired
-	private ResultsService resultsService;
+	private transient ResultsService resultsService;
 
 	@Override
-	public Results convert(String source) {
+	public Results convert(final String source) {
 		Results res;
 		int id;
 
 		try {
-			if (StringUtils.isEmpty(source))
+			if (StringUtils.isEmpty(source)) {
 				res = null;
-			else {
+			} else {
 				id = Integer.valueOf(source);
 				res = resultsService.findOne(id);
 			}

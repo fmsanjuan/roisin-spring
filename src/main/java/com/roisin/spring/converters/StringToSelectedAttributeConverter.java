@@ -13,20 +13,23 @@ import com.roisin.spring.repositories.SelectedAttributeRepository;
 @Transactional
 public class StringToSelectedAttributeConverter implements Converter<String, SelectedAttribute> {
 
+	/**
+	 * Selected attribute repository
+	 */
 	@Autowired
-	private SelectedAttributeRepository selectedAttributeRepository;
+	private transient SelectedAttributeRepository saRepository;
 
 	@Override
-	public SelectedAttribute convert(String source) {
+	public SelectedAttribute convert(final String source) {
 		SelectedAttribute res;
 		int id;
 
 		try {
-			if (StringUtils.isEmpty(source))
+			if (StringUtils.isEmpty(source)) {
 				res = null;
-			else {
+			} else {
 				id = Integer.valueOf(source);
-				res = selectedAttributeRepository.findOne(id);
+				res = saRepository.findOne(id);
 			}
 		} catch (Throwable oops) {
 			throw new IllegalArgumentException(oops);

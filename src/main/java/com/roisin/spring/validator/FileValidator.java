@@ -6,6 +6,7 @@ import static com.roisin.spring.utils.Constants.FORMAT_CSV;
 import static com.roisin.spring.utils.Constants.FORMAT_XLS;
 import static com.roisin.spring.utils.Constants.FORMAT_XLSX;
 import static com.roisin.spring.utils.Constants.FORMAT_XRFF;
+import static com.roisin.spring.utils.ModelViewConstants.FILE2;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
@@ -16,17 +17,17 @@ import com.roisin.spring.model.UploadedFile;
 public class FileValidator implements Validator {
 
 	@Override
-	public boolean supports(Class<?> arg0) {
+	public boolean supports(final Class<?> arg0) {
 		return false;
 	}
 
 	@Override
-	public void validate(Object uploadedFile, Errors errors) {
+	public void validate(final Object uploadedFile, final Errors errors) {
 
-		UploadedFile file = (UploadedFile) uploadedFile;
+		final UploadedFile file = (UploadedFile) uploadedFile;
 
 		if (file.getFile().getSize() == 0) {
-			errors.rejectValue("file", "file.error.select.file", "file.error.select.file");
+			errors.rejectValue(FILE2, "file.error.select.file", "file.error.select.file");
 		}
 
 		if (file.getFile().getSize() > 0) {
@@ -39,7 +40,7 @@ public class FileValidator implements Validator {
 							&& !fileFormat.equalsIgnoreCase(FORMAT_ARFF)
 							&& !fileFormat.equalsIgnoreCase(FORMAT_CSV) && !fileFormat
 								.equalsIgnoreCase(FORMAT_XRFF))) {
-				errors.rejectValue("file", "file.error.format", "file.error.format");
+				errors.rejectValue(FILE2, "file.error.format", "file.error.format");
 			}
 		}
 

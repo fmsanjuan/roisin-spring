@@ -9,7 +9,14 @@ import com.roisin.spring.model.Administrator;
 @Repository
 public interface AdministratorRepository extends JpaRepository<Administrator, Integer> {
 
+	/**
+	 * Returns the administrator given a user account identifier
+	 * 
+	 * @param id
+	 *            user account identifier
+	 * @return administrator
+	 */
 	@Query("select a from Administrator a where a.userAccount.id= ?1")
-	Administrator findByUserAccountId(int id);
+	Administrator findByUserAccountId(int identifier);
 
 }

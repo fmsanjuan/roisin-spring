@@ -1,9 +1,21 @@
 package com.roisin.spring.utils;
 
+/**
+ * This class represents a line in the cartesian coordinate system
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 public class Line {
 
+	/**
+	 * Slope
+	 */
 	private double m;
 
+	/**
+	 * Y axis cut
+	 */
 	private double k;
 
 	public Line() {
@@ -11,7 +23,7 @@ public class Line {
 		k = 0.0;
 	}
 
-	public Line(double m, double k) {
+	public Line(final double m, final double k) {
 		this.m = m;
 		this.k = k;
 	}
@@ -20,7 +32,7 @@ public class Line {
 		return m;
 	}
 
-	public void setM(double m) {
+	public void setM(final double m) {
 		this.m = m;
 	}
 
@@ -28,7 +40,7 @@ public class Line {
 		return k;
 	}
 
-	public void setK(double k) {
+	public void setK(final double k) {
 		this.k = k;
 	}
 

@@ -11,13 +11,14 @@ import com.roisin.spring.model.SelectedAttribute;
 public class SelectedAttributeToStringConverter implements Converter<SelectedAttribute, String> {
 
 	@Override
-	public String convert(SelectedAttribute source) {
+	public String convert(final SelectedAttribute source) {
 		String result;
 
-		if (source == null)
+		if (source == null) {
 			result = null;
-		else
+		} else {
 			result = String.valueOf(source.getId());
+		}
 
 		return result;
 	}

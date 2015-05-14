@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
@@ -28,18 +29,19 @@ public class RoisinAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
 	private static final String SECURITY_CREDENTIALS = "/security/credentials";
 
-	protected final Log logger = LogFactory.getLog(getClass());
+	private static final Log logger = LogFactory.getLog(RoisinAuthenticationFailureHandler.class);
 
 	public RoisinAuthenticationFailureHandler() {
 		super();
 	}
 
-	public RoisinAuthenticationFailureHandler(String defaultFailureUrl) {
+	public RoisinAuthenticationFailureHandler(final String defaultFailureUrl) {
 		super(defaultFailureUrl);
 	}
 
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException exception) throws IOException, ServletException {
+	public void onAuthenticationFailure(final HttpServletRequest request,
+			final HttpServletResponse response, final AuthenticationException exception)
+			throws IOException, ServletException {
 
 		saveException(request, exception);
 
@@ -62,15 +64,24 @@ public class RoisinAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 				getRedirectStrategy().sendRedirect(request, response, SECURITY_ACTIVATION);
 			}
 		} else if (exception instanceof BadCredentialsException) {
-		if (isUseForward()) {
-			logger.debug("Forwarding to " + SECURITY_CREDENTIALS);
+			if (isUseForward()) {
+				logger.debug("Forwarding to " + SECURITY_CREDENTIALS);
 
-			request.getRequestDispatcher(SECURITY_CREDENTIALS).forward(request, response);
-		} else {
-			logger.debug("Redirecting to " + SECURITY_CREDENTIALS);
-			getRedirectStrategy().sendRedirect(request, response, SECURITY_CREDENTIALS);
+				request.getRequestDispatcher(SECURITY_CREDENTIALS).forward(request, response);
+			} else {
+				logger.debug("Redirecting to " + SECURITY_CREDENTIALS);
+				getRedirectStrategy().sendRedirect(request, response, SECURITY_CREDENTIALS);
+			}
+		} else if (exception instanceof AuthenticationServiceException) {
+			if (isUseForward()) {
+				logger.debug("Forwarding to " + SECURITY_CREDENTIALS);
+
+				request.getRequestDispatcher(SECURITY_CREDENTIALS).forward(request, response);
+			} else {
+				logger.debug("Redirecting to " + SECURITY_CREDENTIALS);
+				getRedirectStrategy().sendRedirect(request, response, SECURITY_CREDENTIALS);
+			}
 		}
-	}
 
 	}
 

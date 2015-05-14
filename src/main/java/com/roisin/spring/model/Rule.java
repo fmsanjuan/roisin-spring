@@ -8,32 +8,74 @@ import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * Rule entity
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class Rule extends DomainEntity {
 
+	/**
+	 * Premise
+	 */
 	private String premise;
 
+	/**
+	 * Conclusion
+	 */
 	private String conclusion;
 
+	/**
+	 * Precision
+	 */
 	private Double rulePrecision;
 
+	/**
+	 * Support
+	 */
 	private Double support;
 
+	/**
+	 * True positive rate
+	 */
 	private Double tpr;
 
+	/**
+	 * False positive rate
+	 */
 	private Double fpr;
 
+	/**
+	 * True positives
+	 */
 	private Integer tp;
 
+	/**
+	 * True negatives
+	 */
 	private Integer tn;
 
+	/**
+	 * False positives
+	 */
 	private Integer fp;
 
+	/**
+	 * False negatives
+	 */
 	private Integer fn;
 
+	/**
+	 * Area under the curve
+	 */
 	private Double auc;
 
+	/**
+	 * Results
+	 */
 	private Results results;
 
 	public Rule() {
@@ -45,7 +87,7 @@ public class Rule extends DomainEntity {
 		return premise;
 	}
 
-	public void setPremise(String premise) {
+	public void setPremise(final String premise) {
 		this.premise = premise;
 	}
 
@@ -54,7 +96,7 @@ public class Rule extends DomainEntity {
 		return conclusion;
 	}
 
-	public void setConclusion(String conclusion) {
+	public void setConclusion(final String conclusion) {
 		this.conclusion = conclusion;
 	}
 
@@ -62,7 +104,7 @@ public class Rule extends DomainEntity {
 		return rulePrecision;
 	}
 
-	public void setRulePrecision(Double rulePrecision) {
+	public void setRulePrecision(final Double rulePrecision) {
 		this.rulePrecision = rulePrecision;
 	}
 
@@ -70,7 +112,7 @@ public class Rule extends DomainEntity {
 		return support;
 	}
 
-	public void setSupport(Double support) {
+	public void setSupport(final Double support) {
 		this.support = support;
 	}
 
@@ -78,7 +120,7 @@ public class Rule extends DomainEntity {
 		return tpr;
 	}
 
-	public void setTpr(Double tpr) {
+	public void setTpr(final Double tpr) {
 		this.tpr = tpr;
 	}
 
@@ -86,7 +128,7 @@ public class Rule extends DomainEntity {
 		return fpr;
 	}
 
-	public void setFpr(Double fpr) {
+	public void setFpr(final Double fpr) {
 		this.fpr = fpr;
 	}
 
@@ -94,7 +136,7 @@ public class Rule extends DomainEntity {
 		return tp;
 	}
 
-	public void setTp(Integer tp) {
+	public void setTp(final Integer tp) {
 		this.tp = tp;
 	}
 
@@ -102,7 +144,7 @@ public class Rule extends DomainEntity {
 		return tn;
 	}
 
-	public void setTn(Integer tn) {
+	public void setTn(final Integer tn) {
 		this.tn = tn;
 	}
 
@@ -110,7 +152,7 @@ public class Rule extends DomainEntity {
 		return fp;
 	}
 
-	public void setFp(Integer fp) {
+	public void setFp(final Integer fp) {
 		this.fp = fp;
 	}
 
@@ -118,7 +160,7 @@ public class Rule extends DomainEntity {
 		return fn;
 	}
 
-	public void setFn(Integer fn) {
+	public void setFn(final Integer fn) {
 		this.fn = fn;
 	}
 
@@ -126,7 +168,7 @@ public class Rule extends DomainEntity {
 		return auc;
 	}
 
-	public void setAuc(Double auc) {
+	public void setAuc(final Double auc) {
 		this.auc = auc;
 	}
 
@@ -136,7 +178,7 @@ public class Rule extends DomainEntity {
 		return results;
 	}
 
-	public void setResults(Results results) {
+	public void setResults(final Results results) {
 		this.results = results;
 	}
 

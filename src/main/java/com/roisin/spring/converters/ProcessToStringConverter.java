@@ -11,13 +11,14 @@ import com.roisin.spring.model.Process;
 public class ProcessToStringConverter implements Converter<Process, String> {
 
 	@Override
-	public String convert(Process source) {
+	public String convert(final Process source) {
 		String result;
 
-		if (source == null)
+		if (source == null) {
 			result = null;
-		else
+		} else {
 			result = String.valueOf(source.getId());
+		}
 
 		return result;
 	}

@@ -5,6 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import com.roisin.spring.model.RipperSettings;
 
+/**
+ * Ripper settings repository
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Repository
 public interface RipperSettingsRepository extends JpaRepository<RipperSettings, Integer> {
 

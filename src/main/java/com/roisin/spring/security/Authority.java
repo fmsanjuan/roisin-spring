@@ -25,22 +25,35 @@ import org.springframework.security.core.GrantedAuthority;
 @Access(AccessType.PROPERTY)
 public class Authority implements GrantedAuthority {
 
-	// Constructors -----------------------------------------------------------
-
-	private static final long serialVersionUID = 1L;
-
-	public Authority() {
-		super();
-	}
+	/**
+	 * Serial uid
+	 */
+	private static final long serialVersionUID = -9184318510231814853L;
 
 	// Values -----------------------------------------------------------------
 
+	/**
+	 * Admin authority
+	 */
 	public static final String ADMIN = "ADMIN";
+
+	/**
+	 * User authority
+	 */
 	public static final String USER = "USER";
 
 	// Attributes -------------------------------------------------------------
 
+	/**
+	 * Authority
+	 */
 	private String authority;
+
+	// Constructors -----------------------------------------------------------
+
+	public Authority() {
+		super();
+	}
 
 	@NotBlank
 	@Pattern(regexp = "^" + ADMIN + "|" + USER + "$")
@@ -49,7 +62,7 @@ public class Authority implements GrantedAuthority {
 		return authority;
 	}
 
-	public void setAuthority(String authority) {
+	public void setAuthority(final String authority) {
 		this.authority = authority;
 	}
 
@@ -78,18 +91,18 @@ public class Authority implements GrantedAuthority {
 	}
 
 	@Override
-	public boolean equals(Object other) {
+	public boolean equals(final Object other) {
 		boolean result;
 
-		if (this == other)
+		if (this == other) {
 			result = true;
-		else if (other == null)
+		} else if (other == null) {
 			result = false;
-		else if (!this.getClass().isInstance(other))
+		} else if (!this.getClass().isInstance(other)) {
 			result = false;
-		else
+		} else {
 			result = (this.getAuthority().equals(((Authority) other).getAuthority()));
-
+		}
 		return result;
 	}
 

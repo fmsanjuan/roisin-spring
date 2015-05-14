@@ -1,5 +1,7 @@
 package com.roisin.spring.security;
 
+import static com.roisin.spring.utils.Constants.SLASH_SYMBOL;
+
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,41 +18,61 @@ import com.roisin.spring.model.User;
 @Transactional
 public class MailService {
 
-	private static final String SLASH = "/";
-
+	/**
+	 * Http protocol
+	 */
 	private static final String HTTP = "http://";
 
+	/**
+	 * Security activate path
+	 */
 	private static final String SECURITY_ACTIVATE = "/security/activate/";
 
+	/**
+	 * Security password recovery path
+	 */
 	private static final String SECURITY_RECOVER = "/security/recover/";
 
+	/**
+	 * Mail sender
+	 */
 	@Autowired
 	private JavaMailSender mailSender;
 
+	/**
+	 * Activation message from bean
+	 */
 	@Autowired
 	@Qualifier("activationMessage")
-	private SimpleMailMessage activationMessage;
+	private transient SimpleMailMessage activationMessage;
 
+	/**
+	 * Password recovery message
+	 */
 	@Autowired
 	@Qualifier("passwordRecoverMessage")
-	private SimpleMailMessage passwordRecoverMessage;
+	private transient SimpleMailMessage passRecoverMsg;
 
+	/**
+	 * Login service
+	 */
 	@Autowired
-	private LoginService loginService;
+	private transient LoginService loginService;
 
+	/**
+	 * Domain variable
+	 */
 	@Value("${domain}")
 	private String domain;
 
-	public void sendActivationEmail(User user) {
+	public void sendActivationEmail(final User user) {
 		// A copy of the message established in mail.xml is modified and sent.
-		SimpleMailMessage message = new SimpleMailMessage(activationMessage);
-		String activationKey = loginService.generateUserAccountActivationKey(user.getUserAccount());
-		StringBuilder activationUrl = new StringBuilder();
-		activationUrl.append(HTTP);
-		activationUrl.append(domain);
-		activationUrl.append(SECURITY_ACTIVATE);
-		activationUrl.append(user.getUserAccount().getId());
-		activationUrl.append(SLASH);
+		final SimpleMailMessage message = new SimpleMailMessage(activationMessage);
+		final String activationKey = loginService.generateUserAccountActivationKey(user
+				.getUserAccount());
+		final StringBuilder activationUrl = new StringBuilder();
+		activationUrl.append(HTTP).append(domain).append(SECURITY_ACTIVATE)
+				.append(user.getUserAccount().getId()).append(SLASH_SYMBOL);
 		activationUrl.append(activationKey);
 
 		message.setSentDate(new Date());
@@ -59,20 +81,17 @@ public class MailService {
 		mailSender.send(message);
 	}
 
-	public void sendPasswordRecoverEmail(UserAccount userAccount) {
+	public void sendPasswordRecoverEmail(final UserAccount userAccount) {
 		// A copy of the message established in mail.xml is modified and sent.
-		SimpleMailMessage message = new SimpleMailMessage(passwordRecoverMessage);
-		String passwordRecoveryKey = loginService.generatePasswordRecoveryKey(userAccount);
-		StringBuilder sb = new StringBuilder();
-		sb.append(HTTP);
-		sb.append(domain);
-		sb.append(SECURITY_RECOVER);
-		sb.append(userAccount.getId());
-		sb.append(SLASH);
-		sb.append(passwordRecoveryKey);
+		final SimpleMailMessage message = new SimpleMailMessage(passRecoverMsg);
+		final String passRecoveryKey = loginService.generatePasswordRecoveryKey(userAccount);
+		final StringBuilder strb = new StringBuilder();
+		strb.append(HTTP).append(domain).append(SECURITY_RECOVER).append(userAccount.getId())
+				.append(SLASH_SYMBOL);
+		strb.append(passRecoveryKey);
 
 		message.setSentDate(new Date());
-		message.setText(String.format(message.getText(), sb.toString()));
+		message.setText(String.format(message.getText(), strb.toString()));
 		message.setTo(userAccount.getUsername());
 		mailSender.send(message);
 	}
@@ -81,7 +100,7 @@ public class MailService {
 		return mailSender;
 	}
 
-	public void setMailSender(JavaMailSender mailSender) {
+	public void setMailSender(final JavaMailSender mailSender) {
 		this.mailSender = mailSender;
 	}
 
@@ -89,7 +108,7 @@ public class MailService {
 		return domain;
 	}
 
-	public void setDomain(String domain) {
+	public void setDomain(final String domain) {
 		this.domain = domain;
 	}
 }

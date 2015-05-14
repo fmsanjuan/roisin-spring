@@ -36,14 +36,11 @@ import com.roisin.spring.model.RipperSettings;
 import com.roisin.spring.model.Rule;
 import com.roisin.spring.model.SubgroupSettings;
 import com.roisin.spring.model.TreeToRulesSettings;
-import com.roisin.spring.services.DeletedRowService;
-import com.roisin.spring.services.FileService;
 import com.roisin.spring.services.PreprocessedDataService;
 import com.roisin.spring.services.ProcessService;
 import com.roisin.spring.services.ResultsService;
 import com.roisin.spring.services.RipperSettingsService;
 import com.roisin.spring.services.RuleService;
-import com.roisin.spring.services.SelectedAttributeService;
 import com.roisin.spring.services.SubgroupSettingsService;
 import com.roisin.spring.services.TreeToRulesSettingsService;
 import com.roisin.spring.utils.RoisinUtils;
@@ -55,132 +52,151 @@ import com.roisin.spring.validator.TreeSettingsValidator;
 @RequestMapping("/process")
 public class ProcessController {
 
+	/**
+	 * Process service
+	 */
 	@Autowired
-	private ProcessService processService;
+	private transient ProcessService processService;
 
+	/**
+	 * Results service
+	 */
 	@Autowired
-	private ResultsService resultsService;
+	private transient ResultsService resultsService;
 
+	/**
+	 * Ripper settings service
+	 */
 	@Autowired
-	private FileService fileService;
+	private transient RipperSettingsService ripperConfService;
 
+	/**
+	 * Subgroup settings service
+	 */
 	@Autowired
-	private SelectedAttributeService selectedAttributeService;
+	private transient SubgroupSettingsService subgroupConfService;
 
+	/**
+	 * Tree to rules settings service
+	 */
 	@Autowired
-	private DeletedRowService deletedRowService;
+	private transient TreeToRulesSettingsService treeConfService;
 
+	/**
+	 * Preprocessed data service
+	 */
 	@Autowired
-	private RipperSettingsService ripperSettingsService;
+	private transient PreprocessedDataService preproDataService;
 
+	/**
+	 * Rule service
+	 */
 	@Autowired
-	private SubgroupSettingsService subgroupSettingsService;
+	private transient RuleService ruleService;
 
+	/**
+	 * Ripper settings validator
+	 */
 	@Autowired
-	private TreeToRulesSettingsService treeToRulesSettingsService;
+	private transient RipperSettingsValidator ripperValidator;
 
+	/**
+	 * Subgroup settings validator
+	 */
 	@Autowired
-	private PreprocessedDataService preprocessedDataService;
+	private transient SubgroupSettingsValidator subgroupValidator;
 
+	/**
+	 * Tree settings validator
+	 */
 	@Autowired
-	private RuleService ruleService;
-
-	@Autowired
-	private RipperSettingsValidator ripperValidator;
-
-	@Autowired
-	private SubgroupSettingsValidator subgroupValidator;
-
-	@Autowired
-	private TreeSettingsValidator treeValidator;
+	private transient TreeSettingsValidator treeValidator;
 
 	@RequestMapping(value = "/ripper", method = RequestMethod.POST)
-	public ModelAndView ripper(@ModelAttribute RipperSettings ripperSettings, BindingResult result)
-			throws NamingException {
+	public ModelAndView ripper(@ModelAttribute final RipperSettings ripperSettings,
+			final BindingResult result) throws NamingException {
 
 		ripperValidator.validate(ripperSettings, result);
 
+		ModelAndView res;
+
 		if (result.hasErrors()) {
-			SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+			final SubgroupSettings subgroupSettings = subgroupConfService.create();
 			subgroupSettings.setProcess(ripperSettings.getProcess());
-			TreeToRulesSettings treeSettings = treeToRulesSettingsService.create();
+			final TreeToRulesSettings treeSettings = treeConfService.create();
 			treeSettings.setProcess(ripperSettings.getProcess());
 
-			ModelAndView res = new ModelAndView("process/create");
+			res = new ModelAndView("process/create");
 			res.addObject(RIPPER_SETTINGS, ripperSettings);
 			res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
 			res.addObject(TREE_SETTINGS, treeSettings);
 			res.addObject(ERROR_LOWER_CASE, RIPPER);
-
-			return res;
-
 		} else {
-
-			Results results = resultsService.calculateRipperResults(ripperSettings);
-
-			return createResultsModelAndView(results);
+			final Results results = resultsService.calculateRipperResults(ripperSettings);
+			res = createResultsModelAndView(results);
 		}
+
+		return res;
 	}
 
 	@RequestMapping(value = "/subgroup", method = RequestMethod.POST)
-	public ModelAndView subgroup(@ModelAttribute SubgroupSettings subgroupSettings,
-			BindingResult result) throws NamingException {
+	public ModelAndView subgroup(@ModelAttribute final SubgroupSettings subgroupSettings,
+			final BindingResult result) throws NamingException {
 
 		subgroupValidator.validate(subgroupSettings, result);
 
+		ModelAndView res;
+
 		if (result.hasErrors()) {
-			RipperSettings ripperSettings = ripperSettingsService.create();
+			final RipperSettings ripperSettings = ripperConfService.create();
 			ripperSettings.setProcess(subgroupSettings.getProcess());
-			TreeToRulesSettings treeSettings = treeToRulesSettingsService.create();
+			final TreeToRulesSettings treeSettings = treeConfService.create();
 			treeSettings.setProcess(subgroupSettings.getProcess());
 
-			ModelAndView res = new ModelAndView("process/create");
+			res = new ModelAndView("process/create");
 			res.addObject(RIPPER_SETTINGS, ripperSettings);
 			res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
 			res.addObject(TREE_SETTINGS, treeSettings);
 			res.addObject(ERROR_LOWER_CASE, SUBGROUP_DISCOVERY);
-
-			return res;
 		} else {
-
-			Results results = resultsService.calculateSubgroupResults(subgroupSettings);
-
-			return createResultsModelAndView(results);
+			final Results results = resultsService.calculateSubgroupResults(subgroupSettings);
+			res = createResultsModelAndView(results);
 		}
+		return res;
 	}
 
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
-	public ModelAndView tree(@ModelAttribute TreeToRulesSettings treeSettings, BindingResult result)
-			throws NamingException {
+	public ModelAndView tree(@ModelAttribute final TreeToRulesSettings treeSettings,
+			final BindingResult result) throws NamingException {
 
 		treeValidator.validate(treeSettings, result);
 
+		ModelAndView res;
+
 		if (result.hasErrors()) {
-			RipperSettings ripperSettings = ripperSettingsService.create();
+			final RipperSettings ripperSettings = ripperConfService.create();
 			ripperSettings.setProcess(treeSettings.getProcess());
-			SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+			final SubgroupSettings subgroupSettings = subgroupConfService.create();
 			subgroupSettings.setProcess(treeSettings.getProcess());
 
-			ModelAndView res = new ModelAndView("process/create");
+			res = new ModelAndView("process/create");
 			res.addObject(RIPPER_SETTINGS, ripperSettings);
 			res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
 			res.addObject(TREE_SETTINGS, treeSettings);
 			res.addObject(ERROR_LOWER_CASE, TREE_TO_RULES);
-
-			return res;
 		} else {
-
-			Results results = resultsService.calculateTreeToRulesResults(treeSettings);
-
-			return createResultsModelAndView(results);
+			final Results results = resultsService.calculateTreeToRulesResults(treeSettings);
+			res = createResultsModelAndView(results);
 		}
+
+		return res;
 	}
 
-	public ModelAndView createResultsModelAndView(Results results) {
-		Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
-		XYLineChart chart = RoisinUtils.getAucChart(rules, results.getAuc());
+	public ModelAndView createResultsModelAndView(final Results results) {
+		final Collection<Rule> rules = ruleService.findRulesByResultsId(results.getId());
+		final XYLineChart chart = RoisinUtils.getAucChart(rules, results.getAuc());
 
-		ModelAndView res = new ModelAndView("results/view");
+		final ModelAndView res = new ModelAndView("results/view");
 		res.addObject(RULES_LOWER_CASE, rules);
 		res.addObject(REQUEST_URI, "results/view?resultsId=" + results.getId());
 		res.addObject(CHART_LOWER_CASE, chart.toURLString());
@@ -190,12 +206,13 @@ public class ProcessController {
 	}
 
 	@RequestMapping(value = "/details", method = RequestMethod.POST, params = { "ripper" })
-	public ModelAndView ripperDetails(@RequestParam int dataId) {
+	public ModelAndView ripperDetails(@RequestParam final int dataId) {
 
-		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId, RIPPER);
-		PreprocessedData data = preprocessedDataService.findOne(dataId);
+		final Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId,
+				RIPPER);
+		final PreprocessedData data = preproDataService.findOne(dataId);
 
-		ModelAndView res = new ModelAndView("details/ripper");
+		final ModelAndView res = new ModelAndView("details/ripper");
 		res.addObject(PROCESSES_LOWER_CASE, processes);
 		res.addObject(DATA_NAME, data.getName());
 
@@ -203,13 +220,13 @@ public class ProcessController {
 	}
 
 	@RequestMapping(value = "/details", method = RequestMethod.POST, params = { "subgroup" })
-	public ModelAndView subgroupDetails(@RequestParam int dataId) {
+	public ModelAndView subgroupDetails(@RequestParam final int dataId) {
 
 		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId,
 				SUBGROUP_DISCOVERY);
-		PreprocessedData data = preprocessedDataService.findOne(dataId);
+		final PreprocessedData data = preproDataService.findOne(dataId);
 
-		ModelAndView res = new ModelAndView("details/subgroup");
+		final ModelAndView res = new ModelAndView("details/subgroup");
 		res.addObject(PROCESSES_LOWER_CASE, processes);
 		res.addObject(DATA_NAME, data.getName());
 
@@ -217,13 +234,13 @@ public class ProcessController {
 	}
 
 	@RequestMapping(value = "/details", method = RequestMethod.POST, params = { "tree" })
-	public ModelAndView treeDetails(@RequestParam int dataId) {
+	public ModelAndView treeDetails(@RequestParam final int dataId) {
 
 		Collection<Process> processes = processService.findByAlgorithmAndDataId(dataId,
 				TREE_TO_RULES);
-		PreprocessedData data = preprocessedDataService.findOne(dataId);
+		final PreprocessedData data = preproDataService.findOne(dataId);
 
-		ModelAndView res = new ModelAndView("details/tree");
+		final ModelAndView res = new ModelAndView("details/tree");
 		res.addObject(PROCESSES_LOWER_CASE, processes);
 		res.addObject(DATA_NAME, data.getName());
 
@@ -231,22 +248,22 @@ public class ProcessController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public ModelAndView create(@ModelAttribute PreproSimpleForm form) throws NamingException {
+	public ModelAndView create(@ModelAttribute final PreproSimpleForm form) throws NamingException {
 
-		Process process = processService.createInitialProcessNoAlgorithm(form);
+		final Process process = processService.createInitialProcessNoAlgorithm(form);
 
 		// Creación de los formularios
-		RipperSettings ripperSettings = ripperSettingsService.create();
+		final RipperSettings ripperSettings = ripperConfService.create();
 		ripperSettings.setProcess(process);
-		SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+		final SubgroupSettings subgroupSettings = subgroupConfService.create();
 		subgroupSettings.setProcess(process);
-		TreeToRulesSettings treeToRulesSettings = treeToRulesSettingsService.create();
-		treeToRulesSettings.setProcess(process);
+		final TreeToRulesSettings treeSettings = treeConfService.create();
+		treeSettings.setProcess(process);
 
-		ModelAndView res = new ModelAndView("process/create");
+		final ModelAndView res = new ModelAndView("process/create");
 		res.addObject(RIPPER_SETTINGS, ripperSettings);
 		res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
-		res.addObject(TREE_SETTINGS, treeToRulesSettings);
+		res.addObject(TREE_SETTINGS, treeSettings);
 
 		return res;
 	}

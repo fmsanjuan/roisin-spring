@@ -65,42 +65,72 @@ import com.roisin.spring.validator.PreproSimpleFormValidator;
 @RequestMapping("/data")
 public class PreprocessedDataController {
 
+	/**
+	 * Preprocessed data service
+	 */
 	@Autowired
-	private PreprocessedDataService preprocessedDataService;
+	private transient PreprocessedDataService preproDataService;
 
+	/**
+	 * Preprocessing form service
+	 */
 	@Autowired
-	private PreprocessingFormService preprocessingFormService;
+	private transient PreprocessingFormService preproFormService;
 
+	/**
+	 * Deleted row service
+	 */
 	@Autowired
-	private DeletedRowService deletedRowService;
+	private transient DeletedRowService deletedRowService;
 
+	/**
+	 * Process service
+	 */
 	@Autowired
-	private ProcessService processService;
+	private transient ProcessService processService;
 
+	/**
+	 * Ripper settings service
+	 */
 	@Autowired
-	private RipperSettingsService ripperSettingsService;
+	private transient RipperSettingsService ripperConfService;
 
+	/**
+	 * Subgroup settings service
+	 */
 	@Autowired
-	private SubgroupSettingsService subgroupSettingsService;
+	private transient SubgroupSettingsService subgConfService;
 
+	/**
+	 * Tree to rules settings service
+	 */
 	@Autowired
-	private TreeToRulesSettingsService treeToRulesSettingsService;
+	private transient TreeToRulesSettingsService treeConfService;
 
+	/**
+	 * File service
+	 */
 	@Autowired
-	private FileService fileService;
+	private transient FileService fileService;
 
+	/**
+	 * Preprosimple form validator
+	 */
 	@Autowired
-	private PreproSimpleFormValidator psfValidator;
-	
+	private transient PreproSimpleFormValidator psfValidator;
+
+	/**
+	 * File utility class
+	 */
 	@Autowired
-	private FileUtils fileUtils;
+	private transient FileUtils fileUtils;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam int fileId) {
+	public ModelAndView list(@RequestParam final int fileId) {
 
-		File file = fileService.findOne(fileId);
-		Collection<PreprocessedData> forms = preprocessedDataService.findDataByFileId(fileId);
-		ModelAndView res = new ModelAndView("data/list");
+		final File file = fileService.findOne(fileId);
+		final Collection<PreprocessedData> forms = preproDataService.findDataByFileId(fileId);
+		final ModelAndView res = new ModelAndView("data/list");
 		res.addObject(FORMS_LOWER_CASE, forms);
 		res.addObject(FILE_LOWER_CASE, file);
 		res.addObject(DATA_ID_FORM, new DataIdForm());
@@ -110,16 +140,16 @@ public class PreprocessedDataController {
 	}
 
 	@RequestMapping(value = "/view", method = RequestMethod.POST)
-	public ModelAndView viewFilePreprocessedData(@ModelAttribute DataViewForm form) {
+	public ModelAndView viewFilePreprocessedData(@ModelAttribute final DataViewForm form) {
 
-		File file = fileService.findOne(form.getFileId());
-		Collection<PreprocessedData> nullData = preprocessedDataService.findNullData(form
+		final File file = fileService.findOne(form.getFileId());
+		final Collection<PreprocessedData> nullData = preproDataService.findNullData(form
 				.getFileId());
-		preprocessedDataService.deleteNullData(nullData);
-		Collection<PreprocessedData> forms = preprocessedDataService.findDataByFileId(form
+		preproDataService.deleteNullData(nullData);
+		final Collection<PreprocessedData> forms = preproDataService.findDataByFileId(form
 				.getFileId());
 
-		ModelAndView res = new ModelAndView("data/list");
+		final ModelAndView res = new ModelAndView("data/list");
 		res.addObject(FORMS_LOWER_CASE, forms);
 		res.addObject(FILE_LOWER_CASE, file);
 		res.addObject(DATA_ID_FORM, new DataIdForm());
@@ -129,16 +159,16 @@ public class PreprocessedDataController {
 	}
 
 	@RequestMapping(value = "/details", method = RequestMethod.GET)
-	public ModelAndView details(@RequestParam int dataId) {
+	public ModelAndView details(@RequestParam final int dataId) {
 
-		PreprocessedData data = preprocessedDataService.findOne(dataId);
-		ExampleSet exampleSet = data.getExampleSet();
-		List<Example> examples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
-		Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
-		PreproSimpleForm form = new PreproSimpleForm();
+		final PreprocessedData data = preproDataService.findOne(dataId);
+		final ExampleSet exampleSet = data.getExampleSet();
+		final List<Example> examples = RoisinUtils.getExampleListFromExampleSet(exampleSet);
+		final Attribute[] attributes = exampleSet.getExampleTable().getAttributes();
+		final PreproSimpleForm form = new PreproSimpleForm();
 		form.setDataId(String.valueOf(dataId));
 
-		ModelAndView res = new ModelAndView("data/details");
+		final ModelAndView res = new ModelAndView("data/details");
 		res.addObject(EXAMPLES_LOWER_CASE, examples);
 		res.addObject(ATTRIBUTES_LOWER_CASE, attributes);
 		res.addObject(FORM_LOWER_CASE, form);
@@ -150,8 +180,8 @@ public class PreprocessedDataController {
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
 
-		Collection<PreprocessedData> dataList = preprocessedDataService.findAll();
-		ModelAndView res = new ModelAndView("data/list");
+		final Collection<PreprocessedData> dataList = preproDataService.findAll();
+		final ModelAndView res = new ModelAndView("data/list");
 		res.addObject(DATA_LIST, dataList);
 		res.addObject(REQUEST_URI, LIST_LOWER_CASE);
 
@@ -159,51 +189,51 @@ public class PreprocessedDataController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = { "process" })
-	public ModelAndView process(@ModelAttribute PreproSimpleForm form, BindingResult result,
-			RedirectAttributes redirect) {
+	public ModelAndView process(@ModelAttribute final PreproSimpleForm form,
+			final BindingResult result, final RedirectAttributes redirect) {
 
 		psfValidator.validateProcess(form, result);
 
+		ModelAndView res;
+
 		if (result.hasErrors()) {
-			for (FieldError fieldError : result.getFieldErrors()) {
+			for (final FieldError fieldError : result.getFieldErrors()) {
 				redirect.addFlashAttribute(fieldError.getField() + ERROR,
 						fieldError.getDefaultMessage());
 			}
 			redirect.addFlashAttribute(ERROR_LOWER_CASE, true);
-			ModelAndView res = new ModelAndView("redirect:/preform/list?dataId=" + form.getDataId());
-			return res;
+			res = new ModelAndView("redirect:/preform/list?dataId=" + form.getDataId());
 		} else {
 
-			Process process = processService.createInitialProcessNoAlgorithm(form);
+			final Process process = processService.createInitialProcessNoAlgorithm(form);
 			// Creación de los formularios
-			RipperSettings ripperSettings = ripperSettingsService.create();
+			final RipperSettings ripperSettings = ripperConfService.create();
 			ripperSettings.setProcess(process);
-			SubgroupSettings subgroupSettings = subgroupSettingsService.create();
+			final SubgroupSettings subgroupSettings = subgConfService.create();
 			subgroupSettings.setProcess(process);
-			TreeToRulesSettings treeToRulesSettings = treeToRulesSettingsService.create();
+			final TreeToRulesSettings treeToRulesSettings = treeConfService.create();
 			treeToRulesSettings.setProcess(process);
 
-			ModelAndView res = new ModelAndView("process/create");
+			res = new ModelAndView("process/create");
 			res.addObject(RIPPER_SETTINGS, ripperSettings);
 			res.addObject(SUBGROUP_SETTINGS, subgroupSettings);
 			res.addObject(TREE_SETTINGS, treeToRulesSettings);
-
-			return res;
 		}
+		return res;
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = { "export" })
-	public ResponseEntity<byte[]> export(@ModelAttribute PreproSimpleForm form) {
+	public ResponseEntity<byte[]> export(@ModelAttribute final PreproSimpleForm form) {
 
-		PreprocessedData data = preprocessedDataService.findOne(Integer.parseInt(form.getDataId()));
+		final PreprocessedData data = preproDataService.findOne(Integer.parseInt(form.getDataId()));
 		// Formulario
-		PreprocessingForm storedForm = preprocessingFormService.saveSubmitedSimpleFormExport(
+		PreprocessingForm storedForm = preproFormService.saveSubmitedSimpleFormExport(
 				data.getPreprocessingForm(), form);
 		// Extracción de file de BD
-		File file = storedForm.getFile();
-		String exportFormat = form.getExportFormat();
-		String exportFileName = FileUtils.getExportFileName(file.getName(), exportFormat);
-		String tmpPath = fileUtils.getFileTmpPath(file);
+		final File file = storedForm.getFile();
+		final String exportFormat = form.getExportFormat();
+		final String exportFileName = FileUtils.getExportFileName(file.getName(), exportFormat);
+		final String tmpPath = fileUtils.getFileTmpPath(file);
 		// Escritura en disco del fichero
 		fileUtils.writeFileFromByteArray(file.getOriginalFile(), tmpPath);
 		// Colección de deleted rows
@@ -215,7 +245,7 @@ public class PreprocessedDataController {
 				form.getExportAttributeSelection(),
 				fileUtils.getFileDownloadPath(file, exportFormat));
 		// Create and configure headers to return the file
-		HttpHeaders headers = new HttpHeaders();
+		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/" + exportFormat));
 		headers.setContentDispositionFormData(exportFileName, exportFileName);
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");

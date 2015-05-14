@@ -1,7 +1,11 @@
 package com.roisin.spring.forms;
 
+// FIXME Consider deleting this class and use an alternative
 public class DataIdForm {
 
+	/**
+	 * Data id
+	 */
 	private int dataId;
 
 	public DataIdForm() {
@@ -12,7 +16,7 @@ public class DataIdForm {
 		return dataId;
 	}
 
-	public void setDataId(int dataId) {
+	public void setDataId(final int dataId) {
 		this.dataId = dataId;
 	}
 

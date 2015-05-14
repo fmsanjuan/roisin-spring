@@ -5,24 +5,57 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * Sign up form
+ * 
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 public class SignupForm {
 
+	/**
+	 * Name
+	 */
 	private String name;
 
+	/**
+	 * Surname
+	 */
 	private String surname;
 
+	/**
+	 * Email
+	 */
 	private String email;
 
+	/**
+	 * City
+	 */
 	private String city;
 
+	/**
+	 * Nationality
+	 */
 	private String nationality;
 
+	/**
+	 * Password
+	 */
 	private String password;
 
+	/**
+	 * Repeat password
+	 */
 	private String repeatPassword;
 
+	/**
+	 * Identifier
+	 */
 	private int id;
 
+	/**
+	 * Version
+	 */
 	private int version;
 
 	public SignupForm() {
@@ -34,7 +67,7 @@ public class SignupForm {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -42,7 +75,7 @@ public class SignupForm {
 		return surname;
 	}
 
-	public void setSurname(String surname) {
+	public void setSurname(final String surname) {
 		this.surname = surname;
 	}
 
@@ -52,7 +85,7 @@ public class SignupForm {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 
@@ -61,7 +94,7 @@ public class SignupForm {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(final String city) {
 		this.city = city;
 	}
 
@@ -70,7 +103,7 @@ public class SignupForm {
 		return nationality;
 	}
 
-	public void setNationality(String nationality) {
+	public void setNationality(final String nationality) {
 		this.nationality = nationality;
 	}
 
@@ -78,7 +111,7 @@ public class SignupForm {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(final int id) {
 		this.id = id;
 	}
 
@@ -86,7 +119,7 @@ public class SignupForm {
 		return version;
 	}
 
-	public void setVersion(int version) {
+	public void setVersion(final int version) {
 		this.version = version;
 	}
 
@@ -95,7 +128,7 @@ public class SignupForm {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -103,7 +136,7 @@ public class SignupForm {
 		return repeatPassword;
 	}
 
-	public void setRepeatPassword(String repeatPassword) {
+	public void setRepeatPassword(final String repeatPassword) {
 		this.repeatPassword = repeatPassword;
 	}
 

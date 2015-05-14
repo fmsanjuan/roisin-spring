@@ -13,34 +13,36 @@ import com.roisin.spring.repositories.TreeToRulesSettingsRepository;
 @Transactional
 public class TreeToRulesSettingsService {
 
+	/**
+	 * Tree to rules settings repository
+	 */
 	@Autowired
-	private TreeToRulesSettingsRepository treeToRulesSettingsRepository;
+	private transient TreeToRulesSettingsRepository treeSettingsRepo;
 
 	public TreeToRulesSettingsService() {
 		super();
 	}
 
 	public TreeToRulesSettings create() {
-		TreeToRulesSettings treeToRulesSettings = new TreeToRulesSettings();
+		final TreeToRulesSettings settings = new TreeToRulesSettings();
 
-		return treeToRulesSettings;
+		return settings;
 	}
 
-	public TreeToRulesSettings findOne(int treeToRulesSettingsId) {
-		return treeToRulesSettingsRepository.findOne(treeToRulesSettingsId);
+	public TreeToRulesSettings findOne(final int identifier) {
+		return treeSettingsRepo.findOne(identifier);
 	}
 
-	public TreeToRulesSettings save(TreeToRulesSettings treeToRulesSettings) {
-		return treeToRulesSettingsRepository.save(treeToRulesSettings);
+	public TreeToRulesSettings save(final TreeToRulesSettings settings) {
+		return treeSettingsRepo.save(settings);
 	}
 
-	public void delete(TreeToRulesSettings treeToRulesSettings) {
-		treeToRulesSettingsRepository.delete(treeToRulesSettings);
+	public void delete(final TreeToRulesSettings settings) {
+		treeSettingsRepo.delete(settings);
 	}
 
 	public Collection<TreeToRulesSettings> findAll() {
-		return treeToRulesSettingsRepository.findAll();
+		return treeSettingsRepo.findAll();
 	}
 
-	// TODO: Método para obtener todas las reglas de un proceso.
 }

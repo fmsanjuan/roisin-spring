@@ -14,23 +14,30 @@ import javax.validation.constraints.Size;
 
 public class Credentials {
 
+	// Attributes -------------------------------------------------------------
+
+	/**
+	 * Credential username
+	 */
+	private String username;
+
+	/**
+	 * Credential password
+	 */
+	private String password;
+
 	// Constructors -----------------------------------------------------------
 
 	public Credentials() {
 		super();
 	}
 
-	// Attributes -------------------------------------------------------------
-
-	private String username;
-	private String password;
-
 	@Size(min = 5, max = 32)
 	public String getUsername() {
 		return username;
 	}
 
-	public void setJ_username(String username) {
+	public void setJ_username(final String username) {
 		this.username = username;
 	}
 
@@ -39,7 +46,7 @@ public class Credentials {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 

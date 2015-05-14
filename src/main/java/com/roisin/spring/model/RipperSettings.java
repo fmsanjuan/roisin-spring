@@ -9,18 +9,39 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * Ripper algorithm configuration
+ *
+ * @author Félix Miguel Sanjuán Segovia <felsanseg@alum.us.es>
+ *
+ */
 @Entity
 @Access(AccessType.PROPERTY)
 public class RipperSettings extends DomainEntity {
 
+	/**
+	 * Ripper critetion
+	 */
 	private String ripperCriterion;
 
+	/**
+	 * Sample ratio
+	 */
 	private Double sampleRatio;
 
+	/**
+	 * Pureness
+	 */
 	private Double pureness;
 
+	/**
+	 * Minimal prune benefit
+	 */
 	private Double minimalPruneBenefit;
 
+	/**
+	 * Process
+	 */
 	private Process process;
 
 	public RipperSettings() {
@@ -36,7 +57,7 @@ public class RipperSettings extends DomainEntity {
 		return ripperCriterion;
 	}
 
-	public void setRipperCriterion(String ripperCriterion) {
+	public void setRipperCriterion(final String ripperCriterion) {
 		this.ripperCriterion = ripperCriterion;
 	}
 
@@ -44,7 +65,7 @@ public class RipperSettings extends DomainEntity {
 		return sampleRatio;
 	}
 
-	public void setSampleRatio(Double sampleRatio) {
+	public void setSampleRatio(final Double sampleRatio) {
 		this.sampleRatio = sampleRatio;
 	}
 
@@ -52,7 +73,7 @@ public class RipperSettings extends DomainEntity {
 		return pureness;
 	}
 
-	public void setPureness(Double pureness) {
+	public void setPureness(final Double pureness) {
 		this.pureness = pureness;
 	}
 
@@ -60,8 +81,8 @@ public class RipperSettings extends DomainEntity {
 		return minimalPruneBenefit;
 	}
 
-	public void setMinimalPruneBenefit(Double minimalPruneBenefit) {
-		this.minimalPruneBenefit = minimalPruneBenefit;
+	public void setMinimalPruneBenefit(final Double minPruneBenefit) {
+		this.minimalPruneBenefit = minPruneBenefit;
 	}
 
 	@OneToOne
@@ -69,7 +90,7 @@ public class RipperSettings extends DomainEntity {
 		return process;
 	}
 
-	public void setProcess(Process process) {
+	public void setProcess(final Process process) {
 		this.process = process;
 	}
 
