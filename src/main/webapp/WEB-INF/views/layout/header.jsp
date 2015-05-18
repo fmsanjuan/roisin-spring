@@ -34,7 +34,7 @@
 						<li><a href="/j_spring_security_logout"><spring:message code="sign.out" /></a></li>
 					</ul></li>
 			</security:authorize>
-			<li><a href="#"><spring:message code="help" /></a></li>
+			<li><a href="/help/manual"><spring:message code="help" /></a></li>
 			<li class="dropdown"><a href="#" class="dropdown-toggle"
 				data-toggle="dropdown"><spring:message code="language" /> <b class="caret"></b></a>
 				<ul class="dropdown-menu">
