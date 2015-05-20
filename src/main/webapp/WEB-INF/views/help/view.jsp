@@ -10,18 +10,29 @@
 
 <div class="page-header text-center">
 	<h1>
-		<spring:message code="help.h1" /> <small><spring:message code="help.small" /></small>
+		<spring:message code="help.h1" />
+		<small><spring:message code="help.small" /></small>
 	</h1>
 </div>
 
 <div class="container">
 	<c:set var="localeCode" value="${pageContext.response.locale}" />
-	<c:choose>
-	  <c:when test="${localeCode == 'en' }">
-	    <a href="${manualEn}"><spring:message code="help.manual.download" /></a>
-	  </c:when>
-	  <c:otherwise>
-	    <a href="${manualEs}"><spring:message code="help.manual.download" /></a>
-	  </c:otherwise>
-	</c:choose>
+	<div class="text-center">
+		<c:choose>
+			<c:when test="${localeCode == 'en' }">
+				<a href="${manualEn}">
+					<button class="btn btn-primary btn-lg">
+						<spring:message code="help.manual.download" />
+					</button>
+				</a>
+			</c:when>
+			<c:otherwise>
+				<a href="${manualEs}">
+					<button class="btn btn-primary btn-lg">
+						<spring:message code="help.manual.download" />
+					</button>
+				</a>
+			</c:otherwise>
+		</c:choose>
+	</div>
 </div>
